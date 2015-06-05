@@ -1,0 +1,6 @@
+key.json
+datastore.yml
+
+# This is my local gcd.sh dataset for testing.
+# Be sure to ignore your own if you use a different dataset ID.
+/ruby-datastore-test
