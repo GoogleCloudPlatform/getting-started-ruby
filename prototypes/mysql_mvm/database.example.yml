@@ -1,0 +1,16 @@
+development:
+  adapter: mysql2
+  database: my_database
+  host: 1.2.3.4
+  user: user
+  password: password
+
+production:
+  adapter: mysql2
+  database: my_database
+  host: 1.2.3.4
+  user: user
+  password: password
+
+test:
+  adapter: sqlite
