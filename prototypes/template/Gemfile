@@ -1,0 +1,9 @@
+source 'https://rubygems.org'
+#ruby '2.1.5'
+
+gem 'rack'
+#gem 'mysql2'
+#gem 'sequel'
+
+## Uncomment the line if you want to use thin.
+# gem 'thin'
