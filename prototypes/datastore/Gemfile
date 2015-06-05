@@ -3,3 +3,8 @@ source "https://rubygems.org"
 gem "gcloud"
 gem "sinatra"
 gem "slim"
+
+group :test do
+  gem "rspec"
+  gem "capybara"
+end
