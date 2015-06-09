@@ -12,6 +12,8 @@ Uses the the [`google/ruby-runtime`][] Docker image with no customization.
  - Create a new [Service Account][] and download a JSON key
  - Move the JSON key to this project directory as `key.json`
 
+To start the web application:
+
     $ bundle
     $ bundle exec rackup
 
