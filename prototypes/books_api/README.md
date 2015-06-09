@@ -3,8 +3,6 @@
 Simple sample of running a Ruby application on [App Engine Managed VMs][] 
 that uses the [Google Books API][reference] in some way.
 
-Uses a custom Dockerfile based on [`google/ruby`][] image to install `libmysqlclient-dev`.
-
 Uses the the [`google/ruby-runtime`][] Docker image with no customization.
 
 ## Run locally
