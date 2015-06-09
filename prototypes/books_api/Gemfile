@@ -1,10 +1,10 @@
 source "https://rubygems.org"
 
-gem "gcloud"
+gem "google-api-client"
 gem "sinatra"
 gem "slim"
 
 group :test do
   gem "rspec"
-  gem "capybara"
+  gem "rack-test"
 end
