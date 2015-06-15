@@ -3,6 +3,8 @@
 Simple sample that logs and the logs show up in the Developers Console
 under [Monitoring > Logs][logs].
 
+[Custom Managed VM Logs][] are written to any `.log` file under `/var/log/app_engine/custom_logs`.
+
 Uses the [`google/ruby-runtime`][] Docker image with no customization.
 
 App Engine [health check requests][] implicitly work because this application always
@@ -28,3 +30,4 @@ returns `200` with a non-empty response body.
 [google/ruby-runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
 [health check requests]: https://cloud.google.com/appengine/docs/managed-vms/custom-runtimes#health_check_requests
 [logs]: https://console.developers.google.com/project/_/logs
+[Custom Managed VM Logs]: https://cloud.google.com/appengine/docs/managed-vms/custom-runtimes#logging
