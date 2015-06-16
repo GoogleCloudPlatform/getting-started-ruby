@@ -9,15 +9,16 @@ $ gem install bundler
 $ gem install rails
 
 git clone our app, should have the below already done:
-  $ rails new todos --database postgres
+  $ rails new todos
+  edit Gemfile, add 'therubyracer'
   this is for demo todos app:  $ rails g scaffold todo name:string finished:boolean
-  edit Gemfile, add 'therubyracer' 'capistrano' (pg should be there instead of sqlite)
 
 
 $ bundle install
 resolve any C dev file deps (libxml2, pgsql, etc.)
-$ rake db:setup
-$ rake s
+$ rake db:migrate
+$ rails s
+
 check that it is working locally
 
 get ready to deploy:
@@ -26,26 +27,9 @@ should already be done in our app
   $ bundle exec cap install
   setup basic config/deploy.rb and production.rb
   setup Gemfile with capistrano(-rails/bundler) and Capfile with those
+    nginx/unicorn, monkey patches
+  our custom copy_yml
 
-need custom cap "service start" with sudo
-
-Rake::Task["unicorn:start"].clear
-Rake::Task["unicorn:stop"].clear
-Rake::Task["unicorn:restart"].clear
-
-
-namespace :unicorn do
-
-  %w[start stop restart].each do |command|
-    desc "#{command} unicorn sudo"
-    task command do
-      on roles :app do
-        sudo :service, fetch(:unicorn_service), command
-      end
-    end
-  end
-
-end
 
 
 create a gce vm
@@ -67,6 +51,10 @@ edit config/deploy.rb
 edit config/deploy/production.rb
   replace with your server info
   server '<GCE IP>', user: 'jeffmendoza', roles: %w{app db web}
+
+
+cap setup?
+cap copy_yml ?
 
 bundle exec cap produciton deploy:check
 bundle exec cap produciton bundler:install
