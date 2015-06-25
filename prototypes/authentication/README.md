@@ -25,8 +25,8 @@ Then run the application:
     $ gcloud config set project <PROJECT_ID>
     $ gcloud preview app deploy app.yaml --set-default
 
-[Rails]: http://rubyonrails.org/
 [App Engine Managed VMs]: https://cloud.google.com/appengine/docs/managed-vms/
 [google/ruby-runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
 [health check requests]: https://cloud.google.com/appengine/docs/managed-vms/custom-runtimes#health_check_requests
 [creds]: https://pantheon.corp.google.com/project/_/apiui/credential
+[Sinatra]: http://www.sinatrarb.com/
