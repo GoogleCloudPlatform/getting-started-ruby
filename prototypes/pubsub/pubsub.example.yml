@@ -1,0 +1,11 @@
+development:
+        project_id: your-project-id
+  keyfile: key.json
+
+production:
+  project_id: your-project-id
+  keyfile: key.json
+
+test:
+  project_id: your-project-id
+  keyfile: key.json
