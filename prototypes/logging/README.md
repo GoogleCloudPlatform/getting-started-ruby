@@ -14,7 +14,7 @@ Two examples are provided:
 ## Run locally
 
     $ bundle
-    $ bundle exec rails s
+    $ bundle exec rackup
 
 ## Deploy
 
