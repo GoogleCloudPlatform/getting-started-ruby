@@ -1,0 +1,11 @@
+development:
+  client_id: the-client-id
+  client_secret: the-client-secret
+
+production:
+  client_id: the-client-id
+  client_secret: the-client-secret
+
+test:
+  client_id: test
+  client_secret: test
