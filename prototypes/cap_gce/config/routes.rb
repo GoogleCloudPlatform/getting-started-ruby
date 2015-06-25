@@ -1,3 +1,5 @@
+require 'resque/server'
+
 Rails.application.routes.draw do
   resources :todos
   # The priority is based upon order of creation: first created -> highest priority.
@@ -54,4 +56,7 @@ Rails.application.routes.draw do
   #     # (app/controllers/admin/products_controller.rb)
   #     resources :products
   #   end
+
+  mount Resque::Server.new, at: "/resque"
+
 end
