@@ -3,13 +3,15 @@
 # Defines a single server with a list of roles and multiple properties.
 # You can define all roles on a single server, or split them:
 
-server 'localhost', user: 'jeffmendoza', roles: %w{app db web}
+server '104.154.54.209', user: 'jeffmendoza', roles: %w{app web}
 set :rails_env, "production"
-set :deploy_via, :copy
-
 # server 'example.com', user: 'deploy', roles: %w{app web}, other_property: :other_value
 # server 'db.example.com', user: 'deploy', roles: %w{db}
 
+role :resque_worker, "104.154.54.209"
+role :resque_scheduler, "104.154.54.209"
+
+set :workers, { "finish" => 1 }
 
 
 # role-based syntax

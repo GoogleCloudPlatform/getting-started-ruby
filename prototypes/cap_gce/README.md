@@ -13,6 +13,9 @@ Don't: install postgress, we'll use sqlite for local development
 
 * (15.04) more -dev needed for gems: libxml2-dev zlib1g-dev libsqlite3-dev libpq-dev
 
+* Install Redis, used by Resque:
+  * (Ubuntu) sudo apt-get install redis-server
+
 Install bundler and rails
 ```
 $ gem install bundler
@@ -74,7 +77,7 @@ gcloud compute ssh rails-app
 Install stuff:
 
 ```
-sudo apt-get install -y ruby-dev build-essential libxml2-dev zlib1g-dev libsqlite3-dev nginx libpq-dev
+sudo apt-get install -y ruby-dev build-essential libxml2-dev zlib1g-dev libsqlite3-dev nginx libpq-dev redis-server
 sudo gem install rails bundler
 mkdir $HOME/rails-app
 ls -d $HOME/rails-app
