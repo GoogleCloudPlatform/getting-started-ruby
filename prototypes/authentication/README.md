@@ -20,6 +20,10 @@ Then run the application:
     $ bundle
     $ bundle exec rackup
 
+## Run tests
+
+    $ bundle exec rspec test.rb
+
 ## Deploy
 
     $ gcloud config set project <PROJECT_ID>
