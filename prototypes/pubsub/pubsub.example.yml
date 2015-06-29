@@ -1,5 +1,5 @@
 development:
-        project_id: your-project-id
+  project_id: your-project-id
   keyfile: key.json
 
 production:
@@ -7,5 +7,5 @@ production:
   keyfile: key.json
 
 test:
-  project_id: your-project-id
-  keyfile: key.json
+  project_id: test
+  keyfile: test
