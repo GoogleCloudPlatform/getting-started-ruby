@@ -1,6 +1,6 @@
 # Google OAuth 2 Authentication
 
-Simple [Sinatra][] application that provided user login via [Google OAuth 2][].
+Simple [Sinatra][] application that provides [Google login][] via OAuth 2.0.
 
 Uses `omniauth` gem and `omniauth-google-oauth2` plugin for authentication.
 
@@ -30,3 +30,4 @@ Then run the application:
 [health check requests]: https://cloud.google.com/appengine/docs/managed-vms/custom-runtimes#health_check_requests
 [creds]: https://pantheon.corp.google.com/project/_/apiui/credential
 [Sinatra]: http://www.sinatrarb.com/
+[Google login]: https://developers.google.com/identity/protocols/OpenIDConnect
