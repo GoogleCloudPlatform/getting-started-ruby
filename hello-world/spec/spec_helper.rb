@@ -10,7 +10,17 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# [START docker]
-FROM google/ruby-runtime
-# [END docker]
+
+ENV["RAILS_ENV"] ||= "test"
+
+require File.expand_path("../../config/environment", __FILE__)
+require "rspec/rails"
+require "capybara/rails"
+require "rack/test"
+
+RSpec.configure do |config|
+  config.infer_spec_type_from_file_location!
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+end

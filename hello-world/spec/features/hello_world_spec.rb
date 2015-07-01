@@ -10,7 +10,15 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# [START docker]
-FROM google/ruby-runtime
-# [END docker]
+
+require "spec_helper"
+
+feature "Hello World" do
+
+  scenario "saying Hello, World!" do
+    visit "/"
+
+    expect(page).to have_content "Hello, world!"
+  end
+
+end

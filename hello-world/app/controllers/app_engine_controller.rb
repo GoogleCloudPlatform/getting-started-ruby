@@ -10,7 +10,23 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# [START docker]
-FROM google/ruby-runtime
-# [END docker]
+
+class AppEngineController < ApplicationController
+
+  # [START health_checks]
+  def health
+    render text: "ok"
+  end
+  # [END health_checks]
+
+  def start
+    logger.info "Application start"
+    head :ok
+  end
+
+  def stop
+    logger.info "Application stop"
+    head :ok
+  end
+
+end

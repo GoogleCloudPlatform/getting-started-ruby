@@ -10,7 +10,33 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#
-# [START docker]
-FROM google/ruby-runtime
-# [END docker]
+
+require "spec_helper"
+
+feature "Handling App Engine events" do
+  include Rack::Test::Methods
+
+  def app
+    Rails.application
+  end
+
+  scenario "responding to health checks" do
+    get "/_ah/health"
+
+    expect(last_response.status).to eq 200
+    expect(last_response.body).not_to be_empty
+  end
+
+  scenario "handling start events" do
+    get "/_ah/start"
+
+    expect(last_response.status).to eq 200
+  end
+
+  scenario "handling stop events" do
+    get "/_ah/stop"
+
+    expect(last_response.status).to eq 200
+  end
+
+end
