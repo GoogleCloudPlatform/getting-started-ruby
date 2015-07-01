@@ -11,15 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+require "spec_helper"
 
-  # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
+feature "Hello World" do
 
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
+  scenario "saying Hello, World!" do
+    visit "/"
 
-  root "books#index"
+    expect(page).to have_content "Hello, world!"
+  end
 
 end

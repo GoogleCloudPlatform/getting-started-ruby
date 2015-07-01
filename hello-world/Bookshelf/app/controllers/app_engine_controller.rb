@@ -11,15 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+class AppEngineController < ApplicationController
 
   # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
+  def health
+    render text: "ok"
+  end
   # [END health_checks]
 
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
+  def start
+    logger.info "Application start"
+    head :ok
+  end
 
-  root "books#index"
+  def stop
+    logger.info "Application stop"
+    head :ok
+  end
 
 end

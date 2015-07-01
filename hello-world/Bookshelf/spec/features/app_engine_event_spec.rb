@@ -11,15 +11,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+require "spec_helper"
 
-  # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
+feature "Handling App Engine events" do
+  include Rack::Test::Methods
 
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
+  def app
+    Rails.application
+  end
 
-  root "books#index"
+  scenario "responding to health checks" do
+    get "/_ah/health"
+
+    expect(last_response.status).to eq 200
+    expect(last_response.body).not_to be_empty
+  end
+
+  scenario "handling start events" do
+    get "/_ah/start"
+
+    expect(last_response.status).to eq 200
+  end
+
+  scenario "handling stop events" do
+    get "/_ah/stop"
+
+    expect(last_response.status).to eq 200
+  end
 
 end

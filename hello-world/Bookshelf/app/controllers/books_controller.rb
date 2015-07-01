@@ -11,15 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+class BooksController < ApplicationController
 
-  # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
-
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
-
-  root "books#index"
+  # [START hello_world]
+  # Say hello!
+  def index
+    render text: "Hello, world!"
+  end
+  # [END hello_world]
 
 end
