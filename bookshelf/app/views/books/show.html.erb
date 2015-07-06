@@ -1,0 +1,20 @@
+<h3>Book</h3>
+
+<div class="btn-group">
+  <%= link_to edit_book_path(@book), class: "btn btn-primary btn-sm" do %>
+    <i class="glyphicon glyphicon-edit"></i>
+    <span>Edit Book</span>
+  <% end %>
+  <%= link_to book_path(@book), class: "btn btn-danger btn-sm", method: :delete do %>
+    <i class="glyphicon glyphicon-trash"></i>
+    <span>Delete Book</span>
+  <% end %>
+</div>
+
+<div class="media">
+  <div class="media-body">
+    <h4><%= @book.title %> | &nbsp; <small><%= @book.published_on %></small></h4>
+    <h5>By <%= @book.author || "unknown" %></h5>
+    <p><%= @book.description %></p>
+  </div>
+</div>

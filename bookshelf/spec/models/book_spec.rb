@@ -11,16 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ENV["RAILS_ENV"] ||= "test"
+require "spec_helper"
 
-require File.expand_path("../../config/environment", __FILE__)
-require "rspec/rails"
-require "capybara/rails"
-require "rack/test"
+RSpec.describe Book do
 
-RSpec.configure do |config|
-  config.infer_spec_type_from_file_location!
-  config.expect_with :rspec do |expectations|
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  it "requires a title or author" do
+    expect(Book.new).not_to be_valid
+
+    expect(Book.new title: "title").to be_valid
+    expect(Book.new author: "author").to be_valid
+    expect(Book.new title: "title", author: "author").to be_valid
   end
+
 end

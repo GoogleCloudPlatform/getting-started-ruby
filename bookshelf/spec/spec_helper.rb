@@ -11,15 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+ENV["RAILS_ENV"] ||= "test"
 
-  # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
+require File.expand_path("../../config/environment", __FILE__)
+require "rspec/rails"
+require "capybara/rails"
+require "rack/test"
 
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
+RSpec.configure do |config|
+  config.use_transactional_fixtures = true
 
-  root "books#index"
+  config.infer_spec_type_from_file_location!
 
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
 end

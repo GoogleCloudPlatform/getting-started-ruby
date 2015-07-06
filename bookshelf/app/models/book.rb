@@ -11,13 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class BooksController < ApplicationController
+class Book < ActiveRecord::Base
+  validate :title_or_author_present
 
-  # [START hello_world]
-  # Say hello!
-  def index
-    render text: "Hello, world!"
+  private
+
+  def title_or_author_present
+    if title.blank? && author.blank?
+      errors.add :base, "Title or Author must be present"
+    end
   end
-  # [END hello_world]
-
 end

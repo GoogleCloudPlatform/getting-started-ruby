@@ -11,3 +11,12 @@
 /log/*
 !/log/.keep
 /tmp
+
+# Ignore database configuration
+/config/database.yml
+
+# Ignore generated assets
+/public/assets/
+
+# Ignore SQLite database files
+*.sqlite3

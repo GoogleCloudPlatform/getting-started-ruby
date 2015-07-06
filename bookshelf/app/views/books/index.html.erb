@@ -1,0 +1,23 @@
+<h3>Books</h3>
+
+<%= link_to new_book_path, class: "btn btn-success btn-sm" do %>
+  <i class="glyphicon glyphicon-plus"></i>
+  <span>Add Book</span>
+<% end %>
+
+<% @books.each do |book| %>
+  <div class="media">
+    <%= link_to book_path(book) do %>
+      <div class="media-body">
+        <h4><%= book.title %></h4>
+        <p><%= book.author %></p>
+      </div>
+    <% end %>
+  </div>
+<% end %>
+
+<% if @books.none? %>
+  <p>No books found.</p>
+<% end %>
+
+<%# pagination ... %>
