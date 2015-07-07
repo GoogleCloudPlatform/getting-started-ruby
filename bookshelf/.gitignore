@@ -20,3 +20,5 @@
 
 # Ignore SQLite database files
 *.sqlite3
+
+/datastore/

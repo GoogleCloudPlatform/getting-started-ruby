@@ -1,20 +1,7 @@
 development:
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
-  database: db/development.sqlite3
+  project_id: datastore
+  host: http://localhost:8080/
 
-# TODO make in-memory
 test:
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
-  database: db/test.sqlite3
-
-# TODO show mysql and postgres config examples
-production:
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
-  database: db/test.sqlite3
-  database: db/production.sqlite3
+  project_id: datastore
+  host: http://localhost:8080/
