@@ -33,9 +33,7 @@ class BooksController < ApplicationController
   end
 
   def show
-    puts "SHOW"
     @book = Book.find params[:id]
-    puts "@book #{@book.inspect}"
   end
 
   def edit
