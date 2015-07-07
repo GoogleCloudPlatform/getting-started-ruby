@@ -33,6 +33,3 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.5
 # [END scaling]
-
-env_variables:
-  SECRET_KEY_BASE: 3659d9ac716f22a88f4235cae7c33e9a994492fb0dd5704350863c8bb8cc34571e568651578784185f2ea94a660769e586e72008fb801127df045b4aa4abb0ba
