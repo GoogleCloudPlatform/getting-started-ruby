@@ -12,6 +12,10 @@
 # limitations under the License.
 
 # In-memory Book implementation
+#
+# This is NOT intended to be shared.
+#
+# This exists to render views displaying data without SQL or Datastore dependencies.
 class Book
   include ActiveModel::Validations
   include ActiveModel::Model
@@ -59,7 +63,7 @@ class Book
     Date.parse(@published_on) if @published_on.present?
   end
 
-  # TODO pagination!
+  # TODO pagination
   def self.all
     BOOKS.values
   end
