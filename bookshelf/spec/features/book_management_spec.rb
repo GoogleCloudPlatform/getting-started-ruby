@@ -30,7 +30,38 @@ feature "Managing Books" do
     expect(page).to have_content "Charles Dickens"
   end
 
-  scenario "Paginating through list of books"
+  scenario "Paginating through list of books" do
+    Book.create! title: "Book 1"
+    Book.create! title: "Book 2"
+    Book.create! title: "Book 3"
+    Book.create! title: "Book 4"
+    Book.create! title: "Book 5"
+
+    stub_const "BooksController::PER_PAGE", 2
+
+    visit root_path
+    expect(page).to have_content "Book 1"
+    expect(page).to have_content "Book 2"
+    expect(page).not_to have_content "Book 3"
+    expect(page).not_to have_content "Book 4"
+    expect(page).not_to have_content "Book 5"
+
+    click_link "More"
+    expect(page).not_to have_content "Book 1"
+    expect(page).not_to have_content "Book 2"
+    expect(page).to have_content "Book 3"
+    expect(page).to have_content "Book 4"
+    expect(page).not_to have_content "Book 5"
+
+    click_link "More"
+    expect(page).not_to have_content "Book 1"
+    expect(page).not_to have_content "Book 2"
+    expect(page).not_to have_content "Book 3"
+    expect(page).not_to have_content "Book 4"
+    expect(page).to have_content "Book 5"
+
+    expect(page).not_to have_link "More"
+  end
 
   scenario "Adding a book" do
     expect(Book.count).to eq 0
