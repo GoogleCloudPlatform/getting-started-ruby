@@ -11,22 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/ruby
+class CreateBooks < ActiveRecord::Migration
+  def change
+    create_table :books do |t|
+      t.string :title
+      t.string :author
+      t.date :published_on
+      t.string :image_url
+      t.text :description
+      t.integer :user_id
+      t.string :username
 
-RUN apt-get update && apt-get install -qy --no-install-recommends \
-    libmysqlclient-dev && \
-    apt-get clean
-
-ENV RACK_ENV production
-
-WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN ["/usr/bin/bundle", "install", "--deployment", "--without", "development:test"]
-ADD . /app
-
-EXPOSE 8080
-CMD []
-ENV APPSERVER webrick
-ENTRYPOINT /usr/bin/bundle exec rackup \
-    -p 8080 /app/config.ru -s $APPSERVER -E $RACK_ENV
+      t.timestamps null: false
+    end
+  end
+end

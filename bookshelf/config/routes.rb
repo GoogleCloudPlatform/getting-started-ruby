@@ -13,6 +13,8 @@
 
 Rails.application.routes.draw do
 
+  resources :books
+
   # [START health_checks]
   get "_ah/health", to: "app_engine#health"
   # [END health_checks]

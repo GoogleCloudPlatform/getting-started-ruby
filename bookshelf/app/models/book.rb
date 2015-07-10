@@ -11,22 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/ruby
+class Book < ActiveRecord::Base
+  validate :title_or_author_present
 
-RUN apt-get update && apt-get install -qy --no-install-recommends \
-    libmysqlclient-dev && \
-    apt-get clean
+  private
 
-ENV RACK_ENV production
-
-WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN ["/usr/bin/bundle", "install", "--deployment", "--without", "development:test"]
-ADD . /app
-
-EXPOSE 8080
-CMD []
-ENV APPSERVER webrick
-ENTRYPOINT /usr/bin/bundle exec rackup \
-    -p 8080 /app/config.ru -s $APPSERVER -E $RACK_ENV
+  def title_or_author_present
+    if title.blank? && author.blank?
+      errors.add :base, "Title or Author must be present"
+    end
+  end
+end

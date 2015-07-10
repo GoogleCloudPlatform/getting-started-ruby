@@ -13,11 +13,59 @@
 
 class BooksController < ApplicationController
 
-  # [START hello_world]
-  # Say hello!
+  PER_PAGE = 3
+
   def index
-    render text: "Hello, world!"
+    page = params[:page] ? params[:page].to_i : 0
+
+    @books = Book.limit(PER_PAGE).offset(PER_PAGE * page)
+    @next_page = page + 1 if @books.count == PER_PAGE
   end
-  # [END hello_world]
+
+  def new
+    @book = Book.new
+  end
+
+  def create
+    @book = Book.new book_params
+
+    if @book.save
+      flash[:success] = "Added Book"
+      redirect_to book_path(@book)
+    else
+      render :new
+    end
+  end
+
+  def show
+    @book = Book.find params[:id]
+  end
+
+  def edit
+    @book = Book.find params[:id]
+  end
+
+  def update
+    @book = Book.find params[:id]
+
+    if @book.update book_params
+      flash[:success] = "Updated Book"
+      redirect_to book_path(@book)
+    else
+      render :edit
+    end
+  end
+
+  def destroy
+    @book = Book.find params[:id]
+    @book.destroy
+    redirect_to books_path
+  end
+
+  private
+
+  def book_params
+    params.require(:book).permit(:title, :author, :published_on, :description)
+  end
 
 end

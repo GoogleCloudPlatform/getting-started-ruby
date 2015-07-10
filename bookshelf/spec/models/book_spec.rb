@@ -11,22 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/ruby
+require "spec_helper"
 
-RUN apt-get update && apt-get install -qy --no-install-recommends \
-    libmysqlclient-dev && \
-    apt-get clean
+RSpec.describe Book do
 
-ENV RACK_ENV production
+  it "requires a title or author" do
+    expect(Book.new).not_to be_valid
 
-WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN ["/usr/bin/bundle", "install", "--deployment", "--without", "development:test"]
-ADD . /app
+    expect(Book.new title: "title").to be_valid
+    expect(Book.new author: "author").to be_valid
+    expect(Book.new title: "title", author: "author").to be_valid
+  end
 
-EXPOSE 8080
-CMD []
-ENV APPSERVER webrick
-ENTRYPOINT /usr/bin/bundle exec rackup \
-    -p 8080 /app/config.ru -s $APPSERVER -E $RACK_ENV
+end
