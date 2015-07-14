@@ -16,6 +16,3 @@ ENV RACK_ENV production
 
 CMD /usr/bin/bundle exec rackup \
     -p 8080 /app/config.ru -s $APPSERVER -E $RACK_ENV
-
-## Uncomment the line if you want to use thin.
-# ENV APPSERVER thin
