@@ -1,7 +1,0 @@
-development:
-  project_id: datastore
-  host: http://localhost:8080/
-
-test:
-  project_id: datastore
-  host: http://localhost:8080/
