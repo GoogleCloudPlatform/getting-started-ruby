@@ -11,20 +11,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+class UserBooksController < ApplicationController
 
-  resources :books
-  resource :session, only: [:create, :destroy]
-  resources :user_books, only: [:index]
+  before_filter :login_required
 
-  get "/login", to: redirect("/auth/google_oauth2")
-  get "/logout", to: "sessions#destroy"
-  get "/auth/google_oauth2/callback", to: "sessions#create"
+  def index
+    @books = Book.where creator_id: current_user.id
+    render "books/index"
+  end
 
-  get "_ah/health", to: "app_engine#health"
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
+  private
 
-  root "books#index"
+  def login_required
+    redirect_to root_path unless logged_in?
+  end
 
 end

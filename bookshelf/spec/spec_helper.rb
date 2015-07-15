@@ -18,6 +18,8 @@ require "rspec/rails"
 require "capybara/rails"
 require "rack/test"
 
+OmniAuth.config.test_mode = true
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 

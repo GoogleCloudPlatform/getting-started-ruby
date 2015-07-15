@@ -23,7 +23,7 @@ class Book
 
   BOOKS = {}
 
-  attr_accessor :id, :title, :author, :published_on, :description
+  attr_accessor :id, :title, :author, :published_on, :description, :creator_id
 
   validate :title_or_author_present
 
@@ -92,6 +92,10 @@ class Book
     book = Book.new attributes
     book.save
     book.clone
+  end
+
+  def self.where attributes
+    all.select {|book| attributes.all? {|name, value| book.send(name) == value }}
   end
 
   def self.delete_all

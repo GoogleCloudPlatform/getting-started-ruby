@@ -11,20 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+class User
 
-  resources :books
-  resource :session, only: [:create, :destroy]
-  resources :user_books, only: [:index]
+  attr_accessor :id, :name, :image_url
 
-  get "/login", to: redirect("/auth/google_oauth2")
-  get "/logout", to: "sessions#destroy"
-  get "/auth/google_oauth2/callback", to: "sessions#create"
-
-  get "_ah/health", to: "app_engine#health"
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
-
-  root "books#index"
+  def self.from_auth auth_hash
+    user = User.new
+    user.id        = auth_hash["uid"]
+    user.name      = auth_hash["info"]["name"]
+    user.image_url = auth_hash["info"]["image"]
+    user
+  end
 
 end

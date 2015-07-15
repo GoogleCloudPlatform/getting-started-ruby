@@ -29,10 +29,26 @@
         <div class="navbar-header">
           <div class="navbar-brand">Bookshelf</div>
         </div>
+        <ul class="nav navbar-nav">
+          <li><%= link_to "Books", root_path %></li>
+          <% if logged_in? %>
+            <li><%= link_to "Mine", user_books_path %></li>
+          <% end %>
+        </ul>
+        <p class="navbar-text navbar-right">
+          <% if logged_in? %>
+            <% if current_user.image_url %>
+              <%= image_tag current_user.image_url, class: "img-circle", width: 24 %>
+            <% end %>
+            <span>
+              <%= current_user.name %> &nbsp;
+              <%= link_to "(logout)", logout_path %>
+            </span>
+          <% else %>
+            <%= link_to "Login", login_path %>
+          <% end %>
+        </p>
       </div>
-      <ul class="nav navbar-nav">
-        <li><%= link_to "Books", root_path %></li>
-      </ul>
     </div>
     <div class="container">
       <% if flash.any? %>

@@ -11,20 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-Rails.application.routes.draw do
+class SessionsController < ApplicationController
 
-  resources :books
-  resource :session, only: [:create, :destroy]
-  resources :user_books, only: [:index]
+  def create
+    login_as User.from_auth(request.env["omniauth.auth"])
+    redirect_to root_path
+  end
 
-  get "/login", to: redirect("/auth/google_oauth2")
-  get "/logout", to: "sessions#destroy"
-  get "/auth/google_oauth2/callback", to: "sessions#create"
-
-  get "_ah/health", to: "app_engine#health"
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
-
-  root "books#index"
+  def destroy
+    logout!
+    redirect_to root_path
+  end
 
 end
