@@ -1,17 +1,40 @@
-# Ruby Getting Started
+# Bookshelf
 
-## BASE APPLICATION
+Checkout branches to view particular steps of this sample application.
 
-I wanted a branch of the Bookshelf application that contains all of the
-views but no database persistence or anything specific to a particular
-technology choice, eg. database choice or task queueing choice.
+ - `1-hello-world`
+ - `2-sql`
+ - `2-datastore`
+ - `3-binary-data`
+ - `4-authentication`
+ - `5-logging`
+ - `6-task-queue`
+ - `7-compute-engine`
 
-That's what this is.
+## User Authentication using Google OAuth
 
-When I work on views, I like to work on them here and merge this into
-the SQL and Datastore branches, etc.  So I don't need to deal with
-cherry picking or anything like that.
+### Run
 
-But that's just my preferred workflow!  :)
+To run the application, first install dependencies:
 
-*~ remily*
+    $ bundle install
+
+To setup the database for local development, copy the sample `database.yml` file:
+
+    $ cp config/secrets.example.yml config/secrets.yml
+
+Edit `secrets.yml` and add your `client_id` and `client_secret` from your project's
+web application credentials ([console](https://pantheon.corp.google.com/project/_/apiui/credential)).
+
+Then, run the Rails web server:
+
+    $ rails server
+
+### To run the tests
+
+    $ bundle install
+    $ bundle exec rspec spec/
+
+### To deploy to App Engine Managed VMs
+
+    $ gcloud preview app deploy app.yaml --set-default
