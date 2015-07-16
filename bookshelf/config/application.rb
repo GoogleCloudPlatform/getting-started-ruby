@@ -26,9 +26,16 @@ require "sprockets/railtie"
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
+#[START fog]
 module Bookshelf
   class Application < Rails::Application
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
+
+    # Name of fog directory that images will be stored in
+    config.x.fog_dir = 'bucket'
   end
 end
+
+Fog.credentials_path = Rails.root.join('config/fog_credentials.yml')
+#[END fog]

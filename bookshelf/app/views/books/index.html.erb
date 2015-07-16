@@ -23,6 +23,9 @@
 <% @books.each do |book| %>
   <div class="media">
     <%= link_to book_path(book) do %>
+      <div class="media-left">
+        <img src="<%= book.image_url %>">
+      </div>
       <div class="media-body">
         <h4><%= book.title %></h4>
         <p><%= book.author %></p>

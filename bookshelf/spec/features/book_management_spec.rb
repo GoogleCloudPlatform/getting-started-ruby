@@ -156,4 +156,28 @@ feature "Managing Books" do
     expect(Book.exists? book.id).to be false
   end
 
+  scenario "Adding a book with image" do
+    expect(Book.count).to eq 0
+
+    visit root_path
+    click_link "Add Book"
+    within "form.new_book" do
+      fill_in "Title", with: "A Tale of Two Cities"
+      attach_file "Cover image", "spec/resources/test.txt"
+      click_button "Save"
+    end
+
+    expect(page).to have_content "Added Book"
+    expect(Book.count).to eq 1
+
+    book = Book.first
+    expect(book.title).to eq "A Tale of Two Cities"
+
+    storage = Fog::Storage.new provider: "Google"
+    bucket = storage.directories.get(Rails.configuration.x.fog_dir)
+
+    expect(bucket.files.each.count).to eq 1
+    file = bucket.files.each.first
+    expect(file.key).to end_with "test.txt"
+  end
 end

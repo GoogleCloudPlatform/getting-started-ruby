@@ -15,6 +15,9 @@ source "https://rubygems.org"
 
 gem "rails"
 gem "jquery-rails"
+#[START fog]
+gem "fog"
+#[END fog]
 
 group :production do
   gem "mysql2" # or pg

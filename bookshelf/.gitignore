@@ -33,3 +33,6 @@
 
 # Ignore SQLite database files
 *.sqlite3
+
+# Ignore Cloud Storage secrets
+/config/fog_credentials.yml
