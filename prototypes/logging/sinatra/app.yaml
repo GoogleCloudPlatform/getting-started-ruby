@@ -1,5 +1,0 @@
-api_version: 1
-runtime: custom
-vm: true
-manual_scaling:
-  instances: 1
