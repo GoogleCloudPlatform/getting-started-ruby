@@ -11,13 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Ignore bundler config.
 /.bundle
-
-# Ignore all logfiles and tempfiles.
 /log/*
-!/log/.keep
 /tmp
-
-# Ignore generated assets
 /public/assets/

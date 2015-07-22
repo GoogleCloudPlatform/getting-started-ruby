@@ -11,22 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START health_checks]
 class AppEngineController < ApplicationController
 
-  # [START health_checks]
   def health
-    render text: "ok"
-  end
-  # [END health_checks]
-
-  def start
-    logger.info "Application start"
-    head :ok
-  end
-
-  def stop
-    logger.info "Application stop"
-    head :ok
+    render status: :ok, text: "ok"
   end
 
 end
+# [END health_checks]

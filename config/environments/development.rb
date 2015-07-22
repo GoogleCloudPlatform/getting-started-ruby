@@ -29,9 +29,6 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  # Raises error for missing translations
-  # config.action_view.raise_on_missing_translations = true
-
   config.serve_static_files = true
   config.assets.debug = true
   config.assets.digest = true
