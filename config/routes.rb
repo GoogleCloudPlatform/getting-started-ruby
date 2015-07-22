@@ -17,9 +17,6 @@ Rails.application.routes.draw do
   get "_ah/health", to: "app_engine#health"
   # [END health_checks]
 
-  get "_ah/start", to: "app_engine#start"
-  get "_ah/stop", to: "app_engine#stop"
-
   # [START default_route]
   root "hello#index"
   # [END default_route]
