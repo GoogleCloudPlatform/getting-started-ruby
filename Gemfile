@@ -17,7 +17,7 @@ gem "rails"
 gem "jquery-rails"
 
 group :production do
-  gem "mysql2" # or pg
+  gem "mysql2"
 end
 
 group :development, :test do
