@@ -1,0 +1,23 @@
+development:
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: your-mysql-user-here
+  password: your-mysql-password-here
+  host: your-mysql-host-here
+  database: your-mysql-database-here
+
+production:
+  adapter: mysql2
+  encoding: utf8
+  pool: 5
+  username: your-mysql-user-here
+  password: your-mysql-password-here
+  host: your-mysql-host-here
+  database: your-mysql-database-here
+
+test:
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+  database: db/test.sqlite3
