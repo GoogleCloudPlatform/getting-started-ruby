@@ -11,6 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
+# [START hello_world]
+class HelloController < ApplicationController
+
+  # Say hello!
+  def index
+    render text: "Hello World!"
+  end
+
+end
+# [END hello_world]

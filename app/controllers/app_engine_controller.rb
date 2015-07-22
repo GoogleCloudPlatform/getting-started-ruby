@@ -11,6 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
+# [START health_checks]
+class AppEngineController < ApplicationController
+
+  def health
+    render status: :ok, text: "ok"
+  end
+
+end
+# [END health_checks]

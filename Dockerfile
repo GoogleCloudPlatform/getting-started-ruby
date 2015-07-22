@@ -11,6 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
+# [START docker]
+FROM google/ruby-runtime
+# [END docker]
