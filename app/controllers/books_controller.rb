@@ -13,7 +13,7 @@
 
 class BooksController < ApplicationController
 
-  PER_PAGE = 3
+  PER_PAGE = 10
 
   def index
     page = params[:page] ? params[:page].to_i : 0
