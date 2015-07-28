@@ -12,7 +12,7 @@
 # limitations under the License.
 
 # [START hello_world]
-class HelloController < ApplicationController
+class HelloWorldController < ApplicationController
 
   # Say hello!
   def index

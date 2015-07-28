@@ -11,14 +11,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START routes]
 Rails.application.routes.draw do
 
-  # [START health_checks]
-  get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
+  # Route root of application to HelloWorldController index action
+  root "hello_world#index"
 
-  # [START default_route]
-  root "hello#index"
-  # [END default_route]
+  # App Engine health check
+  get "/_ah/health", to: "app_engine#health"
 
 end
+# [END routes]
