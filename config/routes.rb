@@ -11,16 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START routes]
 Rails.application.routes.draw do
+
+  # Route root of application to HelloWorldController#index action
+  root "books#index"
 
   resources :books
 
-  # [START health_checks]
+  # App Engine health check
   get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
-
-  # [START default_route]
-  root "books#index"
-  # [END default_route]
 
 end
+# [END routes]
