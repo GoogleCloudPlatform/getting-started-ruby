@@ -16,7 +16,7 @@ class HelloWorldController < ApplicationController
 
   # Say hello!
   def index
-    render text: "Hello World!"
+    render text: "Hello, world!"
   end
 
 end
