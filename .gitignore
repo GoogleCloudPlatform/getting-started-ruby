@@ -15,4 +15,5 @@
 /log/*
 /tmp
 /public/assets/
+config/database.yml
 *.sqlite3
