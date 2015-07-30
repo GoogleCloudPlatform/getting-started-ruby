@@ -61,9 +61,9 @@ GEM
     mime-types (2.6.1)
     mini_portile (0.6.2)
     minitest (5.7.0)
-    mysql2 (0.3.18)
     nokogiri (1.6.6.2)
       mini_portile (~> 0.6.0)
+    pg (0.18.2)
     rack (1.6.4)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -129,11 +129,8 @@ PLATFORMS
 DEPENDENCIES
   capybara
   jquery-rails
-  mysql2
+  pg
   rack-test
   rails
   rspec-rails
   sqlite3
-
-BUNDLED WITH
-   1.10.3

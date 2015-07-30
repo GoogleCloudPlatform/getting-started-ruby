@@ -17,11 +17,11 @@ source "https://rubygems.org"
 gem "rails"
 gem "jquery-rails"
 
-group :production do
-  gem "mysql2"
+group :production, :development do
+  gem "pg"
 end
 
-group :development, :test do
+group :test do
   gem "sqlite3"
 end
 

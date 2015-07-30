@@ -43,8 +43,7 @@ Then, run the Rails web server:
 
     $ gcloud preview app deploy app.yaml --set-default
 
-This application uses a custom `Dockerfile` based on the [`google/ruby`][] image
-to install dependencies required for the MySQL gem to run.
+This application uses a custom `Dockerfile` based on the [`google/ruby`][] image.
 
 The `Dockerfile` also runs `bundle install --without development:test` so that only
 production gems will be installed in production.
