@@ -11,10 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/fog_credentials.yml
-*.sqlite3
+# [START health_checks]
+class AppEngineController < ApplicationController
+
+  def health
+    # Return healthy response
+    render status: :ok, text: "ok"
+  end
+
+end
+# [END health_checks]

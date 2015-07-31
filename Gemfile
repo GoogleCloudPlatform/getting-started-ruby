@@ -11,10 +11,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/fog_credentials.yml
-*.sqlite3
+# [START dependencies]
+source "https://rubygems.org"
+
+gem "rails"
+gem "jquery-rails"
+#[START fog]
+gem "fog"
+#[END fog]
+
+group :production do
+  gem "mysql2"
+end
+
+group :development, :test do
+  gem "sqlite3"
+end
+
+group :test do
+  gem "rspec-rails"
+  gem "rack-test"
+  gem "capybara"
+end

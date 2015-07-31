@@ -11,10 +11,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/fog_credentials.yml
-*.sqlite3
+# [START routes]
+Rails.application.routes.draw do
+
+  # Route root of application to HelloWorldController#index action
+  root "books#index"
+
+  resources :books
+
+  # App Engine health check
+  get "_ah/health", to: "app_engine#health"
+
+end
+# [END routes]
