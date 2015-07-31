@@ -14,6 +14,10 @@
 class Book < ActiveRecord::Base
   validate :title_or_author_present
 
+  attr_accessor :cover_image
+
+  after_create :upload_image, if: -> (book) { book.cover_image.present? }
+
   private
 
   def title_or_author_present
@@ -21,4 +25,17 @@ class Book < ActiveRecord::Base
       errors.add :base, "Title or Author must be present"
     end
   end
+
+  # [START upload]
+  def upload_image
+    storage = Fog::Storage.new provider: "Google"
+    bucket = storage.directories.get Rails.configuration.x.fog_dir
+    image = bucket.files.new key: "cover_images/#{id}/#{cover_image.original_filename}",
+                             body: cover_image.read,
+                             public: true
+    image.save
+
+    update image_url: image.public_url
+  end
+  # [END upload]
 end

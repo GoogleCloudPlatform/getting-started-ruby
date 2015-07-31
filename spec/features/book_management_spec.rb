@@ -149,6 +149,8 @@ feature "Managing Books" do
     expect(book.author).to eq "Charles Dickens"
   end
 
+  scenario "Editing a book's cover image"
+
   scenario "Editing a book with missing fields" do
     book = Book.create! title: "A Tale of Two Cities"
 
@@ -181,4 +183,6 @@ feature "Managing Books" do
 
     expect(Book.exists? book.id).to be false
   end
+
+  scenario "Deleting a book with an image"
 end

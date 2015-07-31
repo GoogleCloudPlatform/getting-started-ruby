@@ -27,9 +27,7 @@ class BooksController < ApplicationController
   end
 
   def create
-    bp = upload_image(book_params)
-
-    @book = Book.new bp
+    @book = Book.new book_params
 
     if @book.save
       flash[:success] = "Added Book"
@@ -49,9 +47,8 @@ class BooksController < ApplicationController
 
   def update
     @book = Book.find params[:id]
-    bp = upload_image(book_params)
 
-    if @book.update bp
+    if @book.update book_params
       flash[:success] = "Updated Book"
       redirect_to book_path(@book)
     else
@@ -68,27 +65,8 @@ class BooksController < ApplicationController
   private
 
   def book_params
-    params.require(:book).permit(:title, :author, :published_on, :description, :photo)
+    params.require(:book).permit :title, :author, :published_on, :description,
+                                 :cover_image
   end
-
-  #[START upload]
-  def upload_image(book_params)
-    storage = Fog::Storage.new provider: "Google"
-    bp = book_params.clone
-    unless bp['photo'].nil?
-      bucket = storage.directories.get(Rails.configuration.x.fog_dir)
-      rand = SecureRandom.hex
-      image = bucket.files.new(
-                               :key    => rand + bp['photo'].original_filename,
-                               :body   => bp['photo'].read,
-                               :public => true
-                               )
-      image.save
-      bp['image_url'] = image.public_url
-      bp.delete('photo')
-    end
-    bp
-  end
-  #[END upload]
 
 end
