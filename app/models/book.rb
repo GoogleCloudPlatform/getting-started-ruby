@@ -16,7 +16,9 @@ class Book < ActiveRecord::Base
 
   attr_accessor :cover_image
 
-  after_create :upload_image, if: -> (book) { book.cover_image.present? }
+  after_create   :upload_image, if: :cover_image
+  before_update  :update_image, if: :cover_image
+  before_destroy :delete_image, if: :image_url
 
   private
 
@@ -35,7 +37,20 @@ class Book < ActiveRecord::Base
                              public: true
     image.save
 
-    update image_url: image.public_url
+    update_columns image_url: image.public_url
   end
   # [END upload]
+
+  def delete_image
+    storage = Fog::Storage.new provider: "Google"
+    bucket = storage.directories.get Rails.configuration.x.fog_dir
+    image_key = URI.parse(image_url).path.sub(%r{^/}, "")
+
+    bucket.files.new(key: image_key).destroy
+  end
+
+  def update_image
+    delete_image if image_url?
+    upload_image
+  end
 end
