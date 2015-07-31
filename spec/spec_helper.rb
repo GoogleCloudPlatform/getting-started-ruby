@@ -30,11 +30,7 @@ RSpec.configure do |config|
   end
 
   config.before :each do
-    Fog.mock!
     Fog::Mock.reset
-    
-    storage = Fog::Storage.new provider: "Google"
-    storage.directories.create key: Rails.configuration.x.fog_dir, acl: "public-read"
+    FogStorage.directories.create key: "testbucket", acl: "public-read"
   end
-
 end

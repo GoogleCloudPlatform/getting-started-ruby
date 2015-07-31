@@ -16,5 +16,5 @@
 /tmp
 /public/assets/
 config/database.yml
-config/fog_credentials.yml
+config/cloud_storage.yml
 *.sqlite3

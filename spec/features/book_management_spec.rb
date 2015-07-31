@@ -128,9 +128,6 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book with image" do
-    storage = Fog::Storage.new provider: "Google"
-    bucket = storage.directories.get Rails.configuration.x.fog_dir
-
     visit root_path
     click_link "Add Book"
     within "form.new_book" do
@@ -146,8 +143,8 @@ feature "Managing Books" do
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.image_url).to end_with "/cover_images/#{book.id}/test.txt"
 
-    expect(bucket.files.all.count).to eq 1
-    file = bucket.files.first
+    expect(StorageBucket.files.all.count).to eq 1
+    file = StorageBucket.files.first
     expect(file.key).to eq "cover_images/#{book.id}/test.txt"
     expect(file.body).to include "Test file."
   end
@@ -190,8 +187,6 @@ feature "Managing Books" do
   end
 
   scenario "Editing a book's cover image" do
-    storage = Fog::Storage.new provider: "Google"
-    bucket = storage.directories.get Rails.configuration.x.fog_dir
     book = Book.create! title: "A Tale of Two Cities",
                         cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
 
@@ -202,8 +197,8 @@ feature "Managing Books" do
     click_button "Save"
 
     expect(page).to have_content "Updated Book"
-    expect(bucket.files.get "cover_images/#{book.id}/test-2.txt").to be_present
-    expect(bucket.files.get "cover_images/#{book.id}/test.txt").to be_nil
+    expect(StorageBucket.files.get "cover_images/#{book.id}/test-2.txt").to be_present
+    expect(StorageBucket.files.get "cover_images/#{book.id}/test.txt").to be_nil
 
     book.reload
     expect(book.image_url).to end_with "/cover_images/#{book.id}/test-2.txt"
@@ -246,16 +241,14 @@ feature "Managing Books" do
     book = Book.create! title: "A Tale of Two Cities",
                         cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
 
-    storage = Fog::Storage.new provider: "Google"
-    bucket = storage.directories.get Rails.configuration.x.fog_dir
     image_key = "cover_images/#{book.id}/test.txt"
-    expect(bucket.files.get image_key).to be_present
+    expect(StorageBucket.files.get image_key).to be_present
 
     visit root_path
     click_link "A Tale of Two Cities"
     click_link "Delete Book"
 
     expect(Book.exists? book.id).to be false
-    expect(bucket.files.get image_key).to be_nil
+    expect(StorageBucket.files.get image_key).to be_nil
   end
 end

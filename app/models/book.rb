@@ -14,8 +14,10 @@
 class Book < ActiveRecord::Base
   validate :title_or_author_present
 
+  #
   attr_accessor :cover_image
 
+  #
   after_create   :upload_image, if: :cover_image
   before_update  :update_image, if: :cover_image
   before_destroy :delete_image, if: :image_url
@@ -30,27 +32,30 @@ class Book < ActiveRecord::Base
 
   # [START upload]
   def upload_image
-    storage = Fog::Storage.new provider: "Google"
-    bucket = storage.directories.get Rails.configuration.x.fog_dir
-    image = bucket.files.new key: "cover_images/#{id}/#{cover_image.original_filename}",
-                             body: cover_image.read,
-                             public: true
+    image = StorageBucket.files.new(
+      key: "cover_images/#{id}/#{cover_image.original_filename}",
+      body: cover_image.read,
+      public: true
+    )
+
     image.save
 
     update_columns image_url: image.public_url
   end
   # [END upload]
 
+  # [START delete]
   def delete_image
-    storage = Fog::Storage.new provider: "Google"
-    bucket = storage.directories.get Rails.configuration.x.fog_dir
     image_key = URI.parse(image_url).path.sub(%r{^/}, "")
 
-    bucket.files.new(key: image_key).destroy
+    StorageBucket.files.new(key: image_key).destroy
   end
+  # [END delete]
 
+  # [START update]
   def update_image
     delete_image if image_url?
     upload_image
   end
+  # [END update]
 end
