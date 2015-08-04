@@ -11,10 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+class AppEngineController < ApplicationController
+
+  # [START health_checks]
+  def health
+    render text: "ok"
+  end
+  # [END health_checks]
+
+end

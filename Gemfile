@@ -11,10 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+source "https://rubygems.org"
+
+gem "rails"
+gem "jquery-rails"
+gem "mysql2"
+gem "fog"
+# [START omniauth]
+gem "omniauth"
+gem "omniauth-google-oauth2"
+# [END omniauth]
+
+group :test do
+  gem "rspec-rails"
+  gem "rack-test"
+  gem "capybara"
+  gem "sqlite3"
+end

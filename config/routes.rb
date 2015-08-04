@@ -11,10 +11,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+Rails.application.routes.draw do
+
+  resources :books
+
+  # [START routes]
+  resource :session, only: [:create, :destroy]
+  resources :user_books, only: [:index]
+
+  get "/login", to: redirect("/auth/google_oauth2")
+  get "/logout", to: "sessions#destroy"
+  get "/auth/google_oauth2/callback", to: "sessions#create"
+  # [END routes]
+
+  get "_ah/health", to: "app_engine#health"
+
+  root "books#index"
+
+end

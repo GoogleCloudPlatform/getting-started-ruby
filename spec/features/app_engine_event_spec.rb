@@ -11,10 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+require "spec_helper"
+
+feature "Handling App Engine events" do
+  include Rack::Test::Methods
+
+  def app
+    Rails.application
+  end
+
+  scenario "responding to health checks" do
+    get "/_ah/health"
+
+    expect(last_response.status).to eq 200
+    expect(last_response.body).not_to be_empty
+  end
+
+end

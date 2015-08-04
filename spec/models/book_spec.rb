@@ -11,10 +11,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+require "spec_helper"
+
+RSpec.describe Book do
+
+  it "requires a title" do
+    expect(Book.new title: nil).not_to be_valid
+    expect(Book.new title: "title").to be_valid
+  end
+
+end

@@ -11,10 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/cloud_storage.yml
-*.sqlite3
+# [START rackup]
+# This file is used by Rack-based servers to start the application.
+require ::File.expand_path("../config/environment", __FILE__)
+run Rails.application
+# [END rackup]
