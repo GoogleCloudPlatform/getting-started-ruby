@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START index]
 class BooksController < ApplicationController
 
   PER_PAGE = 10
@@ -21,11 +22,30 @@ class BooksController < ApplicationController
     @books = Book.limit(PER_PAGE).offset(PER_PAGE * page)
     @next_page = page + 1 if @books.count == PER_PAGE
   end
+# [END index]
 
+  # [START new_and_edit]
   def new
     @book = Book.new
   end
 
+  def edit
+    @book = Book.find params[:id]
+  end
+  # [END new_and_edit]
+
+
+  def show
+    @book = Book.find params[:id]
+  end
+
+  def destroy
+    @book = Book.find params[:id]
+    @book.destroy
+    redirect_to books_path
+  end
+
+  # [START create_and_update]
   def create
     @book = Book.new book_params
 
@@ -35,14 +55,6 @@ class BooksController < ApplicationController
     else
       render :new
     end
-  end
-
-  def show
-    @book = Book.find params[:id]
-  end
-
-  def edit
-    @book = Book.find params[:id]
   end
 
   def update
@@ -56,17 +68,12 @@ class BooksController < ApplicationController
     end
   end
 
-  def destroy
-    @book = Book.find params[:id]
-    @book.destroy
-    redirect_to books_path
-  end
-
   private
 
   def book_params
     params.require(:book).permit :title, :author, :published_on, :description,
                                  :cover_image
   end
+  # [END create_and_update]
 
 end

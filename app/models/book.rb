@@ -12,7 +12,7 @@
 # limitations under the License.
 
 class Book < ActiveRecord::Base
-  validate :title_or_author_present
+  validates :title, presence: true
 
   #
   attr_accessor :cover_image
@@ -23,12 +23,6 @@ class Book < ActiveRecord::Base
   before_destroy :delete_image, if: :image_url
 
   private
-
-  def title_or_author_present
-    if title.blank? && author.blank?
-      errors.add :base, "Title or Author must be present"
-    end
-  end
 
   # [START upload]
   def upload_image

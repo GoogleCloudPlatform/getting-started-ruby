@@ -158,7 +158,7 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    expect(page).to have_content "Title or Author must be present"
+    expect(page).to have_content "Title can't be blank"
     expect(Book.count).to eq 0
 
     within "form.new_book" do
@@ -213,7 +213,7 @@ feature "Managing Books" do
     fill_in "Title", with: ""
     click_button "Save"
 
-    expect(page).to have_content "Title or Author must be present"
+    expect(page).to have_content "Title can't be blank"
     book.reload
     expect(book.title).to eq "A Tale of Two Cities"
 
