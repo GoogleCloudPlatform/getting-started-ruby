@@ -23,6 +23,19 @@ To setup the database for local development, copy the sample `database.yml` file
 
     $ cp config/secrets.example.yml config/secrets.yml
 
+  * In the Developers Console, go to "APIs & auth" -> "Credentials"
+  * "Add credentials" then "OAuth 2.0 client ID"
+  * Select "Web application"
+  * Follow instructions to setup consent screen if prompted
+  * Authorized redirect URIs:
+    * http://localhost:3000/auth/google_oauth2/callback
+    * http://<project-id>/auth/google_oauth2/callback
+  * Copy your client id and secret for below:
+
+  * In the Developers Console, go to "APIs & auth" -> "APIs"
+  * "Google+ API"
+  * Enable
+
 Edit `secrets.yml` and add your `client_id` and `client_secret` from your project's
 web application credentials ([console](https://pantheon.corp.google.com/project/_/apiui/credential)).
 
