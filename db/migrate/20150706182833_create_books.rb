@@ -11,18 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START migration]
 class CreateBooks < ActiveRecord::Migration
   def change
     create_table :books do |t|
-      t.string :title
+      t.string :title, required: true
       t.string :author
       t.date :published_on
-      t.string :image_url
       t.text :description
-      t.integer :user_id
-      t.string :username
 
       t.timestamps null: false
     end
   end
 end
+# [END migration]

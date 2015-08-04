@@ -12,13 +12,5 @@
 # limitations under the License.
 
 class Book < ActiveRecord::Base
-  validate :title_or_author_present
-
-  private
-
-  def title_or_author_present
-    if title.blank? && author.blank?
-      errors.add :base, "Title or Author must be present"
-    end
-  end
+  validates :title, presence: true
 end

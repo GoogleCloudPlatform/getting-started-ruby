@@ -14,9 +14,10 @@
 # [START routes]
 Rails.application.routes.draw do
 
-  # Route root of application to HelloWorldController#index action
+  # Route root of application to BooksController#index action
   root "books#index"
 
+  # Restful routes for BooksController
   resources :books
 
   # App Engine health check
