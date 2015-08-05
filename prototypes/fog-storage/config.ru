@@ -1,0 +1,3 @@
+require './hello'
+
+run HelloWorldApp
