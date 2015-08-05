@@ -1,6 +1,8 @@
 # Ruby Getting Started
 
-Datastore
+## Datastore
+
+**Not Complete**
 
     $ cp config/database.example.yml config/database.yml
     $ gcd.sh create dataset
