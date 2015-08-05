@@ -33,7 +33,7 @@ else
     google_storage_secret_access_key: config["secret_access_key"]
   )
 
-  StorageBucket = FogStorage.directories.get config["bucket"]
+  StorageBucket = FogStorage.directories.new key: config["bucket"]
   # [END fog_storage]
 
 end
