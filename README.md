@@ -1,17 +1,8 @@
 # Ruby Getting Started
 
-## BASE APPLICATION
+Datastore
 
-I wanted a branch of the Bookshelf application that contains all of the
-views but no database persistence or anything specific to a particular
-technology choice, eg. database choice or task queueing choice.
-
-That's what this is.
-
-When I work on views, I like to work on them here and merge this into
-the SQL and Datastore branches, etc.  So I don't need to deal with
-cherry picking or anything like that.
-
-But that's just my preferred workflow!  :)
-
-*~ remily*
+    $ cp config/database.example.yml config/database.yml
+    $ gcd.sh create dataset
+    $ gcd.sh start --testing ./dataset/
+    $ bundle exec rspec

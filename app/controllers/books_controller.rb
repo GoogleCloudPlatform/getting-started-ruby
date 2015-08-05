@@ -13,6 +13,9 @@
 
 class BooksController < ApplicationController
 
+  before_filter :convert_published_on_to_date
+
+  # TODO add pagination using cursors
   def index
     @books = Book.all
   end
@@ -61,6 +64,12 @@ class BooksController < ApplicationController
 
   def book_params
     params.require(:book).permit(:title, :author, :published_on, :description)
+  end
+
+  def convert_published_on_to_date
+    if params[:book] && params[:book][:published_on].present?
+      params[:book][:published_on] = Time.parse params[:book][:published_on]
+    end
   end
 
 end

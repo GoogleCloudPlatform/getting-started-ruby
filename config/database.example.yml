@@ -1,0 +1,9 @@
+development:
+  dataset_id: dataset_directory
+  keyfile: path/to/key.json
+
+test:
+  # $ gcd.sh create gcd_test_dataset_directory
+  # $ gcd.sh start --testing ./gcd_test_dataset_directory/
+  dataset_id: gcd_test_dataset_directory
+  host: http://localhost:8080/

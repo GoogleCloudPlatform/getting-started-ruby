@@ -11,26 +11,63 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# In-memory Book implementation
-#
-# This is NOT intended to be shared.
-#
-# This exists to render views displaying data without SQL or Datastore dependencies.
+require "gcloud/datastore" # TODO move to initializer
+
+# Move all methods that only exist for tests into their own section.
+
 class Book
   include ActiveModel::Validations
   include ActiveModel::Model
   include ActiveModel::Conversion
+  # extend ActiveModel::Naming # for routes?
 
-  BOOKS = {}
+  # clean up ...
+  def attributes
+    {
+      "id" => id, "title" => title, "author" => author
+    }
+  end
 
-  attr_accessor :id, :title, :author, :published_on, :description
+  # if attributes are all stored in a hash, RELOAD can be implemented
+
+  KIND = "Book" # use this :)
+
+  attr_accessor :id, :title, :author, :published_on, :image_url, :description,
+                :user_id, :username
 
   validate :title_or_author_present
 
+  # TODO test
+  def persisted?
+    id.present?
+  end
+
+  def to_entity
+    entity = Gcloud::Datastore::Entity.new
+    entity.key = Gcloud::Datastore::Key.new "Book", id
+
+    # TODO not hard coded inline
+    [:title, :author, :published_on, :image_url, :description, :user_id, :username].each do |attribute|
+      entity[attribute.to_s] = send(attribute) unless send(attribute).nil?
+    end
+
+    entity
+  end
+
+  def self.from_entity entity
+    book = Book.new
+    book.id = entity.key.id
+    entity.properties.to_hash.each do |name, value|
+      book.send "#{name}=", value
+    end
+    book
+  end
+
   def save
     if valid?
-      generate_id!
-      BOOKS[id] = self
+      entity = to_entity
+      self.class.dataset.save entity
+      self.id = entity.key.id
       true
     else
       false
@@ -45,45 +82,38 @@ class Book
   end
 
   def destroy
-    BOOKS.delete id if id.present?
+    self.class.dataset.delete Gcloud::Datastore::Key.new "Book", id
   end
 
-  def persisted?
-    id.present?
-  end
-
-  def reload 
-    book = BOOKS[id]
-    [:id, :title, :author, :published_on, :description].each do |attribute|
-      send "#{attribute}=", book.send(attribute)
+  # TODO move to an initializer?  Look @ ActiveRecord::Base#connection
+  def self.dataset
+    if @dataset.nil?
+      config = Rails.application.config.database_configuration[Rails.env]
+      @dataset = Gcloud.datastore config["dataset_id"], config["keyfile"]
+      @dataset.connection.http_host = config["host"] if config.has_key?("host")
     end
+    @dataset
   end
 
-  def published_on
-    Date.parse(@published_on) if @published_on.present?
-  end
-
-  # TODO pagination
+  # don't actually use #all ... change controller code to support paging ...
   def self.all
-    BOOKS.values
-  end
-
-  def self.count
-    BOOKS.count
+    query = Gcloud::Datastore::Query.new.kind("Book")
+    entities = dataset.run query
+    entities.map {|entity| Book.from_entity entity }
   end
 
   def self.find id
-    BOOKS[id.to_i].clone if exists? id.to_i
+    id = id.to_i if id.is_a?(String) && id =~ /^\d+$/
+
+    query = Gcloud::Datastore::Key.new "Book", id
+    entities = dataset.lookup query
+
+    if entities.any?
+      from_entity entities.first
+    end
   end
 
-  def self.first
-    BOOKS.values.first.clone
-  end
-
-  def self.exists? id
-    BOOKS.has_key? id
-  end
-
+  # TODO add validations and failure
   def self.create! attributes = nil
     create attributes
   end
@@ -91,16 +121,23 @@ class Book
   def self.create attributes = nil
     book = Book.new attributes
     book.save
-    book.clone
+    book
+  end
+
+  def self.exists? id
+    Book.find(id).present?
   end
 
   def self.delete_all
-    BOOKS.clear
-  end
-
-  def self.next_id!
-    @next_id ||= 0
-    @next_id += 1
+    query = Gcloud::Datastore::Query.new.kind "Book"
+    loop do
+      books = dataset.run query
+      if books.any?
+        dataset.delete *books
+      else
+        break
+      end
+    end 
   end
 
   private
@@ -109,9 +146,5 @@ class Book
     if title.blank? && author.blank?
       errors.add :base, "Title or Author must be present"
     end
-  end
-
-  def generate_id!
-    self.id = Book.next_id! if id.nil?
   end
 end

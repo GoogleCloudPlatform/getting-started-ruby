@@ -11,16 +11,17 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START routes]
 Rails.application.routes.draw do
 
+  # Route root of application to BooksController#index action
+  root "books#index"
+
+  # Restful routes for BooksController
   resources :books
 
-  # [START health_checks]
+  # App Engine health check
   get "_ah/health", to: "app_engine#health"
-  # [END health_checks]
-
-  # [START default_route]
-  root "hello#index"
-  # [END default_route]
 
 end
+# [END routes]

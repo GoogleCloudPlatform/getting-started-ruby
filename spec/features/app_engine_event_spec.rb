@@ -27,16 +27,4 @@ feature "Handling App Engine events" do
     expect(last_response.body).not_to be_empty
   end
 
-  scenario "handling start events" do
-    get "/_ah/start"
-
-    expect(last_response.status).to eq 200
-  end
-
-  scenario "handling stop events" do
-    get "/_ah/stop"
-
-    expect(last_response.status).to eq 200
-  end
-
 end
