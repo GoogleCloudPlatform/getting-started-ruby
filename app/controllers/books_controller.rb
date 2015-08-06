@@ -15,9 +15,10 @@ class BooksController < ApplicationController
 
   before_filter :convert_published_on_to_date
 
-  # TODO add pagination using cursors
+  PER_PAGE = 10
+
   def index
-    @books = Book.all
+    @books, @cursor = Book.all limit: PER_PAGE, cursor: params[:cursor]
   end
 
   def new

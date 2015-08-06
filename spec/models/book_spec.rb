@@ -30,12 +30,15 @@ RSpec.describe Book do
     it "can serialize #to_entity"
 
     it "can save a book" do
-      expect(Book.all.length).to eq 0
+      books, _ = Book.all
+      expect(books.length).to eq 0
 
       book = Book.new title: "A Tale of Two Cities"
       book.save
 
-      expect(Book.all.length).to eq 1
+      books, _ = Book.all
+      expect(books.length).to eq 1
+      expect(books.first.title).to eq "A Tale of Two Cities"
     end
 
     it "can fetch a book by ID" do

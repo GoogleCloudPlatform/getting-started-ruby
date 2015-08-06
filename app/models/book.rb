@@ -19,7 +19,6 @@ class Book
   include ActiveModel::Validations
   include ActiveModel::Model
   include ActiveModel::Conversion
-  # extend ActiveModel::Naming # for routes?
 
   # clean up ...
   def attributes
@@ -95,11 +94,17 @@ class Book
     @dataset
   end
 
-  # don't actually use #all ... change controller code to support paging ...
-  def self.all
-    query = Gcloud::Datastore::Query.new.kind("Book")
-    entities = dataset.run query
-    entities.map {|entity| Book.from_entity entity }
+  def self.all limit: nil, cursor: nil
+    query = Gcloud::Datastore::Query.new
+    query.kind "Book"
+    query.limit limit   if limit
+    query.cursor cursor if cursor
+
+    results     = dataset.run query
+    books       = results.map {|entity| Book.from_entity entity }
+    next_cursor = results.cursor if limit && results.size == limit
+
+    return books, next_cursor
   end
 
   def self.find id

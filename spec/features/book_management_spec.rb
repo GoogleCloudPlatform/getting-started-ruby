@@ -40,25 +40,13 @@ feature "Managing Books" do
     stub_const "BooksController::PER_PAGE", 2
 
     visit root_path
-    expect(page).to have_content "Book 1"
-    expect(page).to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
+    expect(all(".book").length).to eq 2
 
     click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).to have_content "Book 3"
-    expect(page).to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
+    expect(all(".book").length).to eq 2
 
     click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).to have_content "Book 5"
+    expect(all(".book").length).to eq 1
 
     expect(page).not_to have_link "More"
   end
@@ -76,7 +64,8 @@ feature "Managing Books" do
 
     expect(page).to have_content "Added Book"
 
-    book = Book.all.first
+    books, _ = Book.all # meh, I don't like this.  Diff method for cursors?
+    book = books.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
     expect(book.published_on).to eq Time.parse("1859-04-01")
@@ -97,7 +86,8 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    expect(Book.all.first.title).to eq "A Tale of Two Cities"
+    books, _ = Book.all
+    expect(books.first.title).to eq "A Tale of Two Cities"
   end
 
   scenario "Editing a book" do

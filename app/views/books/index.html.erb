@@ -21,7 +21,7 @@
 <% end %>
 
 <% @books.each do |book| %>
-  <div class="media">
+  <div class="media book">
     <%= link_to book_path(book) do %>
       <div class="media-body">
         <h4><%= book.title %></h4>
@@ -35,10 +35,10 @@
   <p>No books found.</p>
 <% end %>
 
-<% if @next_page %>
+<% if @cursor %>
   <nav>
     <ul class="pager">
-      <li><%= link_to "More", books_path(page: @next_page) %></li>
+      <li><%= link_to "More", books_path(cursor: @cursor) %></li>
     </ul>
   </nav>
 <% end %>
