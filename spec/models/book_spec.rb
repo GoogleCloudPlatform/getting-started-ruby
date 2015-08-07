@@ -15,12 +15,9 @@ require "spec_helper"
 
 RSpec.describe Book do
 
-  it "requires a title or author" do
-    expect(Book.new).not_to be_valid
-
+  it "requires a title" do
+    expect(Book.new title: nil).not_to be_valid
     expect(Book.new title: "title").to be_valid
-    expect(Book.new author: "author").to be_valid
-    expect(Book.new title: "title", author: "author").to be_valid
   end
 
   describe "Datastore Persistence" do
@@ -30,15 +27,13 @@ RSpec.describe Book do
     it "can serialize #to_entity"
 
     it "can save a book" do
-      books, _ = Book.all
-      expect(books.length).to eq 0
+      expect(Book.count).to eq 0
 
       book = Book.new title: "A Tale of Two Cities"
       book.save
 
-      books, _ = Book.all
-      expect(books.length).to eq 1
-      expect(books.first.title).to eq "A Tale of Two Cities"
+      expect(Book.count).to eq 1
+      expect(Book.first.title).to eq "A Tale of Two Cities"
     end
 
     it "can fetch a book by ID" do

@@ -11,29 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START index]
 class BooksController < ApplicationController
-
-  before_filter :convert_published_on_to_date
 
   PER_PAGE = 10
 
   def index
-    @books, @cursor = Book.all limit: PER_PAGE, cursor: params[:cursor]
+    @books, @cursor = Book.query limit: PER_PAGE, cursor: params[:cursor]
   end
+# [END index]
 
   def new
     @book = Book.new
-  end
-
-  def create
-    @book = Book.new book_params
-
-    if @book.save
-      flash[:success] = "Added Book"
-      redirect_to book_path(@book)
-    else
-      render :new
-    end
   end
 
   def show
@@ -59,6 +48,19 @@ class BooksController < ApplicationController
     @book = Book.find params[:id]
     @book.destroy
     redirect_to books_path
+  end
+
+  before_filter :convert_published_on_to_date
+
+  def create
+    @book = Book.new book_params
+
+    if @book.save
+      flash[:success] = "Added Book"
+      redirect_to book_path(@book)
+    else
+      render :new
+    end
   end
 
   private

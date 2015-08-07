@@ -64,8 +64,7 @@ feature "Managing Books" do
 
     expect(page).to have_content "Added Book"
 
-    books, _ = Book.all # meh, I don't like this.  Diff method for cursors?
-    book = books.first
+    book = Book.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
     expect(book.published_on).to eq Time.parse("1859-04-01")
@@ -79,15 +78,14 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    expect(page).to have_content "Title or Author must be present"
+    expect(page).to have_content "Title can't be blank"
 
     within "form.new_book" do
       fill_in "Title", with: "A Tale of Two Cities"
       click_button "Save"
     end
 
-    books, _ = Book.all
-    expect(books.first.title).to eq "A Tale of Two Cities"
+    expect(Book.first.title).to eq "A Tale of Two Cities"
   end
 
   scenario "Editing a book" do
@@ -115,7 +113,7 @@ feature "Managing Books" do
     fill_in "Title", with: ""
     click_button "Save"
 
-    expect(page).to have_content "Title or Author must be present"
+    expect(page).to have_content "Title can't be blank"
     book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
 

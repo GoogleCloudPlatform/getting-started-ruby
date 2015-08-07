@@ -1,6 +1,8 @@
 development:
-  dataset_id: dataset_directory
-  keyfile: path/to/key.json
+  dataset_id: your-project-id
+
+production:
+  dataset_id: your-project-id
 
 test:
   # $ gcd.sh create gcd_test_dataset_directory
