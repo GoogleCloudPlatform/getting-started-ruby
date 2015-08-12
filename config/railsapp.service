@@ -1,0 +1,12 @@
+[Unit]
+Description=Rails App
+After=network.target
+
+[Service]
+Type=forking
+WorkingDirectory=/opt/app
+ExecStart=/usr/local/bin/bundle exec unicorn -c config/unicorn.rb -E production -D
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
