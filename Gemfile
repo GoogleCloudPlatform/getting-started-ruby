@@ -17,10 +17,9 @@ gem "rails"
 gem "jquery-rails"
 gem "mysql2"
 gem "fog"
-# [START omniauth]
 gem "omniauth"
 gem "omniauth-google-oauth2"
-# [END omniauth]
+gem "unicorn"
 
 group :test do
   gem "rspec-rails"
