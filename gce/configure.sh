@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # # Install logging monitor and configure it to pickup application logs
 # # [START logging]
 # curl -s "https://storage.googleapis.com/signals-agents/logging/google-fluentd-install.sh" | bash
@@ -28,6 +30,10 @@ gem install rails bundler --no-ri --no-rdoc
 useradd -m railsapp
 chown -R railsapp:railsapp /opt/app
 
+mkdir /opt/gem
+chown -R railsapp:railsapp /opt/gem
+
+export GEM_HOME=/opt/gem
 sudo -u railsapp -H bundle install
 sudo -u railsapp -H rake db:create
 sudo -u railsapp -H rake db:migrate

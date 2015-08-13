@@ -3,6 +3,7 @@ Description=Rails App
 After=network.target
 
 [Service]
+Environment="GEM_HOME=/opt/gem"
 PIDFile=/opt/app/shared/pids/unicorn.pid
 User=railsapp
 Type=forking

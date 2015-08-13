@@ -30,7 +30,11 @@ pushd /opt/app
 pushd config
 
 cp database.example.yml database.yml
+chmod go-rwx database.yml
 cp cloud_storage.example.yml cloud_storage.yml
+chmod go-rwx cloud_storage.yml
+
+chmod go-rwx secrets.yml
 
 # Add your database config here
 sed -i -e 's/@@USER@@/your-cloud-sql-username/' database.yml
