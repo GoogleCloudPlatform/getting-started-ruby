@@ -33,22 +33,22 @@ cp database.example.yml database.yml
 cp cloud_storage.example.yml cloud_storage.yml
 
 # Add your database config here
-sed -i -e 's/your-mysql-user-here/railsapp/' database.yml
-sed -i -e 's/your-mysql-password-here/password/' database.yml
-sed -i -e 's/your-mysql-IPv4-address-here/1.2.3.4/' database.yml
-sed -i -e 's/your-mysql-database-here/library/' database.yml
+sed -i -e 's/@@USER@@/your-cloud-sql-username/' database.yml
+sed -i -e 's/@@PASS@@/your-cloud-sql-password/' database.yml
+sed -i -e 's/@@IP@@/your-cloud-sql-ip/' database.yml
+sed -i -e 's/@@DB@@/your-cloud-sql-db-name/' database.yml
 
 # Add your cloud storage config here
-sed -i -e 's/your-bucket-name/mybucket/' cloud_storage.yml
-sed -i -e 's/your-access-key-id/1234/' cloud_storage.yml
-sed -i -e 's/your-secret-access-key/1234/' cloud_storage.yml
+sed -i -e 's/@@BUCKET@@/your-cloud-storage-bucket/' cloud_storage.yml
+sed -i -e 's/@@ID@@/your-access-key-id/' cloud_storage.yml
+sed -i -e 's:@@KEY@@:your-secret-access-key:' cloud_storage.yml
 
 # Add your OAuth config here
-sed -i -e 's/<client ID>/1234/' secrets.yml
-sed -i -e 's/<client secret>/1234/' secrets.yml
+sed -i -e 's/@@ID@@/your-oauth-client-id/' secrets.yml
+sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' secrets.yml
 
 popd # config
 
-./startup-in-git.sh
+./gce/configure.sh
 
 popd # /opt/app

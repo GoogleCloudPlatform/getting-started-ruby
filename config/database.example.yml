@@ -2,10 +2,10 @@ mysql_settings: &mysql_settings
   adapter: mysql2
   encoding: utf8
   pool: 5
-  username: your-mysql-user-here
-  password: your-mysql-password-here
-  host: your-mysql-IPv4-address-here
-  database: your-mysql-database-here
+  username: @@USER@@
+  password: @@PASS@@
+  host: @@IP@@
+  database: @@DB@@
 
 development:
   <<: *mysql_settings

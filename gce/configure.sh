@@ -32,10 +32,10 @@ bundle install
 rake db:create
 rake db:migrate
 
-cat config/default-nginx > /etc/nginx/sites-available/default
+cat gce/default-nginx > /etc/nginx/sites-available/default
 systemctl restart nginx.service
 
-cat config/railsapp.service > /lib/systemd/system/railsapp.service
+cat gce/railsapp.service > /lib/systemd/system/railsapp.service
 systemctl daemon-reload
 systemctl enable railsapp.service
 systemctl start railsapp.service
