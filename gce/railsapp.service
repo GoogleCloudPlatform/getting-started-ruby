@@ -3,6 +3,8 @@ Description=Rails App
 After=network.target
 
 [Service]
+PIDFile=/opt/app/shared/pids/unicorn.pid
+User=railsapp
 Type=forking
 WorkingDirectory=/opt/app
 ExecStart=/usr/local/bin/bundle exec unicorn -c config/unicorn.rb -E production -D

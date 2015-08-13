@@ -25,12 +25,12 @@ apt-get install -y git ruby-dev build-essential libxml2-dev zlib1g-dev nginx lib
 gem install rails bundler --no-ri --no-rdoc
 
 # # Create a pythonapp user. The application will run as this user.
-# useradd -m -d /home/pythonapp pythonapp
-# chown -R pythonapp:pythonapp /opt/app
+useradd -m railsapp
+chown -R railsapp:railsapp /opt/app
 
-bundle install
-rake db:create
-rake db:migrate
+sudo -u railsapp -H bundle install
+sudo -u railsapp -H rake db:create
+sudo -u railsapp -H rake db:migrate
 
 cat gce/default-nginx > /etc/nginx/sites-available/default
 systemctl restart nginx.service
