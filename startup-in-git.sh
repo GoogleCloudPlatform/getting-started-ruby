@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 # # Install logging monitor and configure it to pickup application logs
 # # [START logging]
@@ -19,7 +19,7 @@
 
 # Install dependencies from apt
 apt-get update
-apt-get install -y git ruby-dev build-essential libxml2-dev zlib1g-dev nginx libmysqlclient-dev
+apt-get install -y git ruby-dev build-essential libxml2-dev zlib1g-dev nginx libmysqlclient-dev libsqlite3-dev
 # redis-server
 
 gem install rails bundler --no-ri --no-rdoc
