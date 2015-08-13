@@ -33,10 +33,9 @@ chown -R railsapp:railsapp /opt/app
 mkdir /opt/gem
 chown -R railsapp:railsapp /opt/gem
 
-export GEM_HOME=/opt/gem
-sudo -u railsapp -H bundle install
-sudo -u railsapp -H rake db:create
-sudo -u railsapp -H rake db:migrate
+sudo -u railsapp -H bundle install --path /opt/gem
+sudo -u railsapp -H bundle exec rake db:create
+sudo -u railsapp -H bundle exec rake db:migrate
 
 cat gce/default-nginx > /etc/nginx/sites-available/default
 systemctl restart nginx.service
