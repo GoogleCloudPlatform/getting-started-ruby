@@ -20,6 +20,7 @@ set -e
 PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
 
 # Get the source code
+export HOME=/root
 git config --global credential.helper gcloud.sh
 # Change branch from master if not using master
 git clone https://source.developers.google.com/p/$PROJECTID /opt/app -b master
