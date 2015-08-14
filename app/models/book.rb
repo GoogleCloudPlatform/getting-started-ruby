@@ -18,6 +18,16 @@ class Book
 
   attr_accessor :id, :title, :author, :published_on, :description
 
+  # Return a Gcloud::Datastore::Dataset for the configured dataset.
+  # The dataset is used to create, read, update, and delete entity objects.
+  def self.dataset
+    @dataset ||= Gcloud.datastore(
+      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+    )
+  end
+# [END book_class]
+
+  # [END query]
   # Query Book entities from Cloud Datastore.
   #
   # returns an array of Book query results and a cursor
@@ -37,17 +47,7 @@ class Book
 
     return books, next_cursor
   end
-# [END book_class]
-
-  # [START dataset]
-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
-  # The dataset is used to create, read, update, and delete entity objects.
-  def self.dataset
-    @dataset ||= Gcloud.datastore(
-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
-    )
-  end
-  # [END dataset]
+  # [END query]
 
   # [START from_entity]
   def self.from_entity entity
