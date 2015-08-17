@@ -17,10 +17,11 @@ gem "rails"
 gem "jquery-rails"
 gem "mysql2"
 gem "fog"
-# [START omniauth]
 gem "omniauth"
 gem "omniauth-google-oauth2"
-# [END omniauth]
+# [START google_api_client]
+gem "google-api-client"
+# [END google_api_client]
 
 group :test do
   gem "rspec-rails"

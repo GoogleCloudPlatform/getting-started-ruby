@@ -12,6 +12,7 @@
 # limitations under the License.
 
 require "spec_helper"
+require "ostruct"
 
 RSpec.describe Book do
   include ActiveJob::TestHelper
@@ -37,8 +38,28 @@ RSpec.describe Book do
   end
 
   it "requires a title" do
+    allow_any_instance_of(LookupBookDetailsJob).to receive(:perform)
+
     expect(Book.new title: nil).not_to be_valid
     expect(Book.new title: "title").to be_valid
+  end
+
+  # Alternatively, faraday can be mocked.
+  # HTTP mocking the discovery API requires a local HTTP response fixture.
+  # TODO Make these doubles instead?  So then we're mixing mocking with fake classes.
+  # TODO Convert OpenStructs to doubles too?
+  # Ideally, this spec should demonstrate how to *cleanly* test Google::APIClient
+  #
+  # SEE ALSO Google API Client Faraday mocking in prototypes
+  class FakeBookApi; end
+  class FakeGoogleApiClient
+    class FakeGoogleApiClientAuthorization
+      def scope=(*args); end
+      def fetch_access_token!; end
+    end
+    def initialize(*args); end
+    def authorization=(*args); end
+    def authorization; FakeGoogleApiClientAuthorization.new; end
   end
 
   it "book details are automatically looked up when created" do
@@ -55,13 +76,37 @@ RSpec.describe Book do
     expect(job[:job]).to eq LookupBookDetailsJob
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
+    fake_client = FakeGoogleApiClient.new
+    fake_book_api = FakeBookApi.new
+    allow(Google::APIClient).to receive(:new).and_return fake_client
+    allow(fake_client).to receive(:discovered_api).and_return fake_book_api
+    allow(fake_book_api).to receive_message_chain(:volumes, :list).and_return "BookVolumesListMethod"
+    book_response = OpenStruct.new(
+      self_link: "https://link/to/book",
+      volume_info: OpenStruct.new(
+        title: "A Tale of Two Cities",
+        authors: ["Charles Dickens"],
+        image_links: { thumbnail: "https://path/to/cover/image.png" }
+      )
+    )
+
+    expect(fake_client).to receive(:execute).with(
+      api_method: fake_book_api.volumes.list,
+      parameters: { q: "A Tale of Two Cities", intitle: true, order_by: "relevance" }
+    ).and_return(
+      OpenStruct.new data: OpenStruct.new(items: [book_response])
+    )
+
     run_enqueued_jobs!
 
     expect(enqueued_jobs).to be_empty
 
-    # test
     book.reload
-    expect(book.title).to eq "A TALE OF TWO CITIES"
+    expect(book.title).to eq "A Tale of Two Cities"
+    expect(book.author).to eq "Charles Dickens"
+    # description ?
+    # publication date ?
+    expect(book.image_url).to eq "https://path/to/cover/image.png"
   end
 
   it "book details are only looked up when fields are blank"

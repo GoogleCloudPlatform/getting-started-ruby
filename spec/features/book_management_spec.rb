@@ -16,6 +16,8 @@ require "spec_helper"
 feature "Managing Books" do
 
   before do
+    allow_any_instance_of(LookupBookDetailsJob).to receive(:perform)
+
     OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
       provider: :google_oauth2,
       uid: "123456",
