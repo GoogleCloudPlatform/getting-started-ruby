@@ -14,10 +14,56 @@
 require "spec_helper"
 
 RSpec.describe Book do
+  include ActiveJob::TestHelper
+
+  def run_enqueued_jobs!
+    enqueued_jobs.each {|job| run_enqueued_job! job }
+  end
+
+  def run_enqueued_job! job
+    job_class = job[:job]
+
+    job_arguments = job[:args].map do |arg|
+      if arg.try :has_key?, "_aj_globalid" # ActiveJob object identifier
+        GlobalID::Locator.locate arg["_aj_globalid"]
+      else
+        arg
+      end
+    end
+
+    job_class.perform_now *job_arguments
+
+    enqueued_jobs.delete job
+  end
 
   it "requires a title" do
     expect(Book.new title: nil).not_to be_valid
     expect(Book.new title: "title").to be_valid
   end
+
+  it "book details are automatically looked up when created" do
+    expect(enqueued_jobs).to be_empty
+
+    book = Book.create title: "A Tale of Two Cities"
+
+    expect(book.title).to eq "A Tale of Two Cities" # test
+
+    expect(enqueued_jobs.length).to eq 1
+
+    job = enqueued_jobs.first
+
+    expect(job[:job]).to eq LookupBookDetailsJob
+    expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
+
+    run_enqueued_jobs!
+
+    expect(enqueued_jobs).to be_empty
+
+    # test
+    book.reload
+    expect(book.title).to eq "A TALE OF TWO CITIES"
+  end
+
+  it "book details are only looked up when fields are blank"
 
 end

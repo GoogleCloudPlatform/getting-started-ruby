@@ -14,17 +14,24 @@
 class Book < ActiveRecord::Base
   validates :title, presence: true
 
-  #
   attr_accessor :cover_image
 
-  #
   after_create   :upload_image, if: :cover_image
   before_update  :update_image, if: :cover_image
   before_destroy :delete_image, if: :image_url
 
+  # [START enqueue_job]
+  after_create :lookup_book_details
+
   private
 
-  # [START upload]
+  def lookup_book_details
+    if [author, description, published_on, image_url].any? {|attr| attr.blank? }
+      LookupBookDetailsJob.perform_later self
+    end
+  end
+  # [END enqueue_job]
+
   def upload_image
     image = StorageBucket.files.new(
       key: "cover_images/#{id}/#{cover_image.original_filename}",
@@ -36,20 +43,15 @@ class Book < ActiveRecord::Base
 
     update_columns image_url: image.public_url
   end
-  # [END upload]
 
-  # [START delete]
   def delete_image
     image_key = URI.parse(image_url).path.sub(%r{^/}, "")
 
     StorageBucket.files.new(key: image_key).destroy
   end
-  # [END delete]
 
-  # [START update]
   def update_image
     delete_image if image_url?
     upload_image
   end
-  # [END update]
 end
