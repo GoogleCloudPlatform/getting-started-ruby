@@ -12,6 +12,8 @@ class LookupBookDetailsJob < ActiveJob::Base
   queue_as :default
 
   def perform book
+    puts "Lookup details for book #{book.id} #{book.title.inspect}"
+
     book_service = BooksAPI::BooksService.new
     book_service.authorization = Google::Auth.get_application_default [BooksAPI::AUTH_BOOKS]
 

@@ -19,9 +19,10 @@ gem "mysql2"
 gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
-# [START google_api_client]
+# [START google_api_gems]
+gem "gcloud", "0.2.0"
 gem "google-api-client", "0.9.pre3"
-# [END google_api_client]
+# [END google_api_gems]
 
 group :test do
   gem "rspec-rails"
