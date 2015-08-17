@@ -20,9 +20,11 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START google_api_gems]
-gem "gcloud", "0.2.0"
-gem "google-api-client", "0.9.pre3"
+gem "gcloud"
+gem "google-api-client"
 # [END google_api_gems]
+
+# New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
 
 group :test do
   gem "rspec-rails"
