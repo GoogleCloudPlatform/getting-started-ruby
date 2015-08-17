@@ -9,15 +9,19 @@ require "google/api_client"
 class LookupBookDetailsJob < ActiveJob::Base
   queue_as :default
 
-  def perform book
-    Rails.logger.info "(#{book.id}) Lookup book details for #{book.title.inspect}"
-
+  def google_api_client
     api_client = Google::APIClient.new application_name: "Bookshelf Sample Application"
     api_client.authorization = :google_app_default
     api_client.authorization.scope = "https://www.googleapis.com/auth/books"
     api_client.authorization.fetch_access_token!
+    api_client
+  end
 
-    books_api = api_client.discovered_api "books"
+  def perform book
+    Rails.logger.info "(#{book.id}) Lookup book details for #{book.title.inspect}"
+
+    api_client = google_api_client
+    books_api  = api_client.discovered_api "books"
 
     result = api_client.execute(
       api_method: books_api.volumes.list,
@@ -37,8 +41,12 @@ class LookupBookDetailsJob < ActiveJob::Base
       info   = volume.volume_info
       images = info.image_links
 
+      publication_date = info.published_date
+      publication_date = "#{$1}-01-01" if publication_date =~ /^(\d{4})$/
+      publication_date = Date.parse publication_date
+
       book.author       = info.authors.join(", ") unless book.author.present?
-      book.published_on = info.published_date     unless book.published_on.present?
+      book.published_on = publication_date        unless book.published_on.present?
       book.description  = info.description        unless book.description.present?
       book.image_url    = images.try(:thumbnail)  unless book.image_url.present?
       book.save

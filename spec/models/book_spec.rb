@@ -44,24 +44,6 @@ RSpec.describe Book do
     expect(Book.new title: "title").to be_valid
   end
 
-  # Alternatively, faraday can be mocked.
-  # HTTP mocking the discovery API requires a local HTTP response fixture.
-  # TODO Make these doubles instead?  So then we're mixing mocking with fake classes.
-  # TODO Convert OpenStructs to doubles too?
-  # Ideally, this spec should demonstrate how to *cleanly* test Google::APIClient
-  #
-  # SEE ALSO Google API Client Faraday mocking in prototypes
-  class FakeBookApi; end
-  class FakeGoogleApiClient
-    class FakeGoogleApiClientAuthorization
-      def scope=(*args); end
-      def fetch_access_token!; end
-    end
-    def initialize(*args); end
-    def authorization=(*args); end
-    def authorization; FakeGoogleApiClientAuthorization.new; end
-  end
-
   it "book details are automatically looked up when created" do
     expect(enqueued_jobs).to be_empty
 
@@ -76,26 +58,33 @@ RSpec.describe Book do
     expect(job[:job]).to eq LookupBookDetailsJob
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
-    fake_client = FakeGoogleApiClient.new
-    fake_book_api = FakeBookApi.new
-    allow(Google::APIClient).to receive(:new).and_return fake_client
-    allow(fake_client).to receive(:discovered_api).and_return fake_book_api
-    allow(fake_book_api).to receive_message_chain(:volumes, :list).and_return "BookVolumesListMethod"
-    book_response = OpenStruct.new(
+    # Mock Books API volumes.list RPC method
+    books_api = double
+    allow(books_api).to receive_message_chain(:volumes, :list).and_return "BookVolumesListMethod"
+
+    # Mock response from call to Books API
+    book_response = double(
       self_link: "https://link/to/book",
-      volume_info: OpenStruct.new(
+      volume_info: double(
         title: "A Tale of Two Cities",
         authors: ["Charles Dickens"],
-        image_links: OpenStruct.new(thumbnail: "https://path/to/cover/image.png")
+        published_date: "1859",
+        description: "A Tale of Two Cities is a novel by Charles Dickens.",
+        image_links: double(thumbnail: "https://path/to/cover/image.png")
       )
     )
 
-    expect(fake_client).to receive(:execute).with(
-      api_method: fake_book_api.volumes.list,
+    # Mock Google::APIClient
+    google_api_client = double
+    allow(google_api_client).to receive(:discovered_api).and_return books_api
+    expect(google_api_client).to receive(:execute).with(
+      api_method: books_api.volumes.list,
       parameters: { q: "A Tale of Two Cities", order_by: "relevance" }
     ).and_return(
-      OpenStruct.new data: OpenStruct.new(items: [book_response])
+      double data: double(items: [book_response])
     )
+
+    allow_any_instance_of(LookupBookDetailsJob).to receive(:google_api_client).and_return google_api_client
 
     run_enqueued_jobs!
 
@@ -104,8 +93,8 @@ RSpec.describe Book do
     book.reload
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    # description ?
-    # publication date ?
+    expect(book.published_on).to eq Date.parse("1859-01-01")
+    expect(book.description).to eq "A Tale of Two Cities is a novel by Charles Dickens."
     expect(book.image_url).to eq "https://path/to/cover/image.png"
   end
 
