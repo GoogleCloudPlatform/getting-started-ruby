@@ -20,7 +20,7 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START google_api_client]
-gem "google-api-client"
+gem "google-api-client", "0.9.pre3"
 # [END google_api_client]
 
 group :test do
