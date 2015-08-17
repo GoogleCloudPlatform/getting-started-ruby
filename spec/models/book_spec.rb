@@ -38,7 +38,7 @@ RSpec.describe Book do
   end
 
   it "requires a title" do
-    allow_any_instance_of(LookupBookDetailsJob).to receive(:perform)
+    allow_any_instance_of(Book).to receive(:lookup_book_details)
 
     expect(Book.new title: nil).not_to be_valid
     expect(Book.new title: "title").to be_valid
@@ -86,13 +86,13 @@ RSpec.describe Book do
       volume_info: OpenStruct.new(
         title: "A Tale of Two Cities",
         authors: ["Charles Dickens"],
-        image_links: { thumbnail: "https://path/to/cover/image.png" }
+        image_links: OpenStruct.new(thumbnail: "https://path/to/cover/image.png")
       )
     )
 
     expect(fake_client).to receive(:execute).with(
       api_method: fake_book_api.volumes.list,
-      parameters: { q: "A Tale of Two Cities", intitle: true, order_by: "relevance" }
+      parameters: { q: "A Tale of Two Cities", order_by: "relevance" }
     ).and_return(
       OpenStruct.new data: OpenStruct.new(items: [book_response])
     )
