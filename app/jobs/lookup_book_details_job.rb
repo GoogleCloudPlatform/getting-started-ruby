@@ -10,7 +10,7 @@ class LookupBookDetailsJob < ActiveJob::Base
   queue_as :default
 
   def perform book
-    puts "Lookup details for book #{book.id} #{book.title.inspect}"
+    Rails.logger.info "(#{book.id}) Lookup book details for #{book.title.inspect}"
 
     api_client = Google::APIClient.new application_name: "Bookshelf Sample Application"
     api_client.authorization = :google_app_default
@@ -43,6 +43,8 @@ class LookupBookDetailsJob < ActiveJob::Base
       book.image_url    = images.try(:thumbnail)  unless book.image_url.present?
       book.save
     end
+
+    Rails.logger.info "(#{book.id}) Complete"
   end
 end
 # [END book_lookup]

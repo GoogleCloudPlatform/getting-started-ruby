@@ -12,22 +12,28 @@ module ActiveJob
       end
 
       def self.enqueue job
+        book  = job.arguments.first
         topic = pubsub.topic "lookup_book_details_queue"
 
         topic.publish book.id.to_s
       end
 
       def self.run_worker!
-        topic        = pubsub.topic "lookup_book_details_queue"
+        Rails.logger = Logger.new(STDOUT)
+        Rails.logger.info "Running worker to lookup book details"
+
+        topic        = pubsub.topic       "lookup_book_details_queue"
         subscription = topic.subscription "lookup_book_details"
-        
+
+        topic.subscribe "lookup_book_details" unless subscription.exists?
+
         subscription.listen autoack: true do |message|
-          puts "Message received #{message.data.inspect}"
+          Rails.logger.info "Book lookup request (#{message.data})"
 
           book_id = message.data.to_i
-          book    = Book.find book_id
+          book    = Book.find_by_id book_id
 
-          LookupBookDetailsJob.perform_now book
+          LookupBookDetailsJob.perform_now book if book
         end
       end
 
