@@ -15,14 +15,6 @@ require "spec_helper"
 
 feature "Managing Books" do
 
-  before do
-    OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
-      provider: :google_oauth2,
-      uid: "123456",
-      info: { name: "Fake User", image: "https://user-profile/image.png" }
-    )
-  end
-
   scenario "No books have been added" do
     visit root_path
 
@@ -36,25 +28,6 @@ feature "Managing Books" do
 
     expect(page).to have_content "A Tale of Two Cities"
     expect(page).to have_content "Charles Dickens"
-  end
-
-  scenario "Listing user's books" do
-    Book.create! title: "Book created by anonymous user"
-    Book.create! creator_id: "123456", title: "Book created by logged in user"
-
-    visit root_path
-    expect(page).not_to have_link "Mine"
-    expect(page).to have_content "Book created by anonymous user"
-    expect(page).to have_content "Book created by logged in user"
-
-    click_link "Login"
-    expect(page).to have_link "Mine"
-    expect(page).to have_content "Book created by anonymous user"
-    expect(page).to have_content "Book created by logged in user"
-
-    click_link "Mine"
-    expect(page).not_to have_content "Book created by anonymous user"
-    expect(page).to have_content "Book created by logged in user"
   end
 
   scenario "Paginating through list of books" do
@@ -135,27 +108,6 @@ feature "Managing Books" do
     expect(book.description).to eq "A novel by Charles Dickens"
   end
 
-  scenario "Logged in user adding a book" do
-    expect(Book.count).to eq 0
-
-    visit root_path
-    click_link "Login"
-    click_link "Add Book"
-    within "form.new_book" do
-      fill_in "Title", with: "A Tale of Two Cities"
-      fill_in "Author", with: "Charles Dickens"
-      click_button "Save"
-    end
-
-    expect(page).to have_content "Added Book"
-    expect(Book.count).to eq 1
-
-    book = Book.first
-    expect(book.creator_id).to eq 123456
-    expect(book.title).to eq "A Tale of Two Cities"
-    expect(book.author).to eq "Charles Dickens"
-  end
-
   scenario "Adding a book with missing fields" do
     expect(Book.count).to eq 0
 
@@ -226,7 +178,7 @@ feature "Managing Books" do
     expect(Book.exists? book.id).to be false
   end
 
-  feature "with Cover Images" do
+  feature "with cover images" do
 
     scenario "Displaying cover images in book listing" do
       book = Book.create! title: "A Tale of Two Cities",
@@ -301,6 +253,56 @@ feature "Managing Books" do
       expect(Book.exists? book.id).to be false
       expect(StorageBucket.files.get image_key).to be_nil
     end
+  end
 
+  feature "when logged in" do
+
+    before do
+      OmniAuth.config.mock_auth[:google_oauth2] = OmniAuth::AuthHash.new(
+        provider: :google_oauth2,
+        uid: "123456",
+        info: { name: "Fake User", image: "https://user-profile/image.png" }
+      )
+    end
+
+    scenario "Listing user's books" do
+      Book.create! title: "Book created by anonymous user"
+      Book.create! creator_id: "123456", title: "Book created by logged in user"
+
+      visit root_path
+      expect(page).not_to have_link "Mine"
+      expect(page).to have_content "Book created by anonymous user"
+      expect(page).to have_content "Book created by logged in user"
+
+      click_link "Login"
+      expect(page).to have_link "Mine"
+      expect(page).to have_content "Book created by anonymous user"
+      expect(page).to have_content "Book created by logged in user"
+
+      click_link "Mine"
+      expect(page).not_to have_content "Book created by anonymous user"
+      expect(page).to have_content "Book created by logged in user"
+    end
+
+    scenario "Adding a user's book" do
+      expect(Book.count).to eq 0
+
+      visit root_path
+      click_link "Login"
+      click_link "Add Book"
+      within "form.new_book" do
+        fill_in "Title", with: "A Tale of Two Cities"
+        fill_in "Author", with: "Charles Dickens"
+        click_button "Save"
+      end
+
+      expect(page).to have_content "Added Book"
+      expect(Book.count).to eq 1
+
+      book = Book.first
+      expect(book.creator_id).to eq 123456
+      expect(book.title).to eq "A Tale of Two Cities"
+      expect(book.author).to eq "Charles Dickens"
+    end
   end
 end
