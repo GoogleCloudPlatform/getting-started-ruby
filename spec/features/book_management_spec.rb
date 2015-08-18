@@ -300,7 +300,7 @@ feature "Managing Books" do
       expect(Book.count).to eq 1
 
       book = Book.first
-      expect(book.creator_id).to eq 123456
+      expect(book.creator_id).to eq "123456"
       expect(book.title).to eq "A Tale of Two Cities"
       expect(book.author).to eq "Charles Dickens"
     end
