@@ -14,17 +14,13 @@
 class Book < ActiveRecord::Base
   validates :title, presence: true
 
-  #
   attr_accessor :cover_image
-
-  #
-  after_create   :upload_image, if: :cover_image
-  before_update  :update_image, if: :cover_image
-  before_destroy :delete_image, if: :image_url
 
   private
 
   # [START upload]
+  after_create :upload_image, if: :cover_image
+
   def upload_image
     image = StorageBucket.files.new(
       key: "cover_images/#{id}/#{cover_image.original_filename}",
@@ -38,15 +34,29 @@ class Book < ActiveRecord::Base
   end
   # [END upload]
 
-  # [START delete]
-  def delete_image
-    image_key = URI.parse(image_url).path.sub(%r{^/}, "")
+  # TODO what if the image is from the Pub/Sub job and NOT in Cloud Storage!?
 
-    StorageBucket.files.new(key: image_key).destroy
+  # [START delete]
+  before_destroy :delete_image, if: :image_url
+
+  def delete_image
+    bucket_name = StorageBucket.key
+    image_uri   = URI.parse image_url
+
+    if image_uri.host == "#{bucket_name}.storage.googleapis.com"
+      # Remove leading forward slash from image path
+      # The result will be the image key, eg. "cover_images/:id/:filename"
+      image_key = image_uri.path.sub("/", "")
+      image     = StorageBucket.files.new key: image_key
+
+      image.destroy
+    end
   end
   # [END delete]
 
   # [START update]
+  before_update :update_image, if: :cover_image
+
   def update_image
     delete_image if image_url?
     upload_image
