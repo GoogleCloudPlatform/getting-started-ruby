@@ -1,4 +1,4 @@
-# [START pub_sub_queue_adapter]
+# [START pub_sub_enqueue]
 require "gcloud"
 
 module ActiveJob
@@ -6,7 +6,8 @@ module ActiveJob
     class PubSubQueueAdapter
 
       def self.pubsub
-        gcloud = Gcloud.new ENV["PROJECT_ID"] # settings.project_id
+        project_id = Rails.application.config.x.settings["project_id"]
+        gcloud     = Gcloud.new project_id
 
         gcloud.pubsub
       end
@@ -17,7 +18,9 @@ module ActiveJob
 
         topic.publish book.id.to_s
       end
+# [END pub_sub_enqueue]
 
+      # [START pub_sub_worker]
       def self.run_worker!
         Rails.logger = Logger.new(STDOUT)
         Rails.logger.info "Running worker to lookup book details"
@@ -36,12 +39,8 @@ module ActiveJob
           LookupBookDetailsJob.perform_now book if book
         end
       end
+      # [END pub_sub_worker]
 
     end
   end
 end
-# [END pub_sub_queue_adapter]
-
-__END__
-
-#<LookupBookDetailsJob:0x007fbed925c4d0 @arguments=[#<Book id: 39, title: "jurassic park", author: "", published_on: nil, description: "", created_at: "2015-08-17 13:51:11", updated_at: "2015-08-17 13:51:11", image_url: nil, creator_id: nil>], @job_id="ca0828f0-0d27-4377-9726-63fdbffec765", @queue_name="default">

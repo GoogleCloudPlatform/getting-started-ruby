@@ -1,4 +1,5 @@
 default: &default
+  project_id: your-project-id
   cloud_storage:
     bucket: your-bucket-name
     access_key_id: your-access-key-id
