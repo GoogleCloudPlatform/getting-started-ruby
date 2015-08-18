@@ -11,26 +11,37 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START login_as]
 class ApplicationController < ActionController::Base
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
-
-  helper_method :logged_in?
-  def logged_in?
-    current_user.present?
-  end
-
-  helper_method :current_user
-  def current_user
-    Marshal.load session[:user] if session.has_key?(:user)
-  end
 
   def login_as user
     session[:user] = Marshal.dump(user)
   end
+# [END login_as]
 
+  # [START logged_in]
+  helper_method :logged_in?
+
+  def logged_in?
+    current_user.present?
+  end
+  # [END logged_in]
+
+  # [START current_user]
+  helper_method :current_user
+
+  def current_user
+    Marshal.load session[:user] if session.has_key?(:user)
+  end
+  # [END current_user]
+
+  # [START logout]
   def logout!
     session.delete :user
   end
+  # [END logout]
+
+  # Prevent CSRF attacks by raising an exception.
+  # For APIs, you may want to use :null_session instead.
+  protect_from_forgery with: :exception
 end

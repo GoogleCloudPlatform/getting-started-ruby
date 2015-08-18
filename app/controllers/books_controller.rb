@@ -51,6 +51,7 @@ class BooksController < ApplicationController
     end
   end
 
+  # [START create]
   def create
     @book = Book.new book_params
 
@@ -63,6 +64,7 @@ class BooksController < ApplicationController
       render :new
     end
   end
+  # [END create]
 
   private
 

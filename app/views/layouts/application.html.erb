@@ -36,6 +36,7 @@
           <% end %>
         </ul>
         <p class="navbar-text navbar-right">
+          <%# [START user_profile] %>
           <% if logged_in? %>
             <% if current_user.image_url %>
               <%= image_tag current_user.image_url, class: "img-circle", width: 24 %>
@@ -44,8 +45,11 @@
               <%= current_user.name %> &nbsp;
               <%= link_to "(logout)", logout_path %>
             </span>
+          <%# [END user_profile] %>
           <% else %>
+            <%# [START login] %>
             <%= link_to "Login", login_path %>
+            <%# [END login] %>
           <% end %>
         </p>
       </div>

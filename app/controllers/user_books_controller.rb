@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START user_books]
 class UserBooksController < ApplicationController
 
   before_filter :login_required
@@ -27,3 +28,4 @@ class UserBooksController < ApplicationController
   end
 
 end
+# [END user_books]

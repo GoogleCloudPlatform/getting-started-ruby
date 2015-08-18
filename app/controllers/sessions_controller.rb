@@ -11,16 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START create]
 class SessionsController < ApplicationController
 
   def create
     login_as User.from_auth(request.env["omniauth.auth"])
     redirect_to root_path
   end
+# [END create]
 
+  # [START destroy]
   def destroy
     logout!
     redirect_to root_path
   end
+  # [END destroy]
 
 end
