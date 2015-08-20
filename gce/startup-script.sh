@@ -54,7 +54,7 @@ sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' settings.yml
 
 popd # config
 
-echo > key.json <<EOF
+cat > key.json <<EOF
 Your service account json contents here
 EOF
 
