@@ -1,0 +1,16 @@
+[Unit]
+Description=Resque Worker
+After=network.target
+
+[Service]
+Environment="GEM_HOME=/opt/gem"
+Environment="TERM_CHILD=1"
+Environment="QUEUE=*"
+User=railsapp
+Type=simple
+WorkingDirectory=/opt/app
+ExecStart=/usr/local/bin/bundle exec rake environment resque:work
+Restart=on-failure
+
+[Install]
+WantedBy=default.target
