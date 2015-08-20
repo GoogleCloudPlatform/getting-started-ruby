@@ -22,6 +22,7 @@ gem "omniauth-google-oauth2"
 gem "unicorn"
 gem "gcloud"
 gem "google-api-client"
+gem "resque"
 
 # New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
 

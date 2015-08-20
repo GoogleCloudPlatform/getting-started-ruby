@@ -29,9 +29,6 @@ Bundler.require(*Rails.groups)
 
 module Bookshelf
   class Application < Rails::Application
-    # [START queue_adapter]
-    config.active_job.queue_adapter = :pub_sub_queue
-    # [END queue_adapter]
 
     config.autoload_paths += Dir["#{config.root}/lib", "#{config.root}/lib/**/"]
 

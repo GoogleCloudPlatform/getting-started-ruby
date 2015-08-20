@@ -11,6 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'resque/server'
+
 Rails.application.routes.draw do
 
   resources :books
@@ -27,5 +29,7 @@ Rails.application.routes.draw do
   get "_ah/health", to: "app_engine#health"
 
   root "books#index"
+
+  mount Resque::Server.new, :at => "/resque"
 
 end
