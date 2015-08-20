@@ -39,6 +39,14 @@ To setup the database for local development, copy the sample `database.yml` file
 Edit `secrets.yml` and add your `client_id` and `client_secret` from your project's
 web application credentials ([console](https://pantheon.corp.google.com/project/_/apiui/credential)).
 
+Notes on queue
+
+  * Need to enable books api
+  * Create a service account, downlaod and save as key.json
+  * Need to install redis, and have running on localhost:6379
+    * Easy: docker run -d -p 6379:6379 redis
+  * Run worker as: TERM_CHILD=1 QUEUE=* rake environment resque:work
+
 Then, run the Rails web server:
 
     $ rails server

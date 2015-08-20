@@ -18,3 +18,4 @@
 config/database.yml
 config/settings.yml
 *.sqlite3
+key.json

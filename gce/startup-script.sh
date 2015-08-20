@@ -31,10 +31,8 @@ pushd config
 
 cp database.example.yml database.yml
 chmod go-rwx database.yml
-cp cloud_storage.example.yml cloud_storage.yml
-chmod go-rwx cloud_storage.yml
-
-chmod go-rwx secrets.yml
+cp settings.example.yml settings.yml
+chmod go-rwx settings.yml
 
 # Add your database config here
 sed -i -e 's/@@USER@@/your-cloud-sql-username/' database.yml
@@ -42,16 +40,23 @@ sed -i -e 's/@@PASS@@/your-cloud-sql-password/' database.yml
 sed -i -e 's/@@IP@@/your-cloud-sql-ip/' database.yml
 sed -i -e 's/@@DB@@/your-cloud-sql-db-name/' database.yml
 
+# Add your GCP project ID here
+sed -i -e 's/@@PROJECT@@/your-project-id/' settings.yml
+
 # Add your cloud storage config here
-sed -i -e 's/@@BUCKET@@/your-cloud-storage-bucket/' cloud_storage.yml
-sed -i -e 's/@@ID@@/your-access-key-id/' cloud_storage.yml
-sed -i -e 's:@@KEY@@:your-secret-access-key:' cloud_storage.yml
+sed -i -e 's/@@BUCKET@@/your-cloud-storage-bucket/' settings.yml
+sed -i -e 's/@@ID@@/your-access-key-id/' settings.yml
+sed -i -e 's:@@KEY@@:your-secret-access-key:' settings.yml
 
 # Add your OAuth config here
-sed -i -e 's/@@ID@@/your-oauth-client-id/' secrets.yml
-sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' secrets.yml
+sed -i -e 's/@@CLIENT@@/your-oauth-client-id/' settings.yml
+sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' settings.yml
 
 popd # config
+
+echo > key.json <<EOF
+Your service account json contents here
+EOF
 
 ./gce/configure.sh
 
