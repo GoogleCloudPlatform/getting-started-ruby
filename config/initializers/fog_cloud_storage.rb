@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if Rails.env.test?
+if Rails.env.test? || ! File.file?(Rails.root.join "config", "cloud_storage.yml")
 
   Fog.mock!
   FogStorage = Fog::Storage.new(
@@ -25,11 +25,11 @@ if Rails.env.test?
 else
 
   # [START fog_storage]
-  config = Rails.application.config_for :cloud_storage
+  config = Rails.application.config.x.settings["cloud_storage"]
 
   FogStorage = Fog::Storage.new(
     provider: "Google",
-    google_storage_access_key_id: config["access_key_id"],
+    google_storage_access_key_id:     config["access_key_id"],
     google_storage_secret_access_key: config["secret_access_key"]
   )
 

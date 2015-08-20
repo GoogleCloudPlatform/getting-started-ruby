@@ -16,5 +16,5 @@
 /tmp
 /public/assets/
 config/database.yml
-config/cloud_storage.yml
+config/settings.yml
 *.sqlite3
