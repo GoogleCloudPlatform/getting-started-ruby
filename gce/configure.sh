@@ -2,22 +2,18 @@
 
 set -e
 
-# # Install logging monitor and configure it to pickup application logs
-# # [START logging]
-# curl -s "https://storage.googleapis.com/signals-agents/logging/google-fluentd-install.sh" | bash
-
-# cat >/etc/google-fluentd/config.d/pythonapp.conf << EOF
-# <source>
-#   type tail
-#   format json
-#   path /opt/app/general.log
-#   pos_file /var/tmp/fluentd.pythonapp-general.pos
-#   tag pythonapp-general
-# </source>
-# EOF
-
-# service google-fluentd restart &
-# # [END logging]
+curl -s "https://storage.googleapis.com/signals-agents/logging/google-fluentd-install.sh" | bash
+cat >/etc/google-fluentd/config.d/railsapp.conf << EOF
+<source>
+  type tail
+  format none
+  path /opt/app/shared/log/*.log
+  pos_file /var/tmp/fluentd.railsapp.pos
+  read_from_head true
+  tag railsapp
+</source>
+EOF
+service google-fluentd restart &
 
 # Install dependencies from apt
 apt-get update
