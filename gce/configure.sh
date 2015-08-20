@@ -23,7 +23,7 @@ set -e
 apt-get update
 apt-get install -y git ruby-dev build-essential libxml2-dev zlib1g-dev nginx libmysqlclient-dev libsqlite3-dev redis-server
 
-gem install rails bundler --no-ri --no-rdoc
+gem install bundler --no-ri --no-rdoc
 
 useradd -m railsapp
 chown -R railsapp:railsapp /opt/app
