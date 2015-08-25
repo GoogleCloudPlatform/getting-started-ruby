@@ -52,9 +52,11 @@ Rails.application.configure do
   # config.log_tags = [ :subdomain, :uuid ]
 
   # Use a different logger for distributed setups.
+  # [START logging]
   if Dir.exist? "/var/log/app_engine/custom_logs"
     config.logger = ActiveSupport::TaggedLogging.new Logger.new("/var/log/app_engine/custom_logs/application.log")
   end
+  # [END logging]
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
