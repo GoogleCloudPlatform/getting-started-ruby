@@ -11,12 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-/public/assets/
-config/database.yml
-config/settings.yml
-*.sqlite3
-/config/database.yml
-/gcd_dataset_directory/
+require File.expand_path("../boot", __FILE__)
+
+require "rails"
+
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "sprockets/railtie"
+
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
+
+module Bookshelf
+  class Application < Rails::Application
+    config.x.settings = Rails.application.config_for :settings
+  end
+end
