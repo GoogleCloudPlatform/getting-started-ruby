@@ -11,25 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-source "https://rubygems.org"
+require File.expand_path("../boot", __FILE__)
 
-gem "rails"
-gem "gcloud"
-gem "jquery-rails"
-#[START fog]
-gem "fog"
-#[END fog]
+require "rails"
 
-group :production do
-  gem "mysql2"
-end
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "sprockets/railtie"
 
-group :development, :test do
-  gem "sqlite3"
-end
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
-group :test do
-  gem "rspec-rails"
-  gem "rack-test"
-  gem "capybara"
+module Bookshelf
+  class Application < Rails::Application
+    config.x.settings = Rails.application.config_for :settings
+  end
 end
