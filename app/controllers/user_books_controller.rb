@@ -16,6 +16,8 @@ class UserBooksController < ApplicationController
 
   before_filter :login_required
 
+  # TODO paginate!!!!
+
   def index
     @books = Book.where creator_id: current_user.id
     render "books/index"

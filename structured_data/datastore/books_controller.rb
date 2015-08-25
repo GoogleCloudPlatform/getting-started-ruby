@@ -55,6 +55,8 @@ class BooksController < ApplicationController
   def create
     @book = Book.new book_params
 
+    @book.creator_id = current_user.id if logged_in?
+
     if @book.save
       flash[:success] = "Added Book"
       redirect_to book_path(@book)
