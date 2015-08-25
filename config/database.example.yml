@@ -1,34 +1,43 @@
-<<<<<<< HEAD
-mysql_settings: &mysql_settings
-  adapter: mysql2
-  encoding: utf8
-  pool: 5
-  username: your-mysql-user-here
-  password: your-mysql-password-here
-  host: your-mysql-IPv4-address-here
-  database: your-mysql-database-here
+# Google Cloud SQL Sample Database Configuration
+# ----------------------------------------------
+# default: &default
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: 5
+#   username: your-mysql-user-here
+#   password: your-mysql-password-here
+#   host: your-mysql-IPv4-address-here
+#   database: your-mysql-database-here
+
+# Google Cloud Datastore Sample Database Configuration
+# ----------------------------------------------------
+# default: &default
+#   dataset_id: your-project-id
+
+# PostgreSQL Sample Database Configuration
+# ----------------------------------------
+# default: &default
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: 5
+#   username: your-postgresql-user-here
+#   password: your-postgresql-password-here
+#   host: your-postgresql-IPv4-address-here
+#   database: your-postgresql-database-here
 
 development:
-  <<: *mysql_settings
+  <<: *default
 
 production:
-  <<: *mysql_settings
+  <<: *default
 
+# Test configuration
 test:
+  # Datastore
+  dataset_id: gcd_test_dataset_directory
+  host: http://localhost:8080/
+  # SQL
   adapter: sqlite3
   pool: 5
   timeout: 5000
   database: db/test.sqlite3
-=======
-development:
-  dataset_id: your-project-id
-
-production:
-  dataset_id: your-project-id
-
-test:
-  # $ gcd.sh create gcd_test_dataset_directory
-  # $ gcd.sh start --testing ./gcd_test_dataset_directory/
-  dataset_id: gcd_test_dataset_directory
-  host: http://localhost:8080/
->>>>>>> 2-cloud-datastore
