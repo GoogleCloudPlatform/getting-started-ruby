@@ -22,7 +22,7 @@ require "rack/test"
 
 database_config = Rails.application.config.database_configuration[Rails.env]
 
-if database_config.has_key? "dataset_id"
+if Book.respond_to? :dataset
   require "datastore_book_extensions"
   Book.send :include, DatastoreBookExtensions
   Book.dataset.connection.http_host = database_config["host"]
