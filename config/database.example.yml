@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 mysql_settings: &mysql_settings
   adapter: mysql2
   encoding: utf8
@@ -18,3 +19,16 @@ test:
   pool: 5
   timeout: 5000
   database: db/test.sqlite3
+=======
+development:
+  dataset_id: your-project-id
+
+production:
+  dataset_id: your-project-id
+
+test:
+  # $ gcd.sh create gcd_test_dataset_directory
+  # $ gcd.sh start --testing ./gcd_test_dataset_directory/
+  dataset_id: gcd_test_dataset_directory
+  host: http://localhost:8080/
+>>>>>>> 2-cloud-datastore

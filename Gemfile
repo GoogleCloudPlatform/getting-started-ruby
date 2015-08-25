@@ -11,10 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START dependencies]
 source "https://rubygems.org"
 
 gem "rails"
+gem "gcloud"
 gem "jquery-rails"
 #[START fog]
 gem "fog"

@@ -11,12 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# TODO test against Ruby 1.9.3
+
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rails"
 require "rack/test"
+
+database_config = Rails.application.config.database_configuration[Rails.env]
+
+if database_config.has_key? "dataset_id"
+  require "datastore_book_extensions"
+  Book.send :include, DatastoreBookExtensions
+  Book.dataset.connection.http_host = database_config["host"]
+end
 
 Rails.configuration.x.fog_dir = "testbucket"
 
@@ -30,6 +40,7 @@ RSpec.configure do |config|
   end
 
   config.before :each do
+    Book.delete_all
     Fog::Mock.reset
     FogStorage.directories.create key: "testbucket", acl: "public-read"
   end
