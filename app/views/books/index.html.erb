@@ -20,6 +20,7 @@
   <span>Add Book</span>
 <% end %>
 
+<%# [START book_list] %>
 <% @books.each do |book| %>
   <div class="book media">
     <%= link_to book_path(book) do %>
@@ -34,14 +35,15 @@
   </div>
 <% end %>
 
-<% if @books.none? %>
-  <p>No books found.</p>
-<% end %>
-
-<% if @cursor %>
+<% if @next_page %>
   <nav>
     <ul class="pager">
-      <li><%= link_to "More", books_path(cursor: @cursor) %></li>
+      <li><%= link_to "More", books_path(page: @next_page) %></li>
     </ul>
   </nav>
+<% end %>
+<%# [END book_list] %>
+
+<% if @books.none? %>
+  <p>No books found.</p>
 <% end %>
