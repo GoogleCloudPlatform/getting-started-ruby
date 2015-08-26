@@ -65,3 +65,11 @@ The `ruby-runtime` image requires that your application directory contain the fo
 [Ruby website]: https://www.ruby-lang.org
 [user-install]: http://guides.rubygems.org/faqs/#user-install
 [runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](LICENSE)
