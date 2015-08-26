@@ -1,4 +1,4 @@
-# Ruby Getting Started
+# Getting Started Ruby
 
 Checkout branches to view particular steps of this sample application.
 
