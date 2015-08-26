@@ -1,0 +1,7 @@
+<% if @more %>
+  <nav>
+    <ul class="pager">
+      <li><%= link_to "More", user_books_path(more: @more) %></li>
+    </ul>
+  </nav>
+<% end %>

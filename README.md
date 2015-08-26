@@ -51,3 +51,20 @@ Then, run the Rails web server:
 ### To deploy to App Engine Managed VMs
 
     $ gcloud preview app deploy app.yaml --set-default
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+<<<<<<< HEAD
+=======
+[google/ruby]: https://registry.hub.docker.com/u/google/ruby-runtime/
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+>>>>>>> 3-cloud-storage
+## Licensing
+
+* See [LICENSE](LICENSE)

@@ -34,7 +34,13 @@
   </div>
 <% end %>
 
-<%= render "pagination_link" %>
+<% if @next_page %>
+  <nav>
+    <ul class="pager">
+      <li><%= link_to "More", books_path(page: @next_page) %></li>
+    </ul>
+  </nav>
+<% end %>
 
 <% if @books.none? %>
   <p>No books found.</p>

@@ -11,29 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START user_books]
-class UserBooksController < ApplicationController
+require File.expand_path("../boot", __FILE__)
 
-  PER_PAGE = 10
+require "rails"
 
-  before_filter :login_required
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "sprockets/railtie"
 
-  def index
-    page = params[:more] ? params[:more].to_i : 0
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
 
-    @books = Book.where(creator_id: current_user.id).
-                  limit(PER_PAGE).offset(PER_PAGE * page)
-
-    @more = page + 1 if @books.count == PER_PAGE
-
-    render "books/index"
+module Bookshelf
+  class Application < Rails::Application
+    config.x.settings = Rails.application.config_for :settings
   end
-
-  private
-
-  def login_required
-    redirect_to root_path unless logged_in?
-  end
-
 end
-# [END user_books]

@@ -14,6 +14,7 @@
 source "https://rubygems.org"
 
 gem "rails"
+gem "gcloud"
 gem "jquery-rails"
 gem "mysql2"
 gem "fog"
