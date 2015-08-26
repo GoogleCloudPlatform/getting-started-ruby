@@ -1,3 +1,0 @@
-require './hello'
-
-run HelloWorldApp
