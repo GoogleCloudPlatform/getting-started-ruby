@@ -14,12 +14,18 @@
 # [START user_books]
 class UserBooksController < ApplicationController
 
+  PER_PAGE = 10
+
   before_filter :login_required
 
-  # TODO paginate!!!!
-
   def index
-    @books = Book.where creator_id: current_user.id
+    page = params[:page] ? params[:page].to_i : 0
+
+    @books = Book.where(creator_id: current_user.id).
+                  limit(PER_PAGE).offset(PER_PAGE * page)
+
+    @next_page = page + 1 if @books.count == PER_PAGE
+
     render "books/index"
   end
 

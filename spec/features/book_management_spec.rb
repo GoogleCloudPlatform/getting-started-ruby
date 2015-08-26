@@ -266,6 +266,30 @@ feature "Managing Books" do
       expect(page).to have_content "Book created by logged in user"
     end
 
+    scenario "Paginating through list of user's books" do
+      Book.create! creator_id: "123456", title: "Book 1"
+      Book.create! creator_id: "123456", title: "Book 2"
+      Book.create! creator_id: "123456", title: "Book 3"
+      Book.create! creator_id: "123456", title: "Book 4"
+      Book.create! creator_id: "123456", title: "Book 5"
+
+      stub_const "UserBooksController::PER_PAGE", 2
+
+      visit root_path
+      click_link "Login"
+
+      click_link "Mine"
+      expect(all(".book").length).to eq 2
+
+      click_link "More"
+      expect(all(".book").length).to eq 2
+
+      click_link "More"
+      expect(all(".book").length).to eq 1
+
+      expect(page).not_to have_link "More"
+    end
+
     scenario "Adding a user's book" do
       expect(Book.count).to eq 0
 
