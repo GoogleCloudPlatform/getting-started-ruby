@@ -2,6 +2,7 @@
 
 set -e
 
+# [START logging]
 curl -s "https://storage.googleapis.com/signals-agents/logging/google-fluentd-install.sh" | bash
 cat >/etc/google-fluentd/config.d/railsapp.conf << EOF
 <source>
@@ -14,6 +15,7 @@ cat >/etc/google-fluentd/config.d/railsapp.conf << EOF
 </source>
 EOF
 service google-fluentd restart &
+# [END logging]
 
 # Install dependencies from apt
 apt-get update
