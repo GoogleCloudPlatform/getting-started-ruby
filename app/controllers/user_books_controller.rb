@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START user_books]
 class UserBooksController < ApplicationController
 
   PER_PAGE = 10
@@ -18,11 +19,12 @@ class UserBooksController < ApplicationController
   before_filter :login_required
 
   def index
-    puts "USER BOOKS #index"
-    puts params.inspect
-    @books, @cursor = Book.query creator_id: current_user.id,
-                                 limit: PER_PAGE,
-                                 cursor: params[:cursor]
+    page = params[:more] ? params[:more].to_i : 0
+
+    @books = Book.where(creator_id: current_user.id).
+                  limit(PER_PAGE).offset(PER_PAGE * page)
+
+    @more = page + 1 if @books.count == PER_PAGE
 
     render "books/index"
   end
@@ -34,3 +36,4 @@ class UserBooksController < ApplicationController
   end
 
 end
+# [END user_books]

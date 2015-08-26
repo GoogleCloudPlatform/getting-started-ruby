@@ -11,109 +11,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud/datastore"
-
-class Book
-  include ActiveModel::Model
-  include ActiveModel::Validations
-
-  attr_accessor :id, :title, :author, :published_on, :description, :image_url,
-                :cover_image, :creator_id
-
-
+class Book < ActiveRecord::Base
   validates :title, presence: true
 
-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
-  # The dataset is used to create, read, update, and delete entity objects.
-  def self.dataset
-    @dataset ||= Gcloud.datastore(
-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
-    )
-  end
+  attr_accessor :cover_image
 
-  # Query Book entities from Cloud Datastore.
-  #
-  # returns an array of Book query results and a cursor
-  # that can be used to query for additional results.
-  def self.query options = {}
-    puts "QUERY #{options.inspect}"
+  private
 
-    query = Gcloud::Datastore::Query.new
-    query.kind "Book"
-    query.limit options[:limit]   if options[:limit]
-    query.cursor options[:cursor] if options[:cursor]
-
-    if options[:creator_id]
-      query.where "creator_id", "=", options[:creator_id]
-    end
-
-    results = dataset.run query
-    books   = results.map {|entity| Book.from_entity entity }
-
-    if options[:limit] && results.size == options[:limit]
-      next_cursor = results.cursor
-    end
-
-    return books, next_cursor
-  end
-
-  def self.from_entity entity
-    book = Book.new
-    book.id = entity.key.id
-    entity.properties.to_hash.each do |name, value|
-      book.send "#{name}=", value
-    end
-    book
-  end
-
-  # Lookup Book by ID.  Returns Book or nil.
-  def self.find id
-    query    = Gcloud::Datastore::Key.new "Book", id.to_i
-    entities = dataset.lookup query
-
-    from_entity entities.first if entities.any?
-  end
-
-  def save
-    if valid?
-      entity = to_entity
-      Book.dataset.save entity
-      self.id = entity.key.id
-      update_image if cover_image.present?
-      true
-    else
-      false
-    end
-  end
-
-  def to_entity
-    entity = Gcloud::Datastore::Entity.new
-    entity.key = Gcloud::Datastore::Key.new "Book", id
-    entity["title"]        = title
-    entity["author"]       = author       if author
-    entity["published_on"] = published_on if published_on
-    entity["description"]  = description  if description
-    entity["image_url"]    = image_url    if image_url
-    entity["creator_id"]   = creator_id   if creator_id
-    entity
-  end
-
-  def update attributes
-    attributes.each do |name, value|
-      send "#{name}=", value
-    end
-    save
-  end
-
-  def destroy
-    delete_image if image_url.present?
-
-    Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
-  end
-
-  def persisted?
-    id.present?
-  end
+  # [START upload]
+  after_create :upload_image, if: :cover_image
 
   def upload_image
     image = StorageBucket.files.new(
@@ -124,10 +30,14 @@ class Book
 
     image.save
 
-    self.image_url = image.public_url
-
-    Book.dataset.save to_entity
+    update_columns image_url: image.public_url
   end
+  # [END upload]
+
+  # TODO what if the image is from the Pub/Sub job and NOT in Cloud Storage!?
+
+  # [START delete]
+  before_destroy :delete_image, if: :image_url
 
   def delete_image
     bucket_name = StorageBucket.key
@@ -142,10 +52,14 @@ class Book
       image.destroy
     end
   end
+  # [END delete]
+
+  # [START update]
+  before_update :update_image, if: :cover_image
 
   def update_image
-    delete_image if image_url.present?
+    delete_image if image_url?
     upload_image
   end
-
+  # [END update]
 end

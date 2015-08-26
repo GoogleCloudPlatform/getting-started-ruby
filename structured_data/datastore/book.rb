@@ -36,8 +36,6 @@ class Book
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
   def self.query options = {}
-    puts "QUERY #{options.inspect}"
-
     query = Gcloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]

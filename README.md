@@ -56,6 +56,15 @@ Then, run the Rails web server:
 
 * See [CONTRIBUTING.md](CONTRIBUTING.md)
 
+<<<<<<< HEAD
+=======
+[google/ruby]: https://registry.hub.docker.com/u/google/ruby-runtime/
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+>>>>>>> 3-cloud-storage
 ## Licensing
 
 * See [LICENSE](LICENSE)

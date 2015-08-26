@@ -18,11 +18,9 @@ class UserBooksController < ApplicationController
   before_filter :login_required
 
   def index
-    puts "USER BOOKS #index"
-    puts params.inspect
-    @books, @cursor = Book.query creator_id: current_user.id,
-                                 limit: PER_PAGE,
-                                 cursor: params[:cursor]
+    @books, @more = Book.query creator_id: current_user.id,
+                               limit: PER_PAGE,
+                               cursor: params[:more]
 
     render "books/index"
   end

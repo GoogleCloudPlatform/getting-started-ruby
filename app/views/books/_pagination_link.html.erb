@@ -1,7 +1,7 @@
-<% if @next_page %>
+<% if @more %>
   <nav>
     <ul class="pager">
-      <li><%= link_to "More", books_path(page: @next_page) %></li>
+      <li><%= link_to "More", books_path(more: @more) %></li>
     </ul>
   </nav>
 <% end %>

@@ -16,10 +16,10 @@ class BooksController < ApplicationController
   PER_PAGE = 10
 
   def index
-    page = params[:page] ? params[:page].to_i : 0
+    page = params[:more] ? params[:more].to_i : 0
 
-    @books = Book.limit(PER_PAGE).offset(PER_PAGE * page)
-    @next_page = page + 1 if @books.count == PER_PAGE
+    @books = Book.limit(PER_PAGE).offset PER_PAGE * page
+    @more  = page + 1 if @books.count == PER_PAGE
   end
 
   def new
@@ -51,7 +51,6 @@ class BooksController < ApplicationController
     end
   end
 
-  # [START create]
   def create
     @book = Book.new book_params
 
@@ -73,6 +72,5 @@ class BooksController < ApplicationController
     params.require(:book).permit :title, :author, :published_on, :description,
                                  :cover_image
   end
-  # [END book_params]
 
 end

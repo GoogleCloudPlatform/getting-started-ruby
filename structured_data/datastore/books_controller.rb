@@ -16,10 +16,7 @@ class BooksController < ApplicationController
   PER_PAGE = 10
 
   def index
-    puts "BOOKS #index"
-    puts params.inspect
-
-    @books, @cursor = Book.query limit: PER_PAGE, cursor: params[:cursor]
+    @books, @more = Book.query limit: PER_PAGE, cursor: params[:more]
   end
 
   def new
