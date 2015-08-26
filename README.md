@@ -8,3 +8,11 @@
     $ gcd.sh create dataset
     $ gcd.sh start --testing ./dataset/
     $ bundle exec rspec
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](LICENSE)
