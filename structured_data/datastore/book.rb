@@ -18,7 +18,7 @@ class Book
   include ActiveModel::Validations
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url,
-                :cover_image
+                :cover_image, :creator_id
 
 
   validates :title, presence: true
@@ -36,10 +36,16 @@ class Book
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
   def self.query options = {}
+    puts "QUERY #{options.inspect}"
+
     query = Gcloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]
     query.cursor options[:cursor] if options[:cursor]
+
+    if options[:creator_id]
+      query.where "creator_id", "=", options[:creator_id]
+    end
 
     results = dataset.run query
     books   = results.map {|entity| Book.from_entity entity }
@@ -88,6 +94,7 @@ class Book
     entity["published_on"] = published_on if published_on
     entity["description"]  = description  if description
     entity["image_url"]    = image_url    if image_url
+    entity["creator_id"]   = creator_id   if creator_id
     entity
   end
 
