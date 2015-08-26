@@ -49,5 +49,12 @@ to install dependencies required for the MySQL gem to run.
 The `Dockerfile` also runs `bundle install --without development:test` so that only
 production gems will be installed in production.
 
-
 [google/ruby]: https://registry.hub.docker.com/u/google/ruby-runtime/
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](LICENSE)
