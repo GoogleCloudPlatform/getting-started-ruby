@@ -11,13 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START login_as]
 class ApplicationController < ActionController::Base
-
-  def login_as user
-    session[:user] = Marshal.dump(user)
-  end
-# [END login_as]
 
   # [START logged_in]
   helper_method :logged_in?
