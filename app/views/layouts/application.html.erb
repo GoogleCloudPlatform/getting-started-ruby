@@ -31,9 +31,11 @@
         </div>
         <ul class="nav navbar-nav">
           <li><%= link_to "Books", root_path %></li>
+          <%# [START mine] %>
           <% if logged_in? %>
             <li><%= link_to "Mine", user_books_path %></li>
           <% end %>
+          <%# [END mine] %>
         </ul>
         <p class="navbar-text navbar-right">
           <%# [START user_profile] %>
