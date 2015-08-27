@@ -11,23 +11,18 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START helper_methods]
 class ApplicationController < ActionController::Base
-
-  # [START logged_in]
-  helper_method :logged_in?
+  helper_method :logged_in?, :current_user
 
   def logged_in?
-    current_user.present?
+    session.has_key? :user
   end
-  # [END logged_in]
-
-  # [START current_user]
-  helper_method :current_user
 
   def current_user
-    Marshal.load session[:user] if session.has_key?(:user)
+    Marshal.load session[:user] if logged_in?
   end
-  # [END current_user]
+# [END helper_methods]
 
   # [START logout]
   def logout!
