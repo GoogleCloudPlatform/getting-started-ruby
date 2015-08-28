@@ -18,6 +18,7 @@ class LookupBookDetailsJob < ActiveJob::Base
   end
 
   def perform book
+    # TODO fix logs to show up in developers console
     Rails.logger.info "(#{book.id}) Lookup book details for #{book.title.inspect}"
 
     api_client = google_api_client

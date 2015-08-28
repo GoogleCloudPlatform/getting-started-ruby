@@ -23,6 +23,7 @@ gem "omniauth-google-oauth2"
 gem "gcloud"
 gem "google-api-client"
 # [END google_api_gems]
+gem "foreman"
 
 # New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
 
