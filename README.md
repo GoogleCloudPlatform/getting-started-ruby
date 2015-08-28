@@ -48,5 +48,12 @@ This application uses a custom `Dockerfile` based on the [`google/ruby`][] image
 The `Dockerfile` also runs `bundle install --without development:test` so that only
 production gems will be installed in production.
 
-
 [google/ruby]: https://registry.hub.docker.com/u/google/ruby-runtime/
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](LICENSE)
