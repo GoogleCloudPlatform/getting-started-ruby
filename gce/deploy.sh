@@ -20,7 +20,8 @@ ZONE=us-central1-f
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
 MACHINE_TYPE=f1-micro
-STARTUP_SCRIPT=startup-script.sh
+STARTUP_SCRIPT=my-startup.sh
+IMAGE=ubuntu-15-04
 SCOPES="userinfo-email,\
 logging-write,\
 storage-full,\
@@ -48,6 +49,7 @@ gcloud compute instance-templates create $TEMPLATE \
   --machine-type $MACHINE_TYPE \
   --scopes $SCOPES \
   --metadata-from-file startup-script=$STARTUP_SCRIPT \
+  --image $IMAGE \
   --tags $TAGS
 # [END create_template]
 
