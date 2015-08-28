@@ -33,7 +33,8 @@ class SessionsController < ApplicationController
 
   # [START destroy]
   def destroy
-    logout!
+    session.delete :user
+
     redirect_to root_path
   end
   # [END destroy]

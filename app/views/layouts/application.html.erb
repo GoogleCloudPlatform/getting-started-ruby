@@ -45,7 +45,9 @@
             <% end %>
             <span>
               <%= current_user.name %> &nbsp;
+              <%# [START logout] %>
               <%= link_to "(logout)", logout_path %>
+              <%# [END logout] %>
             </span>
           <%# [END user_profile] %>
           <% else %>

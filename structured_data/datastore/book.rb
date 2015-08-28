@@ -35,6 +35,7 @@ class Book
   #
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
+  # [START books_by_creator]
   def self.query options = {}
     query = Gcloud::Datastore::Query.new
     query.kind "Book"
@@ -44,6 +45,7 @@ class Book
     if options[:creator_id]
       query.where "creator_id", "=", options[:creator_id]
     end
+    # [END books_by_creator]
 
     results = dataset.run query
     books   = results.map {|entity| Book.from_entity entity }
