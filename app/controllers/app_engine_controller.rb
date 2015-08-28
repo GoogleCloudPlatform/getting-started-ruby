@@ -15,6 +15,7 @@
 class AppEngineController < ApplicationController
 
   def health
+    # Return healthy response
     render status: :ok, text: "ok"
   end
 
