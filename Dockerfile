@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -qy --no-install-recommends \
     apt-get clean
 
 ENV RACK_ENV production
+ENV APPSERVER webrick
 
 WORKDIR /app
 ADD Gemfile /app/Gemfile
@@ -26,7 +27,5 @@ RUN ["/usr/bin/bundle", "install", "--deployment", "--without", "development:tes
 ADD . /app
 
 EXPOSE 8080
-CMD []
-ENV APPSERVER webrick
-ENTRYPOINT /usr/bin/bundle exec rackup \
-    -p 8080 /app/config.ru -s $APPSERVER -E $RACK_ENV
+
+ENTRYPOINT /usr/bin/bundle exec foreman start
