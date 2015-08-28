@@ -13,6 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START all]
 set -e
 
 # [START logging]
@@ -56,3 +57,4 @@ systemctl start railsapp.service
 cat gce/resqworker.service > /lib/systemd/system/resqworker.service
 systemctl enable resqworker.service
 systemctl start resqworker.service
+# [END all]

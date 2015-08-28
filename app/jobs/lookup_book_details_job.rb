@@ -11,9 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO fix ... why isn't it working without this?
-ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json" # default not working?
-
 # TODO test
 
 # [START book_lookup]

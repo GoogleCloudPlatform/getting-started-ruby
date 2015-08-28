@@ -14,6 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+#[ START all ]
 set -e
 
 # Talk to the metadata server to get the project id
@@ -54,10 +55,7 @@ sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' settings.yml
 
 popd # config
 
-cat > key.json <<EOF
-Your service account json contents here
-EOF
-
 ./gce/configure.sh
 
 popd # /opt/app
+#[ END all ]
