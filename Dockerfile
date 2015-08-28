@@ -13,9 +13,11 @@
 
 FROM google/ruby
 
+# [START postgres-dep]
 RUN apt-get update && \
     apt-get install -qy --no-install-recommends libpq-dev && \
     apt-get clean
+# [END postgres-dep]
 
 WORKDIR /app
 ADD Gemfile /app/Gemfile
