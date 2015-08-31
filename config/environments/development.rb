@@ -36,4 +36,8 @@ Rails.application.configure do
   config.assets.debug = true
   config.assets.digest = true
   config.assets.raise_runtime_errors = true
+
+  # Output to STDOUT to view logs in foreman output
+  Rails.logger = ActiveSupport::Logger.new STDOUT
+  $stdout.sync = true
 end

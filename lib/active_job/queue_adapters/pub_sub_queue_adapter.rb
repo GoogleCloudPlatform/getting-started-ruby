@@ -13,6 +13,8 @@ module ActiveJob
       end
 
       def self.enqueue job
+        Rails.logger.info "[PubSubQueueAdapter] enqueue job #{job.inspect}"
+
         book  = job.arguments.first
         topic = pubsub.topic "lookup_book_details_queue"
 
@@ -20,9 +22,10 @@ module ActiveJob
       end
 # [END pub_sub_enqueue]
 
+      # TODO add queue parameter
+
       # [START pub_sub_worker]
       def self.run_worker!
-        Rails.logger = Logger.new(STDOUT)
         Rails.logger.info "Running worker to lookup book details"
 
         topic        = pubsub.topic       "lookup_book_details_queue"

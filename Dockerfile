@@ -28,4 +28,5 @@ ADD . /app
 
 EXPOSE 8080
 
+# TODO specify 8080 here but default to expected 3000 locally?
 ENTRYPOINT /usr/bin/bundle exec foreman start
