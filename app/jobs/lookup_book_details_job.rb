@@ -11,9 +11,7 @@ class LookupBookDetailsJob < ActiveJob::Base
 
   def google_api_client
     api_client = Google::APIClient.new application_name: "Bookshelf Sample Application"
-    api_client.authorization = :google_app_default
-    api_client.authorization.scope = "https://www.googleapis.com/auth/books"
-    api_client.authorization.fetch_access_token!
+    api_client.authorization = nil
     api_client
   end
 
