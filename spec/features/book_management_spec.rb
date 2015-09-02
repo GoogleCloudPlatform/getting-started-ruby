@@ -45,25 +45,13 @@ feature "Managing Books" do
     stub_const "BooksController::PER_PAGE", 2
 
     visit root_path
-    expect(page).to have_content "Book 1"
-    expect(page).to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
+    expect(all(".book").length).to eq 2
 
     click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).to have_content "Book 3"
-    expect(page).to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
+    expect(all(".book").length).to eq 2
 
     click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).to have_content "Book 5"
+    expect(all(".book").length).to eq 1
 
     expect(page).not_to have_link "More"
   end
@@ -91,8 +79,6 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book" do
-    expect(Book.count).to eq 0
-
     visit root_path
     click_link "Add Book"
     within "form.new_book" do
@@ -104,18 +90,15 @@ feature "Managing Books" do
     end
 
     expect(page).to have_content "Added Book"
-    expect(Book.count).to eq 1
 
     book = Book.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Date.parse("1859-04-01")
+    expect(book.published_on.to_date).to eq Date.parse("1859-04-01")
     expect(book.description).to eq "A novel by Charles Dickens"
   end
 
   scenario "Adding a book with missing fields" do
-    expect(Book.count).to eq 0
-
     visit root_path
     click_link "Add Book"
     within "form.new_book" do
@@ -130,7 +113,6 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    expect(Book.count).to eq 1
     expect(Book.first.title).to eq "A Tale of Two Cities"
   end
 
@@ -145,7 +127,7 @@ feature "Managing Books" do
 
     expect(page).to have_content "Updated Book"
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "CHANGED!"
     expect(book.author).to eq "Charles Dickens"
   end
@@ -168,7 +150,7 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "CHANGED!"
   end
 
@@ -287,6 +269,30 @@ feature "Managing Books" do
       click_link "Mine"
       expect(page).not_to have_content "Book created by anonymous user"
       expect(page).to have_content "Book created by logged in user"
+    end
+
+    scenario "Paginating through list of user's books" do
+      Book.create! creator_id: "123456", title: "Book 1"
+      Book.create! creator_id: "123456", title: "Book 2"
+      Book.create! creator_id: "123456", title: "Book 3"
+      Book.create! creator_id: "123456", title: "Book 4"
+      Book.create! creator_id: "123456", title: "Book 5"
+
+      stub_const "UserBooksController::PER_PAGE", 2
+
+      visit root_path
+      click_link "Login"
+
+      click_link "Mine"
+      expect(all(".book").length).to eq 2
+
+      click_link "More"
+      expect(all(".book").length).to eq 2
+
+      click_link "More"
+      expect(all(".book").length).to eq 1
+
+      expect(page).not_to have_link "More"
     end
 
     scenario "Adding a user's book" do

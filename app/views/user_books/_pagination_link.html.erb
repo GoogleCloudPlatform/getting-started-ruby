@@ -13,29 +13,10 @@
   limitations under the License.
 %>
 
-<h3>Books</h3>
-
-<%= link_to new_book_path, class: "btn btn-success btn-sm" do %>
-  <i class="glyphicon glyphicon-plus"></i>
-  <span>Add Book</span>
-<% end %>
-
-<% @books.each do |book| %>
-  <div class="book media">
-    <%= link_to book_path(book) do %>
-      <div class="media-left">
-        <img src="<%= book.image_url %>">
-      </div>
-      <div class="media-body">
-        <h4><%= book.title %></h4>
-        <p><%= book.author %></p>
-      </div>
-    <% end %>
-  </div>
-<% end %>
-
-<%= render "pagination_link" %>
-
-<% if @books.none? %>
-  <p>No books found.</p>
+<% if @more %>
+  <nav>
+    <ul class="pager">
+      <li><%= link_to "More", user_books_path(more: @more) %></li>
+    </ul>
+  </nav>
 <% end %>

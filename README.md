@@ -37,7 +37,7 @@ To setup the database for local development, copy the sample `database.yml` file
   * Enable
 
 Edit `secrets.yml` and add your `client_id` and `client_secret` from your project's
-web application credentials ([console](https://pantheon.corp.google.com/project/_/apiui/credential)).
+web application credentials ([console](https://console.developers.google.com/project/_/apiui/credential)).
 
 Then, run the Rails web server:
 
@@ -51,3 +51,11 @@ Then, run the Rails web server:
 ### To deploy to App Engine Managed VMs
 
     $ gcloud preview app deploy app.yaml --set-default
+
+## Contributing changes
+
+* See [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## Licensing
+
+* See [LICENSE](LICENSE)

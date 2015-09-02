@@ -11,16 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START user]
 class User
-
   attr_accessor :id, :name, :image_url
-
-  def self.from_auth auth_hash
-    user = User.new
-    user.id        = auth_hash["uid"]
-    user.name      = auth_hash["info"]["name"]
-    user.image_url = auth_hash["info"]["image"]
-    user
-  end
-
 end
+# [END user]

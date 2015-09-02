@@ -15,16 +15,23 @@ Rails.application.routes.draw do
 
   resources :books
 
-  # [START routes]
-  resource :session, only: [:create, :destroy]
-  resources :user_books, only: [:index]
-
+  # [START login]
   get "/login", to: redirect("/auth/google_oauth2")
-  get "/logout", to: "sessions#destroy"
-  get "/auth/google_oauth2/callback", to: "sessions#create"
-  # [END routes]
+  # [END login]
 
-  get "_ah/health", to: "app_engine#health"
+  # [START sessions]
+  get "/auth/google_oauth2/callback", to: "sessions#create"
+
+  resource :session, only: [:create, :destroy]
+  # [END sessions]
+
+  # [START user_books]
+  resources :user_books, only: [:index]
+  # [END user_books]
+
+  # [START logout]
+  get "/logout", to: "sessions#destroy"
+  # [END logout]
 
   root "books#index"
 

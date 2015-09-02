@@ -16,21 +16,10 @@ class Book < ActiveRecord::Base
 
   attr_accessor :cover_image
 
-  after_create   :upload_image, if: :cover_image
-  before_update  :update_image, if: :cover_image
-  before_destroy :delete_image, if: :image_url
-
-  # [START enqueue_job]
-  after_create :lookup_book_details
-
   private
 
-  def lookup_book_details
-    if [author, description, published_on, image_url].any? {|attr| attr.blank? }
-      LookupBookDetailsJob.perform_later self
-    end
-  end
-  # [END enqueue_job]
+  # [START upload]
+  after_create :upload_image, if: :cover_image
 
   def upload_image
     image = StorageBucket.files.new(
@@ -43,6 +32,12 @@ class Book < ActiveRecord::Base
 
     update_columns image_url: image.public_url
   end
+  # [END upload]
+
+  # TODO what if the image is from the Pub/Sub job and NOT in Cloud Storage!?
+
+  # [START delete]
+  before_destroy :delete_image, if: :image_url
 
   def delete_image
     bucket_name = StorageBucket.key
@@ -57,9 +52,14 @@ class Book < ActiveRecord::Base
       image.destroy
     end
   end
+  # [END delete]
+
+  # [START update]
+  before_update :update_image, if: :cover_image
 
   def update_image
     delete_image if image_url?
     upload_image
   end
+  # [END update]
 end

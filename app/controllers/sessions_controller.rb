@@ -11,16 +11,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START create]
 class SessionsController < ApplicationController
 
+  # Handle Google OAuth 2.0 login callback.
+  #
+  # GET /auth/google_oauth2/callback
   def create
-    login_as User.from_auth(request.env["omniauth.auth"])
-    redirect_to root_path
-  end
+    user_info = request.env["omniauth.auth"]
 
-  def destroy
-    logout!
+    user           = User.new
+    user.id        = user_info["uid"]
+    user.name      = user_info["info"]["name"]
+    user.image_url = user_info["info"]["image"]
+
+    session[:user] = Marshal.dump user
+
     redirect_to root_path
   end
+# [END create]
+
+  # [START destroy]
+  def destroy
+    session.delete :user
+
+    redirect_to root_path
+  end
+  # [END destroy]
 
 end
