@@ -33,8 +33,6 @@ Rails.application.routes.draw do
   get "/logout", to: "sessions#destroy"
   # [END logout]
 
-  get "_ah/health", to: "app_engine#health"
-
   root "books#index"
 
 end

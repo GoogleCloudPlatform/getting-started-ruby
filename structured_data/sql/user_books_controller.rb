@@ -11,20 +11,29 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START helper_methods]
-class ApplicationController < ActionController::Base
-  helper_method :logged_in?, :current_user
+class UserBooksController < ApplicationController
 
-  def logged_in?
-    session.has_key? :user
+  PER_PAGE = 10
+
+  before_filter :login_required
+
+  def index
+    page = params[:more] ? params[:more].to_i : 0
+
+    # [START books_by_creator]
+    @books = Book.where(creator_id: current_user.id).
+                  limit(PER_PAGE).offset(PER_PAGE * page)
+    # [END books_by_creator]
+
+    @more = page + 1 if @books.count == PER_PAGE
+
+    render "books/index"
   end
 
-  def current_user
-    Marshal.load session[:user] if logged_in?
-  end
-# [END helper_methods]
+  private
 
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
+  def login_required
+    redirect_to root_path unless logged_in?
+  end
+
 end

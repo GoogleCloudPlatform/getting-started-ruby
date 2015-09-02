@@ -1,3 +1,5 @@
+#! /bin/sh
+
 # Copyright 2015, Google, Inc.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,20 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "spec_helper"
-
-feature "Handling App Engine events" do
-  include Rack::Test::Methods
-
-  def app
-    Rails.application
-  end
-
-  scenario "responding to health checks" do
-    get "/_ah/health"
-
-    expect(last_response.status).to eq 200
-    expect(last_response.body).not_to be_empty
-  end
-
-end
+set -ex
+cp structured_data/sql/application.rb           config/
+cp structured_data/sql/book.rb                  app/models/
+cp structured_data/sql/books_controller.rb      app/controllers/
+cp structured_data/sql/user_books_controller.rb app/controllers/

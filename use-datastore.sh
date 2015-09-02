@@ -1,3 +1,5 @@
+#! /bin/sh
+
 # Copyright 2015, Google, Inc.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -11,12 +13,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-class AppEngineController < ApplicationController
-
-  # [START health_checks]
-  def health
-    render text: "ok"
-  end
-  # [END health_checks]
-
-end
+set -ex
+cp structured_data/datastore/application.rb           config/
+cp structured_data/datastore/book.rb                  app/models/
+cp structured_data/datastore/books_controller.rb      app/controllers/
+cp structured_data/datastore/user_books_controller.rb app/controllers/

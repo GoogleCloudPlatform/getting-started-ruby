@@ -11,20 +11,22 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START helper_methods]
-class ApplicationController < ActionController::Base
-  helper_method :logged_in?, :current_user
+require File.expand_path("../boot", __FILE__)
 
-  def logged_in?
-    session.has_key? :user
+require "rails"
+
+# Pick the frameworks you want:
+require "active_model/railtie"
+require "action_controller/railtie"
+require "action_view/railtie"
+require "sprockets/railtie"
+
+# Require the gems listed in Gemfile, including any gems
+# you've limited to :test, :development, or :production.
+Bundler.require(*Rails.groups)
+
+module Bookshelf
+  class Application < Rails::Application
+    config.x.settings = Rails.application.config_for :settings
   end
-
-  def current_user
-    Marshal.load session[:user] if logged_in?
-  end
-# [END helper_methods]
-
-  # Prevent CSRF attacks by raising an exception.
-  # For APIs, you may want to use :null_session instead.
-  protect_from_forgery with: :exception
 end
