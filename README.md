@@ -21,16 +21,6 @@ Ruby 2.0 and above is recommended.
 
 For information on installing Ruby, view [Installing Ruby][] on the [Ruby website][].
 
-If you are using a system version of ruby, you will need to use `sudo` to install gems.
-
-To install gems locally for your user, add the following to your `~/.bashrc` or `~/.bash_profile`:
-
-    export GEM_HOME="$HOME/.gems"
-    export GEM_PATH="$HOME/.gems"
-    export PATH="$GEM_PATH/bin:$PATH"
-
-Or gems can be installed using the [`--user-install` flag][user-install].
-
 ### Run
 
 To run the application, first install dependencies:
