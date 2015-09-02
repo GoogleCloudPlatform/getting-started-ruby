@@ -2,16 +2,15 @@
 
 Checkout branches to view particular steps of this sample application.
 
- - `1-hello-world`
- - `2-sql-database`
- - `2-datastore`
- - `3-files`
- - `4-auth`
- - `5-logging`
- - `6-task-queueing`
- - `7-compute-engine`
-
-## Hello, World!
+ - [`1-hello-world`][]
+ - [`2-cloud-datastore`][]
+ - [`2-cloud-sql`][]
+ - [`2-postgresql`][]
+ - [`3-cloud-storage`][]
+ - [`4-auth`][]
+ - [`5-logging`][]
+ - [`6-task-queueing`][]
+ - [`7-compute-engine`][]
 
 [Ruby on Rails][ror] web application on [Google Managed VMs][mvms].
 
@@ -45,7 +44,7 @@ And then run the Rails web server:
 ### To run the tests
 
     $ bundle install
-    $ rspec spec/
+    $ bundle exec rspec
 
 ### To deploy to App Engine Managed VMs
 
@@ -59,13 +58,6 @@ The `ruby-runtime` image requires that your application directory contain the fo
  - `Gemfile` file declaring application dependencies
  - `config.ru` rackup file defining your web application
 
-[ror]: http://rubyonrails.org/
-[mvms]: https://cloud.google.com/appengine/docs/managed-vms/
-[Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
-[Ruby website]: https://www.ruby-lang.org
-[user-install]: http://guides.rubygems.org/faqs/#user-install
-[runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
-
 ## Contributing changes
 
 * See [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -73,3 +65,19 @@ The `ruby-runtime` image requires that your application directory contain the fo
 ## Licensing
 
 * See [LICENSE](LICENSE)
+
+[ror]: http://rubyonrails.org/
+[mvms]: https://cloud.google.com/appengine/docs/managed-vms/
+[Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
+[Ruby website]: https://www.ruby-lang.org
+[user-install]: http://guides.rubygems.org/faqs/#user-install
+[runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
+[1-hello-world]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/1-hello-world
+[2-cloud-datastore]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-cloud-datastore
+[2-cloud-sql]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-cloud-sql
+[2-postgresql]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-postgresql
+[3-cloud-storage]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/3-cloud-storage
+[4-auth]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/4-auth
+[5-logging]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/5-logging
+[6-task-queueing]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/6-task-queueing
+[7-compute-engine]: https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/7-compute-engine
