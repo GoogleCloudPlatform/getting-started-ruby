@@ -17,8 +17,5 @@ Rails.application.routes.draw do
   # Route root of application to HelloWorldController#index action
   root "hello_world#index"
 
-  # App Engine health check
-  get "/_ah/health", to: "app_engine#health"
-
 end
 # [END routes]
