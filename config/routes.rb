@@ -20,8 +20,5 @@ Rails.application.routes.draw do
   # Restful routes for BooksController
   resources :books
 
-  # App Engine health check
-  get "_ah/health", to: "app_engine#health"
-
 end
 # [END routes]
