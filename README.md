@@ -1,7 +1,5 @@
 # Getting Started Ruby
 
-[`monospace`][]
-
 Checkout branches to view particular steps of this sample application.
 
  - [`1-hello-world`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/1-hello-world)
