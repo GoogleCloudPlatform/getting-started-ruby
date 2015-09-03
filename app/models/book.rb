@@ -27,7 +27,7 @@ class Book
   end
 # [END book_class]
 
-  # [END query]
+  # [START query]
   # Query Book entities from Cloud Datastore.
   #
   # returns an array of Book query results and a cursor
