@@ -23,6 +23,7 @@
   </div>
 <% end %>
 
+<%# [START book_form] %>
 <%= form_for @book do |f| %>
   <div class="form-group">
     <%= f.label :title %>
@@ -42,3 +43,4 @@
   </div>
   <button class="btn btn-success" type="submit">Save</button>
 <% end %>
+<%# [END book_form] %>
