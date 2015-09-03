@@ -25,14 +25,17 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
+  # [START show]
   def show
     @book = Book.find params[:id]
   end
+  # [END show]
 
   def edit
     @book = Book.find params[:id]
   end
 
+  # [START update]
   def update
     @book = Book.find params[:id]
 
@@ -43,15 +46,19 @@ class BooksController < ApplicationController
       render :edit
     end
   end
+  # [END update]
 
+  # [START destroy]
   def destroy
     @book = Book.find params[:id]
     @book.destroy
     redirect_to books_path
   end
+  # [END destroy]
 
   before_filter :convert_published_on_to_date
 
+  # [START create]
   def create
     @book = Book.new book_params
 
@@ -68,6 +75,7 @@ class BooksController < ApplicationController
   def book_params
     params.require(:book).permit(:title, :author, :published_on, :description)
   end
+  # [END create]
 
   def convert_published_on_to_date
     if params[:book] && params[:book][:published_on].present?
