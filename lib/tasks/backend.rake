@@ -8,24 +8,23 @@ namespace :backend do
     app/controllers/books_controller.rb
   ]
 
-  desc "Use Google Cloud Datastore backend"
-  task datastore: :environment do
-    backend_root = "structured_data/datastore"
+  def use_backend name
+    backend_root = "structured_data/#{name}"
 
     BACKEND_FILES.each do |file|
-      puts "Copy #{backend_root}/#{file}"
+      puts "#{backend_root}/#{file} -> #{file}"
       FileUtils.cp Rails.root.join(backend_root, file), Rails.root.join(file)
     end
   end
 
+  desc "Use Google Cloud Datastore backend"
+  task datastore: :environment do
+    use_backend :datastore
+  end
+
   desc "Use ActiveRecord SQL database backend"
   task active_record: :environment do
-    backend_root = "structured_data/active_record"
-
-    BACKEND_FILES.each do |file|
-      puts "Copy #{backend_root}/#{file}"
-      FileUtils.cp Rails.root.join(backend_root, file), Rails.root.join(file)
-    end
+    use_backend :active_record
   end
 
 end
