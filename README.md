@@ -14,13 +14,6 @@ Checkout branches to view particular steps of this sample application.
 
 [Ruby on Rails][ror] web application on [Google Managed VMs][mvms].
 
-### Dependencies
-
-To run the Hello World app, first ensure that you have Ruby 1.9.3 or newer.
-Ruby 2.0 and above is recommended.
-
-For information on installing Ruby, view [Installing Ruby][] on the [Ruby website][].
-
 ### Run
 
 To run the application, first install dependencies:
@@ -37,6 +30,12 @@ And then run the Rails web server:
     $ bundle exec rspec
 
 ### To deploy to App Engine Managed VMs
+
+Install the [Google Cloud SDK](https://cloud.google.com/sdk):
+
+    $ curl https://sdk.cloud.google.com | bash
+
+And then deploy the application:
 
     $ gcloud preview app deploy app.yaml --set-default
 
@@ -58,7 +57,4 @@ The `ruby-runtime` image requires that your application directory contain the fo
 
 [ror]: http://rubyonrails.org/
 [mvms]: https://cloud.google.com/appengine/docs/managed-vms/
-[Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
-[Ruby website]: https://www.ruby-lang.org
-[user-install]: http://guides.rubygems.org/faqs/#user-install
 [runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
