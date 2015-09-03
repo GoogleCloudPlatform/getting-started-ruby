@@ -19,6 +19,8 @@ RUN apt-get update && \
     apt-get clean
 # [END postgres-dep]
 
+ENV RACK_ENV production
+
 WORKDIR /app
 ADD Gemfile /app/Gemfile
 ADD Gemfile.lock /app/Gemfile.lock

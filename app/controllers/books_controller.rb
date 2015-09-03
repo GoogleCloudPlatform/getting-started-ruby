@@ -17,10 +17,10 @@ class BooksController < ApplicationController
   PER_PAGE = 10
 
   def index
-    page = params[:page] ? params[:page].to_i : 0
-
-    @books = Book.limit(PER_PAGE).offset(PER_PAGE * page)
-    @next_page = page + 1 if @books.count == PER_PAGE
+    page_number = params[:page] ? params[:page].to_i : 1
+    book_offset = PER_PAGE * (page_number - 1)
+    @books      = Book.limit(PER_PAGE).offset(book_offset)
+    @next_page  = page_number + 1 if @books.count == PER_PAGE
   end
 # [END index]
 
@@ -34,18 +34,34 @@ class BooksController < ApplicationController
   end
   # [END new_and_edit]
 
-
+  # [START show]
   def show
     @book = Book.find params[:id]
   end
+  # [END show]
 
+  # [START destroy]
   def destroy
     @book = Book.find params[:id]
     @book.destroy
     redirect_to books_path
   end
+  # [END destroy]
 
-  # [START create_and_update]
+  # [START update]
+  def update
+    @book = Book.find params[:id]
+
+    if @book.update book_params
+      flash[:success] = "Updated Book"
+      redirect_to book_path(@book)
+    else
+      render :edit
+    end
+  end
+  # [END update]
+
+  # [START create]
   def create
     @book = Book.new book_params
 
@@ -57,22 +73,11 @@ class BooksController < ApplicationController
     end
   end
 
-  def update
-    @book = Book.find params[:id]
-
-    if @book.update book_params
-      flash[:success] = "Updated Book"
-      redirect_to book_path(@book)
-    else
-      render :edit
-    end
-  end
-
   private
 
   def book_params
     params.require(:book).permit(:title, :author, :published_on, :description)
   end
-  # [END create_and_update]
+  # [END create]
 
 end
