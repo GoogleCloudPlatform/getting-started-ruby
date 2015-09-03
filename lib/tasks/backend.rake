@@ -6,6 +6,7 @@ namespace :backend do
     config/application.rb
     app/models/book.rb
     app/controllers/books_controller.rb
+    app/controllers/user_books_controller.rb
   ]
 
   def use_backend name
