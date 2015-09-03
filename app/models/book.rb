@@ -70,13 +70,13 @@ class Book
   end
   # [END find]
 
-  # [START model]
-  # ...
+  # Add Active Model support.
+  # Provides constructor that takes a Hash of attribute values.
   include ActiveModel::Model
-  # [END model]
 
   # [START save]
-  # ...
+  # Save the book to Datastore.
+  # @return true if valid and saved successfully, otherwise false.
   def save
     if valid?
       entity = to_entity
@@ -103,17 +103,17 @@ class Book
   # [END to_entity]
 
   # [START validations]
-  # ...
+  # Add Active Model validation support to Book class.
   include ActiveModel::Validations
 
   validates :title, presence: true
   # [END validations]
 
   # [START update]
-  # ...
+  # Set attribute values from provided Hash and save to Datastore.
   def update attributes
     attributes.each do |name, value|
-      send "#{name}=", value
+      send "#{name}=", value if respond_to? "#{name}="
     end
     save
   end
