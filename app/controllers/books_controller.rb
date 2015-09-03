@@ -68,7 +68,6 @@ class BooksController < ApplicationController
 
   private
 
-  # [START book_params]
   def book_params
     params.require(:book).permit :title, :author, :published_on, :description,
                                  :cover_image
