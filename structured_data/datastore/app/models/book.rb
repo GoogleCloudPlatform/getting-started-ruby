@@ -74,27 +74,15 @@ class Book
     from_entity entities.first if entities.any?
   end
 
-  def save
-    if valid?
-      entity = to_entity
-      Book.dataset.save entity
-      self.id = entity.key.id
-      update_image if cover_image.present?
-      true
-    else
-      false
-    end
-  end
-
   def to_entity
     entity = Gcloud::Datastore::Entity.new
     entity.key = Gcloud::Datastore::Key.new "Book", id
     entity["title"]        = title
-    entity["author"]       = author       if author
-    entity["published_on"] = published_on if published_on
-    entity["description"]  = description  if description
-    entity["image_url"]    = image_url    if image_url
-    entity["creator_id"]   = creator_id   if creator_id
+    entity["author"]       = author               if author.present?
+    entity["published_on"] = published_on.to_time if published_on.present?
+    entity["description"]  = description          if description.present?
+    entity["image_url"]    = image_url            if image_url.present?
+    entity["creator_id"]   = creator_id           if creator_id.present?
     entity
   end
 
@@ -148,4 +136,34 @@ class Book
     upload_image
   end
 
+  # [START enqueue_job]
+  include GlobalID::Identification
+
+  def save
+    if valid?
+      entity = to_entity
+      Book.dataset.save entity
+
+      # TODO separate create and save ...
+      unless persisted? # just saved
+        self.id = entity.key.id
+        lookup_book_details
+      end
+     
+      self.id = entity.key.id
+      update_image if cover_image.present?
+      true
+    else
+      false
+    end
+  end
+
+  private
+
+  def lookup_book_details
+    if [author, description, published_on, image_url].any? {|attr| attr.blank? }
+      LookupBookDetailsJob.perform_later self
+    end
+  end
+  # [END enqueue_job]
 end

@@ -17,6 +17,7 @@ require "rails"
 
 # Pick the frameworks you want:
 require "active_model/railtie"
+require "active_job/railtie"
 require "action_controller/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
@@ -27,6 +28,12 @@ Bundler.require(*Rails.groups)
 
 module Bookshelf
   class Application < Rails::Application
+    # [START queue_adapter]
+    config.active_job.queue_adapter = :pub_sub_queue
+    # [END queue_adapter]
+
+    config.autoload_paths += Dir["#{config.root}/lib", "#{config.root}/lib/**/"]
+
     config.x.settings = Rails.application.config_for :settings
   end
 end

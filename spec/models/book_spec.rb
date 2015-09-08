@@ -93,7 +93,7 @@ RSpec.describe Book do
     book.reload
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Date.parse("1859-01-01")
+    expect(book.published_on.to_date).to eq Date.parse("1859-01-01")
     expect(book.description).to eq "A Tale of Two Cities is a novel by Charles Dickens."
     expect(book.image_url).to eq "https://path/to/cover/image.png"
   end

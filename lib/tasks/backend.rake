@@ -1,5 +1,7 @@
 require "fileutils"
 
+# TODO copy everything under ./structured_data/:backend/*
+
 namespace :backend do
 
   BACKEND_FILES = %w[
