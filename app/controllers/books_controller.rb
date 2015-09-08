@@ -51,6 +51,7 @@ class BooksController < ApplicationController
     end
   end
 
+  # [START create]
   def create
     @book = Book.new book_params
 
@@ -67,7 +68,6 @@ class BooksController < ApplicationController
 
   private
 
-  # [START book_params]
   def book_params
     params.require(:book).permit :title, :author, :published_on, :description,
                                  :cover_image

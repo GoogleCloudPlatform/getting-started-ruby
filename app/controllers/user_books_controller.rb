@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START user_books]
 class UserBooksController < ApplicationController
 
   PER_PAGE = 10
@@ -21,8 +20,10 @@ class UserBooksController < ApplicationController
   def index
     page = params[:more] ? params[:more].to_i : 0
 
+    # [START books_by_creator]
     @books = Book.where(creator_id: current_user.id).
                   limit(PER_PAGE).offset(PER_PAGE * page)
+    # [END books_by_creator]
 
     @more = page + 1 if @books.count == PER_PAGE
 
@@ -36,4 +37,3 @@ class UserBooksController < ApplicationController
   end
 
 end
-# [END user_books]
