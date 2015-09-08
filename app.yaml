@@ -11,25 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START runtime]
 runtime: custom
 vm: true
 api_version: 1
 module: default
-# [END runtime]
 
-# [START resources]
 resources:
   cpu: .5
   memory_gb: 1.3
   disk_size_gb: 10
-# [END resources]
 
-# [START scaling]
 automatic_scaling:
   min_num_instances: 1
   max_num_instances: 5
   cool_down_period_sec: 60
   cpu_utilization:
     target_utilization: 0.5
-# [END scaling]
+
+# [START formation]
+env_variables:
+  FORMATION: web=1
+# [END formation]

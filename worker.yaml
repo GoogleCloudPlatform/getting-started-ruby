@@ -11,22 +11,24 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM google/ruby
+runtime: custom
+vm: true
+api_version: 1
+module: worker
 
-RUN apt-get update && apt-get install -qy --no-install-recommends \
-    libmysqlclient-dev && \
-    apt-get clean
+resources:
+  cpu: .5
+  memory_gb: 1.3
+  disk_size_gb: 10
 
-ENV RACK_ENV production
-ENV APPSERVER webrick
+automatic_scaling:
+  min_num_instances: 1
+  max_num_instances: 5
+  cool_down_period_sec: 60
+  cpu_utilization:
+    target_utilization: 0.5
 
-WORKDIR /app
-ADD Gemfile /app/Gemfile
-ADD Gemfile.lock /app/Gemfile.lock
-RUN ["/usr/bin/bundle", "install", "--deployment", "--without", "development:test"]
-ADD . /app
-
-EXPOSE 8080
-
-# TODO specify 8080 here but default to expected 3000 locally?
-ENTRYPOINT /usr/bin/bundle exec foreman start --formation "$FORMATION"
+# [START formation]
+env_variables:
+  FORMATION: worker=5,health_check=1
+# [END formation]
