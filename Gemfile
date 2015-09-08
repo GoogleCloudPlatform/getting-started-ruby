@@ -19,10 +19,12 @@ gem "mysql2"
 gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
-# [START google_api_gems]
+# [START gcloud]
 gem "gcloud"
+# [END gcloud]
+# [START google_api_client]
 gem "google-api-client"
-# [END google_api_gems]
+# [END google_api_client]
 gem "foreman"
 
 # New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
