@@ -1,43 +1,38 @@
-# TODO fix ... why isn't it working without this?
-ENV["GOOGLE_APPLICATION_CREDENTIALS"] = "key.json" # default not working?
-
-# TODO test
-
-# [START book_lookup]
+# [START lookup_books]
 require "google/api_client"
 
 class LookupBookDetailsJob < ActiveJob::Base
   queue_as :default
 
-  def google_api_client
-    api_client = Google::APIClient.new application_name: "Bookshelf Sample Application"
-    api_client.authorization = :google_app_default
-    api_client.authorization.scope = "https://www.googleapis.com/auth/books"
-    api_client.authorization.fetch_access_token!
-    api_client
-  end
-
   def perform book
-    # TODO fix logs to show up in developers console
     Rails.logger.info "(#{book.id}) Lookup book details for #{book.title.inspect}"
 
-    api_client = google_api_client
-    books_api  = api_client.discovered_api "books"
+    # Create Books API client
+    api_client = Google::APIClient.new application_name: "Bookshelf Sample Application"
+    api_client.authorization = nil # Books API does not require authorization
+    books_api = api_client.discovered_api "books"
 
     result = api_client.execute(
       api_method: books_api.volumes.list,
       parameters: { q: book.title, order_by: "relevance" } # what is the default order?  can we leave off "relevance" and get consistently good results?
     )
 
+    # Lookup a list of relevant books based on the provided book title.
     volumes = result.data.items
+# [END lookup_books]
 
+    # [START choose_volume]
+    # To provide the best results, find the first returned book that
+    # includes title and author information as well as a book cover image.
     best_match = volumes.find {|volume|
       info = volume.volume_info
       info.title && info.authors && info.image_links.try(:thumbnail)
     }
 
     volume = best_match || volumes.first
+    # [END choose_volume]
 
+    # [START update_book]
     if volume
       info   = volume.volume_info
       images = info.image_links
@@ -52,6 +47,7 @@ class LookupBookDetailsJob < ActiveJob::Base
       book.image_url    = images.try(:thumbnail)  unless book.image_url.present?
       book.save
     end
+    # [END update_book]
 
     Rails.logger.info "(#{book.id}) Complete"
   end
