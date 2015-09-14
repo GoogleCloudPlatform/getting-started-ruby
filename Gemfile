@@ -29,6 +29,9 @@ gem "foreman"
 
 # New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
 
+# For Windows support
+gem "tzinfo-data"
+
 group :test do
   gem "rspec-rails"
   gem "rack-test"

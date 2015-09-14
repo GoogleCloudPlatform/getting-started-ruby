@@ -13,9 +13,11 @@
 
 FROM google/ruby
 
+# [START dependencies]
 RUN apt-get update && apt-get install -qy --no-install-recommends \
     libmysqlclient-dev && \
     apt-get clean
+# [END dependencies]
 
 ENV RACK_ENV production
 ENV APPSERVER webrick

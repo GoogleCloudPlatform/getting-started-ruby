@@ -77,14 +77,14 @@ RSpec.describe Book do
     # Mock Google::APIClient
     google_api_client = double
     allow(google_api_client).to receive(:discovered_api).and_return books_api
+    allow(google_api_client).to receive(:authorization=)
     expect(google_api_client).to receive(:execute).with(
       api_method: books_api.volumes.list,
       parameters: { q: "A Tale of Two Cities", order_by: "relevance" }
     ).and_return(
       double data: double(items: [book_response])
     )
-
-    allow_any_instance_of(LookupBookDetailsJob).to receive(:google_api_client).and_return google_api_client
+    allow(Google::APIClient).to receive(:new).and_return google_api_client
 
     run_enqueued_jobs!
 
