@@ -23,6 +23,9 @@ gem "omniauth"
 gem "omniauth-google-oauth2"
 # [END omniauth]
 
+# For Windows support
+gem "tzinfo-data"
+
 group :test do
   gem "rspec-rails"
   gem "rack-test"
