@@ -17,6 +17,9 @@ source "https://rubygems.org"
 gem "rails"
 # [END dependencies]
 
+# For Windows support
+gem "tzinfo-data"
+
 group :test do
   gem "rspec-rails"
   gem "rack-test"
