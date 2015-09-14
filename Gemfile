@@ -28,6 +28,9 @@ group :development, :test do
   gem "sqlite3"
 end
 
+# For Windows support
+gem "tzinfo-data"
+
 group :test do
   gem "rspec-rails"
   gem "rack-test"
