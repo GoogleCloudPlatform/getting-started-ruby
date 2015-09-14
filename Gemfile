@@ -19,6 +19,9 @@ gem "gcloud"
 # [END dependencies]
 gem "jquery-rails"
 
+# For Windows support
+gem "tzinfo-data"
+
 group :test do
   gem "rspec-rails"
   gem "rack-test"

@@ -168,6 +168,8 @@ GEM
     thread_safe (0.3.5)
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2015.6)
+      tzinfo (>= 1.0.0)
     xpath (2.0.0)
       nokogiri (~> 1.3)
 
@@ -181,6 +183,7 @@ DEPENDENCIES
   rack-test
   rails
   rspec-rails
+  tzinfo-data
 
 BUNDLED WITH
    1.10.3
