@@ -11,11 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START routes]
 Rails.application.routes.draw do
 
   # Route root of application to HelloWorldController#index action
   root "hello_world#index"
 
 end
-# [END routes]
