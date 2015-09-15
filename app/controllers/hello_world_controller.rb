@@ -13,11 +13,9 @@
 
 # [START hello_world]
 class HelloWorldController < ApplicationController
-
-  # Say hello!
   def index
+    # Say hello!
     render text: "Hello, world!"
   end
-
 end
 # [END hello_world]
