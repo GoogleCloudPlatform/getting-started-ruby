@@ -14,7 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#[ START all ]
+# [START all]
 set -e
 
 # Talk to the metadata server to get the project id
@@ -58,4 +58,4 @@ popd # config
 ./gce/configure.sh
 
 popd # /opt/app
-#[ END all ]
+# [END all]
