@@ -15,7 +15,6 @@ source "https://rubygems.org"
 
 gem "rails"
 gem "jquery-rails"
-gem "mysql2"
 gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
@@ -28,6 +27,14 @@ gem "google-api-client"
 gem "foreman"
 
 # New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
+
+group :production do
+  gem "mysql2", "~> 0.3.0"
+end
+
+group :development, :test do
+  gem "sqlite3"
+end
 
 # For Windows support
 gem "tzinfo-data"
