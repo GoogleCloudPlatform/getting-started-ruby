@@ -21,7 +21,7 @@ gem "fog"
 #[END fog]
 
 group :production do
-  gem "mysql2"
+  gem "mysql2", "~> 0.3.0"
 end
 
 group :development, :test do
