@@ -16,12 +16,19 @@ source "https://rubygems.org"
 gem "rails"
 gem "gcloud"
 gem "jquery-rails"
-gem "mysql2"
 gem "fog"
 # [START omniauth]
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [END omniauth]
+
+group :production do
+  gem "mysql2", "~> 0.3.0"
+end
+
+group :development, :test do
+  gem "sqlite3"
+end
 
 # For Windows support
 gem "tzinfo-data"
