@@ -12,10 +12,11 @@
 # limitations under the License.
 
 # [START runtime]
-runtime: custom
+runtime: ruby
 vm: true
 api_version: 1
 module: default
+entrypoint: bundle exec rackup -p 8080 -E production /app/config.ru
 # [END runtime]
 
 # [START resources]
