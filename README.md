@@ -49,22 +49,13 @@ And then run the Rails web server:
 
 ### To deploy to App Engine Managed VMs
 
-    $ gcloud preview app deploy app.yaml --set-default
-
-The application Dockerfile uses the [`google/ruby-runtime`][runtime] Docker image
-which supports running any Ruby web application.
-
-The `ruby-runtime` image requires that your application directory contain the following:
-
- - `Gemfile` file declaring application dependencies
- - `config.ru` rackup file defining your web application
+    $ gcloud preview app deploy app.yaml --promote
 
 [ror]: http://rubyonrails.org/
 [mvms]: https://cloud.google.com/appengine/docs/managed-vms/
 [Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
 [Ruby website]: https://www.ruby-lang.org
 [user-install]: http://guides.rubygems.org/faqs/#user-install
-[runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
 
 ## Contributing changes
 
