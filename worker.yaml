@@ -11,10 +11,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-runtime: custom
+runtime: ruby
 vm: true
-api_version: 1
 module: worker
+entrypoint: bundle exec foreman start --formation "$FORMATION"
 
 resources:
   cpu: .5
