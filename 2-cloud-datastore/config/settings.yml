@@ -1,0 +1,18 @@
+default: &default
+  project_id: remily-work-in-progress
+  cloud_storage:
+    bucket: remily-bookshelf
+    access_key_id: GOOGXGGXT7IAHOZPCAZ7
+    secret_access_key: YbZjaW9Cd7NBlidm3I0K2ml1oOeIcnZcD3egi6SV
+  oauth2:
+    client_id: 730764391901-ads1t3f5kq3cq5h1gn728i064j00kihk.apps.googleusercontent.com
+    client_secret: B9aahVwxMA-VvqMqsJnANHvf
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+
+test:
+  project_id: remily-work-in-progress
