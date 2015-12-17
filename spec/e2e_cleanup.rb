@@ -11,7 +11,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-/.bundle
-/log/*
-/tmp
-client_secrets.json
+# determine branch name
+if ARGV.size < 1
+  puts "usage: ruby spec/e2e_cleanup.rb BRANCH_NAME [BUILD_NUM]"
+  exit 1
+end
+
+branch = ARGV[0]
+
+# determine build number
+if ARGV.size < 2 and not ENV['TRAVIS_BUILD_NUM']
+  puts "you must pass a build number or define ENV[\"TRAVIS_BUILD_NUM\"]"
+  exit 1
+end
+
+build_num = ARGV[1] || ENV['TRAVIS_BUILD_NUM']
+
+# run gcloud command
+cmd = "gcloud preview app modules delete default --version=#{branch}-#{build_num} -q"
+puts "> #{cmd}"
+puts `#{cmd}`

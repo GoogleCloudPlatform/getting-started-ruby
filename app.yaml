@@ -32,3 +32,6 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.5
 # [END scaling]
+
+skip_files:
+  - ^\.bundle$
