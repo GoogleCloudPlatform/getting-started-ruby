@@ -13,10 +13,14 @@
 
 require "spec_helper"
 
+# TEST_URL_ROOT is used for blackbox testing
+# if nothing is supplied, the test executes locally
+domain = ENV["TEST_URL_ROOT"] || ""
+
 feature "Hello World" do
 
   scenario "saying Hello, World!" do
-    visit "/"
+    visit domain + "/"
 
     expect(page).to have_content "Hello, world!"
   end
