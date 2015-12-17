@@ -20,12 +20,12 @@ end
 branch = ARGV[0]
 
 # determine build number
-if ARGV.size < 2 and not ENV['TRAVIS_BUILD_NUM']
-  puts "you must pass a build number or define ENV[\"TRAVIS_BUILD_NUM\"]"
+if ARGV.size < 2 and not ENV['TRAVIS_BUILD_ID']
+  puts "you must pass a build number or define ENV[\"TRAVIS_BUILD_ID\"]"
   exit 1
 end
 
-build_num = ARGV[1] || ENV['TRAVIS_BUILD_NUM']
+build_num = ARGV[1] || ENV['TRAVIS_BUILD_ID']
 
 # run gcloud command
 cmd = "gcloud preview app modules delete default --version=#{branch}-#{build_num} -q"

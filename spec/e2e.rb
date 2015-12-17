@@ -24,7 +24,7 @@ if ARGV.size < 1
 end
 
 branch = ARGV[0]
-build_num = ENV['TRAVIS_BUILD_NUM'] || rand(1000..9999)
+build_num = ENV['TRAVIS_BUILD_ID'] || rand(1000..9999)
 version = "#{branch}-#{build_num}"
 
 # read in our credentials file
