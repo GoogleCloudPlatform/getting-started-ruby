@@ -2,15 +2,15 @@
 
 Checkout branches to view particular steps of this sample application.
 
- - [`1-hello-world`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/1-hello-world)
- - [`2-cloud-datastore`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-cloud-datastore)
- - [`2-cloud-sql`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-cloud-sql)
- - [`2-postgresql`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/2-postgresql)
- - [`3-cloud-storage`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/3-cloud-storage)
- - [`4-auth`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/4-auth)
- - [`5-logging`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/5-logging)
- - [`6-task-queueing`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/6-task-queueing)
- - [`7-compute-engine`](https://github.com/GoogleCloudPlatform/getting-started-ruby/tree/7-compute-engine)
+ - [`1-hello-world`](1-hello-world)
+ - [`2-cloud-datastore`](2-cloud-datastore)
+ - [`2-cloud-sql`](2-cloud-sql)
+ - [`2-postgresql`](2-postgresql)
+ - [`3-cloud-storage`](3-cloud-storage)
+ - [`4-auth`](4-auth)
+ - [`5-logging`](5-logging)
+ - [`6-task-queueing`](6-task-queueing)
+ - [`7-compute-engine`](7-compute-engine)
 
 [Ruby on Rails][ror] web application on [Google Managed VMs][mvms].
 
