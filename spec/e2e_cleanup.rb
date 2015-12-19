@@ -11,18 +11,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-ENV["RAILS_ENV"] ||= "test"
+require File.expand_path("../e2e", __FILE__)
 
-require File.expand_path("../../config/environment", __FILE__)
-require File.expand_path("../../../spec/e2e", __FILE__)
-require "rspec/rails"
-require "capybara/rails"
-require 'capybara/poltergeist'
-require "rack/test"
-
-RSpec.configure do |config|
-  config.infer_spec_type_from_file_location!
-  config.expect_with :rspec do |expectations|
-    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-  end
+if ARGV.size < 1
+  puts "usage: ruby spec/e2e_cleanup.rb STEP_NAME [BUILD_ID]"
+  exit 1
 end
+
+E2E.cleanup(ARGV[0], ARGV[1])
