@@ -1,3 +1,4 @@
+#! /bin/bash
 # Copyright 2015 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -11,18 +12,27 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-#! /bin/bash
+
+if [ $# -ne 1 ]; then
+    echo $0: usage: setup.sh STEP_NAME
+    exit 1
+fi
+
+STEP_NAME=$1
 
 TEST_DIR=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )/../$STEP_NAME
 
-# use example database config
-if [ -a $TEST_DIR/config/settings.example.yml ]; then
+# copy example settings config to settings.yml
+if [ -f $TEST_DIR/config/settings.example.yml ]; then
   cp $TEST_DIR/config/settings.example.yml $TEST_DIR/config/settings.yml
 fi
 
-# use example settings config
-if [ -a $TEST_DIR/config/database.example.yml ]; then
+# copy example database config to database.yml
+if [ -f $TEST_DIR/config/database.example.yml ]; then
   cp $TEST_DIR/config/database.example.yml $TEST_DIR/config/database.yml
+  if [ -n "$GCLOUD_PROJECT_ID" ]; then
+    sed -i -e "s/your-project-id/$GCLOUD_PROJECT_ID/g" $TEST_DIR/config/database.yml
+  fi
 fi
 
 if [ $STEP_NAME = '2-cloud-datastore' ]; then
@@ -38,6 +48,11 @@ fi
 if [ $STEP_NAME = '7-compute-engine' ]; then
   # replace all @@'s with placeholders, since this breaks yaml parsing
   sed -i -e 's/@//g' $TEST_DIR/config/database.yml $TEST_DIR/config/settings.yml
+fi
+
+# compile assets if an "assets" directory exists
+if [ -e $TEST_DIR/app/assets ]; then
+  RAILS_ENV=test rake --rakefile=$TEST_DIR/Rakefile assets:precompile
 fi
 
 # run rake DB tasks after all other changes

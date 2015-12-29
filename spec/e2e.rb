@@ -69,6 +69,9 @@ class E2E
         return $?.to_i
       end
 
+      # sleeping 1 to ensure URL is callable
+      sleep 1
+
       # run the specs for the step, but use the remote URL
       @url = "https://#{version}-dot-#{project_id}.appspot.com"
 
@@ -98,6 +101,7 @@ class E2E
     end
 
     def url
+      self.check()
       @url
     end
 

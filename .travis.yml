@@ -67,7 +67,7 @@ install:
 - bundle install --jobs=3 --retry=3
 
 script:
-- bash $TRAVIS_BUILD_DIR/spec/setup.sh
+- bash $TRAVIS_BUILD_DIR/spec/setup.sh $STEP_NAME
 - bundle exec rspec spec --backtrace --format documentation
 
 after_script:
