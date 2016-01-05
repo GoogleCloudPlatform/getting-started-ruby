@@ -21,4 +21,10 @@ feature "Hello World" do
     expect(page).to have_content "Hello, world!"
   end
 
+  scenario "saying Hello, World! (e2e)", :e2e do
+    visit E2E.url + "/"
+
+    expect(page).to have_content "Hello, world!"
+  end
+
 end
