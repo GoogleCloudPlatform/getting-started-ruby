@@ -50,7 +50,7 @@ Then, run the Rails web server:
 
 ### To deploy to App Engine Managed VMs
 
-    $ gcloud preview app deploy app.yaml --promote
+    $ gcloud preview app deploy
 
 ## Contributing changes
 
