@@ -68,7 +68,7 @@ install:
 
 script:
 - bash $TRAVIS_BUILD_DIR/spec/setup.sh $STEP_NAME
-- bundle exec rspec spec --backtrace --format documentation
+- bundle exec rspec spec --tag ~e2e --backtrace --format documentation
 
 after_script:
 - ruby $TRAVIS_BUILD_DIR/spec/e2e_cleanup.rb $STEP_NAME
