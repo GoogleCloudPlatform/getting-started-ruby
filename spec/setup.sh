@@ -30,8 +30,8 @@ fi
 # copy example database config to database.yml
 if [ -f $TEST_DIR/config/database.example.yml ]; then
   cp $TEST_DIR/config/database.example.yml $TEST_DIR/config/database.yml
-  if [ -n "$GCLOUD_PROJECT_ID" ]; then
-    sed -i -e "s/your-project-id/$GCLOUD_PROJECT_ID/g" $TEST_DIR/config/database.yml
+  if [ -n "$GOOGLE_PROJECT_ID" ]; then
+    sed -i -e "s/your-project-id/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/database.yml
   fi
 fi
 
