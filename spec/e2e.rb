@@ -16,6 +16,9 @@ require 'json'
 class E2E
   class << self
     def check()
+      # this allows the test to be run against a URL specified in an environment
+      # variable
+      @url ||= ENV["E2E_URL"]
       if @url.nil?
         step_name = ENV["STEP_NAME"]
 
@@ -59,7 +62,7 @@ class E2E
       # try 3 times in case of intermittent deploy error
       app_yaml_path = File.expand_path("../../#{step_name}/app.yaml", __FILE__)
       for attempt in 0..3
-        self.exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q"
+        self.exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
         break if $?.to_i == 0
       end
 

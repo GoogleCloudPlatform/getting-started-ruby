@@ -38,4 +38,5 @@ group :test do
   gem "rack-test"
   gem "capybara"
   gem "sqlite3"
+  gem "poltergeist"
 end
