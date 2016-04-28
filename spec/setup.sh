@@ -25,6 +25,13 @@ TEST_DIR=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )/../$STEP_NAME
 # copy example settings config to settings.yml
 if [ -f $TEST_DIR/config/settings.example.yml ]; then
   cp $TEST_DIR/config/settings.example.yml $TEST_DIR/config/settings.yml
+  if [ -n "$GOOGLE_CLIENT_ID" ]; then
+    sed -i -e "s/your-client-id/$GOOGLE_CLIENT_ID/g" $TEST_DIR/config/settings.yml
+  fi
+
+  if [ -n "$GOOGLE_CLIENT_SECRET" ]; then
+    sed -i -e "s/your-client-secret/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
+  fi
 fi
 
 # copy example database config to database.yml
@@ -52,11 +59,11 @@ fi
 
 # compile assets if an "assets" directory exists
 if [ -e $TEST_DIR/app/assets ]; then
-  RAILS_ENV=test rake --rakefile=$TEST_DIR/Rakefile assets:precompile
+  RAILS_ENV=test bundle exec rake --rakefile=$TEST_DIR/Rakefile assets:precompile
 fi
 
 # run rake DB tasks after all other changes
 if [ -d $TEST_DIR/db/migrate ]; then
   # create the tables required for testing
-  RAILS_ENV=test rake --rakefile=$TEST_DIR/Rakefile db:migrate
+  RAILS_ENV=test bundle exec rake --rakefile=$TEST_DIR/Rakefile db:migrate
 fi
