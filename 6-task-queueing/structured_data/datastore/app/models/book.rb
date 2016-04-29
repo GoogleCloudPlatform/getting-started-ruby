@@ -20,7 +20,6 @@ class Book
   attr_accessor :id, :title, :author, :published_on, :description, :image_url,
                 :cover_image, :creator_id
 
-
   validates :title, presence: true
 
   # Return a Gcloud::Datastore::Dataset for the configured dataset.
@@ -73,6 +72,9 @@ class Book
 
     from_entity entities.first if entities.any?
   end
+
+  # alias "find_by_id" for compatibility with Active Record
+  singleton_class.send(:alias_method, :find_by_id, :find)
 
   def to_entity
     entity = Gcloud::Datastore::Entity.new
