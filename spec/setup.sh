@@ -32,6 +32,10 @@ if [ -f $TEST_DIR/config/settings.example.yml ]; then
   if [ -n "$GOOGLE_CLIENT_SECRET" ]; then
     sed -i -e "s/your-client-secret/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
   fi
+
+  if [ -n "$GOOGLE_PROJECT_ID" ]; then
+    sed -i -e "s/your-project-id/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/settings.yml
+  fi
 fi
 
 # copy example database config to database.yml
