@@ -33,7 +33,7 @@ service google-fluentd restart &
 
 # Install dependencies from apt
 apt-get update
-apt-get install -y git ruby-dev build-essential libxml2-dev zlib1g-dev nginx libmysqlclient-dev libsqlite3-dev redis-server
+apt-get install -y git ruby ruby-dev build-essential libxml2-dev zlib1g-dev nginx libmysqlclient-dev libsqlite3-dev redis-server
 
 gem install bundler --no-ri --no-rdoc
 
@@ -46,6 +46,9 @@ chown -R railsapp:railsapp /opt/gem
 sudo -u railsapp -H bundle install --path /opt/gem
 sudo -u railsapp -H bundle exec rake db:create
 sudo -u railsapp -H bundle exec rake db:migrate
+
+systemctl enable redis-server.service
+systemctl start redis-server.service
 
 cat gce/default-nginx > /etc/nginx/sites-available/default
 systemctl restart nginx.service
