@@ -55,7 +55,7 @@ class Book
     book = Book.new
     book.id = entity.key.id
     entity.properties.to_hash.each do |name, value|
-      book.send "#{name}=", value
+      book.send "#{name}=", value if book.respond_to? "#{name}="
     end
     book
   end

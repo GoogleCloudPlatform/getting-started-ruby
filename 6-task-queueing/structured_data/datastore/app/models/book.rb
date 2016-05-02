@@ -60,7 +60,7 @@ class Book
     book = Book.new
     book.id = entity.key.id
     entity.properties.to_hash.each do |name, value|
-      book.send "#{name}=", value
+      book.send "#{name}=", value if book.respond_to? "#{name}="
     end
     book
   end
@@ -151,7 +151,7 @@ class Book
         self.id = entity.key.id
         lookup_book_details
       end
-     
+
       self.id = entity.key.id
       update_image if cover_image.present?
       true
