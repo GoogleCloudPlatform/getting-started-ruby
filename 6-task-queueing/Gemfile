@@ -43,5 +43,4 @@ group :test do
   gem "rspec-rails"
   gem "rack-test"
   gem "capybara"
-  gem "sqlite3"
 end
