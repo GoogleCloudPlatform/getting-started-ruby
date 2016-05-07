@@ -40,8 +40,6 @@ feature "User login (e2e)" do
     expect(query).to have_key "client_id"
     expect(query).to have_key "access_type"
     expect(query).to have_key "response_type"
-    expect(query).to have_key "hl"
-    expect(query).to have_key "from_login"
     expect(query).to have_key "scope"
     expect(query).to have_key "state"
   end
