@@ -17,3 +17,4 @@
 /public/assets/
 /config/database.yml
 /gcd_dataset_directory/
+*.sqlite3
