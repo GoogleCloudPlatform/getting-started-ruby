@@ -354,7 +354,7 @@ DEPENDENCIES
   capybara
   fog
   foreman
-  gcloud
+  gcloud (~> 0.8)
   google-api-client
   jquery-rails
   mysql2 (~> 0.3.0)
