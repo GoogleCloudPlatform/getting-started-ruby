@@ -13,22 +13,7 @@
 
 require "spec_helper"
 
-feature "Managing Books using Cloud Datastore" do
-
-  before :all do
-    # Reload application to change Book model and controller classes
-    ActionDispatch::Reloader.cleanup!
-    ActionDispatch::Reloader.prepare!
-
-    DatastoreBook.send :extend, DatastoreBookExtensions
-  end
-
-  before do
-    stub_const "Book", DatastoreBook
-    stub_const "BooksController", DatastoreBooksController
-
-    DatastoreBook.delete_all
-  end
+feature "[SQL] Managing Books" do
 
   scenario "No books have been added" do
     visit root_path
@@ -52,21 +37,35 @@ feature "Managing Books using Cloud Datastore" do
     Book.create! title: "Book 4"
     Book.create! title: "Book 5"
 
-    stub_const "DatastoreBooksController::PER_PAGE", 2
+    stub_const "BooksController::PER_PAGE", 2
 
     visit root_path
-    expect(all(".book").length).to eq 2
+    expect(page).to have_content "Book 1"
+    expect(page).to have_content "Book 2"
+    expect(page).not_to have_content "Book 3"
+    expect(page).not_to have_content "Book 4"
+    expect(page).not_to have_content "Book 5"
 
     click_link "More"
-    expect(all(".book").length).to eq 2
+    expect(page).not_to have_content "Book 1"
+    expect(page).not_to have_content "Book 2"
+    expect(page).to have_content "Book 3"
+    expect(page).to have_content "Book 4"
+    expect(page).not_to have_content "Book 5"
 
     click_link "More"
-    expect(all(".book").length).to eq 1
+    expect(page).not_to have_content "Book 1"
+    expect(page).not_to have_content "Book 2"
+    expect(page).not_to have_content "Book 3"
+    expect(page).not_to have_content "Book 4"
+    expect(page).to have_content "Book 5"
 
     expect(page).not_to have_link "More"
   end
 
   scenario "Adding a book" do
+    expect(Book.count).to eq 0
+
     visit root_path
     click_link "Add Book"
     within "form.new_book" do
@@ -78,15 +77,18 @@ feature "Managing Books using Cloud Datastore" do
     end
 
     expect(page).to have_content "Added Book"
+    expect(Book.count).to eq 1
 
     book = Book.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Time.parse("1859-04-01")
+    expect(book.published_on).to eq Date.parse("1859-04-01")
     expect(book.description).to eq "A novel by Charles Dickens"
   end
 
   scenario "Adding a book with missing fields" do
+    expect(Book.count).to eq 0
+
     visit root_path
     click_link "Add Book"
     within "form.new_book" do
@@ -94,12 +96,14 @@ feature "Managing Books using Cloud Datastore" do
     end
 
     expect(page).to have_content "Title can't be blank"
+    expect(Book.count).to eq 0
 
     within "form.new_book" do
       fill_in "Title", with: "A Tale of Two Cities"
       click_button "Save"
     end
 
+    expect(Book.count).to eq 1
     expect(Book.first.title).to eq "A Tale of Two Cities"
   end
 
@@ -114,7 +118,7 @@ feature "Managing Books using Cloud Datastore" do
 
     expect(page).to have_content "Updated Book"
 
-    book = Book.find book.id
+    book.reload
     expect(book.title).to eq "CHANGED!"
     expect(book.author).to eq "Charles Dickens"
   end
@@ -129,7 +133,7 @@ feature "Managing Books using Cloud Datastore" do
     click_button "Save"
 
     expect(page).to have_content "Title can't be blank"
-    book = Book.find book.id
+    book.reload
     expect(book.title).to eq "A Tale of Two Cities"
 
     within "form.edit_book" do
@@ -137,7 +141,7 @@ feature "Managing Books using Cloud Datastore" do
       click_button "Save"
     end
 
-    book = Book.find book.id
+    book.reload
     expect(book.title).to eq "CHANGED!"
   end
 

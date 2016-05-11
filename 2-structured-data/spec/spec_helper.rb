@@ -14,45 +14,21 @@
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
-require File.expand_path("../../../spec/e2e", __FILE__)
+
 require "rspec/rails"
 require "capybara/rails"
 require "capybara/poltergeist"
 require "rack/test"
-require "datastore_book_extensions"
-
-SetupE2EConfig = true
+require "datastore_helper"
+require "end_to_end_helper"
 
 RSpec.configure do |config|
+  configure_datastore config
+  configure_end_to_end config
+
   config.use_transactional_fixtures = true
-
   config.infer_spec_type_from_file_location!
-
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
-  end
-
-  config.before(:example, :e2e) do
-    if SetupE2EConfig
-      # Set up database.yml for e2e tests with values from environment variables
-      db_file = File.expand_path("../../config/database.yml", __FILE__)
-      db_config = File.read(db_file)
-      db_values = {
-        "your-mysql-user-here" => "MYSQL_USER",
-        "your-mysql-password-here" =>  "MYSQL_PASSWORD",
-        "your-mysql-IPv4-address-here" => "MYSQL_HOST",
-        "your-mysql-database-here" => "MYSQL_DBNAME"
-      }
-
-      db_values.each { |key, envkey|
-        if ENV[envkey].nil?
-          raise "Please set environment variable #{envkey}"
-        end
-        db_config.sub!(key, ENV[envkey])
-      }
-
-      File.open(db_file, "w") {|file| file.puts db_config }
-      SetupE2EConfig = false
-    end
   end
 end

@@ -11,12 +11,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'json'
+require "json"
 
 class E2E
   class << self
-    def check()
-      # this allows the test to be run against a URL specified in an environment
+    def check
+      # This allows the test to be run against a URL specified in an environment
       # variable
       @url ||= ENV["E2E_URL"]
       if @url.nil?
@@ -55,20 +55,20 @@ class E2E
       project_id = key_json['project_id'];
 
       # authenticate with gcloud using our credentials file
-      self.exec "gcloud config set project #{project_id}"
-      self.exec "gcloud config set account #{account_name}"
+      execute "gcloud config set project #{project_id}"
+      execute "gcloud config set account #{account_name}"
 
       # deploy this step_name to gcloud
       # try 3 times in case of intermittent deploy error
       app_yaml_path = File.expand_path("../../#{step_name}/app.yaml", __FILE__)
       for attempt in 0..3
-        self.exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
-        break if $?.to_i == 0
+        execute "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
+        break if $?.success?
       end
 
       # if status is not 0, we tried 3 times and failed
       if $?.to_i != 0
-        self.output "Failed to deploy to gcloud"
+        puts "Failed to deploy to gcloud"
         return $?.to_i
       end
 
@@ -86,16 +86,16 @@ class E2E
       # determine build number
       build_id ||= ENV['BUILD_ID']
       if build_id.nil?
-        self.output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
+        puts "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
       end
 
       # run gcloud command
-      self.exec "gcloud preview app modules delete default --version=#{step_name}-#{build_id} -q"
+      execute "gcloud preview app modules delete default --version=#{step_name}-#{build_id} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
-        self.output "Failed to delete e2e version"
+        puts "Failed to delete e2e version"
         return $?.to_i
       end
 
@@ -104,17 +104,13 @@ class E2E
     end
 
     def url
-      self.check()
+      check
       @url
     end
 
-    def exec(cmd)
-      self.output "> #{cmd}"
-      self.output `#{cmd}`
-    end
-
-    def output(line)
-      puts line
+    def execute cmd
+      puts "> #{cmd}"
+      puts `#{cmd}`
     end
   end
 end

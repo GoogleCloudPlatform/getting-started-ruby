@@ -34,10 +34,20 @@
   </div>
 <% end %>
 
-<% if @more %>
+<%# SQL ActiveRecord pagination %>
+<% if @next_page %>
   <nav>
     <ul class="pager">
-      <li><%= link_to "More", books_path(more: @more) %></li>
+      <li><%= link_to "More", books_path(page: @next_page) %></li>
+    </ul>
+  </nav>
+<% end %>
+
+<%# Cloud Datastore pagination %>
+<% if @cursor %>
+  <nav>
+    <ul class="pager">
+      <li><%= link_to "More", books_path(cursor: @cursor) %></li>
     </ul>
   </nav>
 <% end %>

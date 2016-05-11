@@ -12,26 +12,21 @@
 # limitations under the License.
 
 # Additional methods added to the Book class for testing only.
-#
-# Implements API similar to ActiveRecord for shared SQL/Datastore test suite.
 module DatastoreBookExtensions
 
   def self.included base
-    base.send :extend, ClassMethods
+    base.extend ClassMethods
   end
 
   def reload
     book = Book.find id
-    self.title        = book.title
-    self.author       = book.author
-    self.published_on = book.published_on
-    self.description  = book.description
-    self.image_url    = book.image_url
-    book
+
+    [:title, :author, :published_on, :description, :image_url].each do |attr|
+      send "#{attr}=", book.send(attr) if respond_to? "#{attr}="
+    end
   end
 
   module ClassMethods
-
     def all
       books = []
 

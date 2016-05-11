@@ -13,9 +13,10 @@
 
 require "spec_helper"
 
-feature "Managing Books" do
+# TODO add image upload test for Cloud Storage
+feature "[End-to-end] Managing Books", :e2e do
 
-  scenario "Adding a book (e2e)", :e2e do
+  scenario "Adding a book" do
     visit E2E.url + root_path
 
     click_link "Add Book"
@@ -31,7 +32,7 @@ feature "Managing Books" do
     expect(page).to have_content "Charles Dickens"
   end
 
-  scenario "Adding a book with missing fields (e2e)", :e2e do
+  scenario "Adding a book with missing fields" do
     visit E2E.url + root_path
 
     click_link "Add Book"
@@ -42,7 +43,7 @@ feature "Managing Books" do
     expect(page).to have_content "Title can't be blank"
   end
 
-  scenario "Listing all books (e2e)", :e2e do
+  scenario "Listing all books" do
     Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
 
     visit E2E.url + root_path
@@ -51,7 +52,7 @@ feature "Managing Books" do
     expect(page).to have_content "Charles Dickens"
   end
 
-  scenario "Deleting a book (e2e)", :e2e do
+  scenario "Deleting a book" do
     visit E2E.url + root_path
 
     first(:link, "A Tale of Two Cities").click

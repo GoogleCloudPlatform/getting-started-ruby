@@ -11,26 +11,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START book_class]
 require "gcloud/datastore"
 
-class Book
-  include ActiveModel::Model
-  include ActiveModel::Validations
+class DatastoreBook
+
+  # Manually set Rails model name to "Book" because "DatastoreBook" is used
+  # in this sample to allow for both SQL and Datastore database options
+  def self.model_name
+    ActiveModel::Name.new self, nil, "Book"
+  end
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url,
                 :cover_image
-
-
-  validates :title, presence: true
 
   # Return a Gcloud::Datastore::Dataset for the configured dataset.
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
     @dataset ||= Gcloud.datastore(
-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+      Rails.application.config.x.settings["project_id"]
     )
   end
+# [END book_class]
 
+  # [START query]
   # Query Book entities from Cloud Datastore.
   #
   # returns an array of Book query results and a cursor
@@ -50,7 +54,9 @@ class Book
 
     return books, next_cursor
   end
+  # [END query]
 
+  # [START from_entity]
   def self.from_entity entity
     book = Book.new
     book.id = entity.key.id
@@ -59,7 +65,9 @@ class Book
     end
     book
   end
+  # [END from_entity]
 
+  # [START find]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
     query    = Gcloud::Datastore::Key.new "Book", id.to_i
@@ -67,7 +75,15 @@ class Book
 
     from_entity entities.first if entities.any?
   end
+  # [END find]
 
+  # Add Active Model support.
+  # Provides constructor that takes a Hash of attribute values.
+  include ActiveModel::Model
+
+  # [START save]
+  # Save the book to Datastore.
+  # @return true if valid and saved successfully, otherwise false.
   def save
     if valid?
       entity = to_entity
@@ -79,7 +95,10 @@ class Book
       false
     end
   end
+  # [END save]
 
+  # [START to_entity]
+  # ...
   def to_entity
     entity = Gcloud::Datastore::Entity.new
     entity.key = Gcloud::Datastore::Key.new "Book", id
@@ -90,19 +109,34 @@ class Book
     entity["image_url"]    = image_url    if image_url
     entity
   end
+  # [END to_entity]
 
+  # [START validations]
+  # Add Active Model validation support to Book class.
+  include ActiveModel::Validations
+
+  validates :title, presence: true
+  # [END validations]
+
+  # [START update]
+  # Set attribute values from provided Hash and save to Datastore.
   def update attributes
     attributes.each do |name, value|
-      send "#{name}=", value
+      send "#{name}=", value if respond_to? "#{name}="
     end
     save
   end
+  # [END update]
 
+  # [START destroy]
   def destroy
     delete_image if image_url.present?
 
     Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
   end
+  # [END destroy]
+
+##################
 
   def persisted?
     id.present?
@@ -140,5 +174,4 @@ class Book
     delete_image if image_url.present?
     upload_image
   end
-
 end

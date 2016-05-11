@@ -11,57 +11,62 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START book]
-class Book < ActiveRecord::Base
-  validates :title, presence: true
+# Choose database backend based on configuration in settings.yml
+if Rails.application.config.x.database.datastore?
+  Book = DatastoreBook
+else
+  # [START book]
+  class Book < ActiveRecord::Base
+    validates :title, presence: true
 
-  attr_accessor :cover_image
+    attr_accessor :cover_image
 
-  private
+    private
 
-  # [START upload]
-  after_create :upload_image, if: :cover_image
+    # [START upload]
+    after_create :upload_image, if: :cover_image
 
-  def upload_image
-    image = StorageBucket.files.new(
-      key: "cover_images/#{id}/#{cover_image.original_filename}",
-      body: cover_image.read,
-      public: true
-    )
+    def upload_image
+      image = StorageBucket.files.new(
+        key: "cover_images/#{id}/#{cover_image.original_filename}",
+        body: cover_image.read,
+        public: true
+      )
 
-    image.save
+      image.save
 
-    update_columns image_url: image.public_url
-  end
-  # [END upload]
-
-  # TODO what if the image is from the Pub/Sub job and NOT in Cloud Storage!?
-
-  # [START delete]
-  before_destroy :delete_image, if: :image_url
-
-  def delete_image
-    bucket_name = StorageBucket.key
-    image_uri   = URI.parse image_url
-
-    if image_uri.host == "#{bucket_name}.storage.googleapis.com"
-      # Remove leading forward slash from image path
-      # The result will be the image key, eg. "cover_images/:id/:filename"
-      image_key = image_uri.path.sub("/", "")
-      image     = StorageBucket.files.new key: image_key
-
-      image.destroy
+      update_columns image_url: image.public_url
     end
-  end
-  # [END delete]
+    # [END upload]
 
-  # [START update]
-  before_update :update_image, if: :cover_image
+    # TODO what if the image is from the Pub/Sub job and NOT in Cloud Storage!?
 
-  def update_image
-    delete_image if image_url?
-    upload_image
+    # [START delete]
+    before_destroy :delete_image, if: :image_url
+
+    def delete_image
+      bucket_name = StorageBucket.key
+      image_uri   = URI.parse image_url
+
+      if image_uri.host == "#{bucket_name}.storage.googleapis.com"
+        # Remove leading forward slash from image path
+        # The result will be the image key, eg. "cover_images/:id/:filename"
+        image_key = image_uri.path.sub("/", "")
+        image     = StorageBucket.files.new key: image_key
+
+        image.destroy
+      end
+    end
+    # [END delete]
+
+    # [START update]
+    before_update :update_image, if: :cover_image
+
+    def update_image
+      delete_image if image_url?
+      upload_image
+    end
+    # [END update]
   end
-  # [END update]
+  # [END book]
 end
-# [END book]
