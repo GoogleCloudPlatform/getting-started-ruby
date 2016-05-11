@@ -1,4 +1,12 @@
 default: &default
+
+  # Choose database backend "sql" or "datastore"
+  database: sql
+
+  # Set project ID if using Cloud Datastore database backend
+  project_id: <your-project-id>
+
+  # Configure Cloud Storage bucket and access
   cloud_storage:
     bucket: your-bucket-name
     access_key_id: your-access-key-id

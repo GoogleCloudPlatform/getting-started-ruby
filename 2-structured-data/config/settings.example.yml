@@ -1,5 +1,7 @@
 development:
+
   # Choose database backend "sql" or "datastore"
   database: sql
+
   # Set project ID if using Cloud Datastore database backend
   project_id: <your-project-id>
