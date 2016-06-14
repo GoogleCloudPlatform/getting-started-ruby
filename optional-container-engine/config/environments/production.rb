@@ -51,12 +51,9 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
 
-  # Use a different logger for distributed setups.
-  # [START logging]
-  if Dir.exist? "/var/log/app_engine/custom_logs"
-    config.logger = ActiveSupport::TaggedLogging.new Logger.new("/var/log/app_engine/custom_logs/application.log")
-  end
-  # [END logging]
+  # Output to STDOUT to view logs in foreman output
+  Rails.logger = ActiveSupport::Logger.new STDOUT
+  $stdout.sync = true
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
