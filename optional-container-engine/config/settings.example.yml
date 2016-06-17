@@ -1,0 +1,15 @@
+default: &default
+  project_id: [YOUR_PROJECT_ID]
+  oauth2:
+    client_id: your-client-id
+    client_secret: your-client-secret
+  cloud_storage:
+    bucket: [YOUR_BUCKET_NAME]
+    access_key_id: [YOUR_ACCESS_KEY]
+    secret_access_key: [YOUR_SECRET]
+
+development:
+  <<: *default
+
+production:
+  <<: *default
