@@ -15,6 +15,8 @@ require 'json'
 
 class E2E
   class << self
+    attr_accessor :configured
+    attr_accessor :attempted
     def check()
       # this allows the test to be run against a URL specified in an environment
       # variable
@@ -82,16 +84,16 @@ class E2E
       return 0
     end
 
-    def cleanup(step_name, build_id = nil)
+    def cleanup()
       # determine build number
-      build_id ||= ENV['BUILD_ID']
-      if build_id.nil?
+      version = @url.match(/https:\/\/(.+)-dot-(.+).appspot.com/)
+      if not version
         self.output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
       end
 
       # run gcloud command
-      self.exec "gcloud preview app modules delete default --version=#{step_name}-#{build_id} -q"
+      self.exec "gcloud preview app versions delete #{version[1]} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
@@ -101,6 +103,10 @@ class E2E
 
       # return 0, no errors
       return 0
+    end
+
+    def deployed
+      not @url.nil?
     end
 
     def url
@@ -115,6 +121,43 @@ class E2E
 
     def output(line)
       puts line
+    end
+
+    def register_config(config)
+      config.before :example, :e2e => true do
+        if not E2E.configured
+          # Set up database.yml for e2e tests with values from environment variables
+          db_file = File.expand_path("../../#{ENV["STEP_NAME"]}/config/database.yml", __FILE__)
+          db_config = File.read(db_file)
+
+          if ENV["GOOGLE_PROJECT_ID"].nil?
+            raise "Please set environment variable GOOGLE_PROJECT_ID"
+          end
+          project_id = ENV["GOOGLE_PROJECT_ID"]
+
+          find = "#   dataset_id: your-project-id"
+          replace = "  dataset_id: #{project_id}"
+          db_config.sub!(find, replace)
+
+          File.open(db_file, "w") {|file| file.puts db_config }
+          E2E.configured = true
+        end
+
+        # set the backend to datastore
+        E2E.exec("bundle exec rake backend:datastore")
+      end
+
+      config.after :example, :e2e => true do
+        E2E.exec("bundle exec rake backend:active_record")
+      end
+    end
+
+    def register_cleanup(config)
+      config.after :suite do
+        if E2E.deployed and ENV["E2E_URL"].nil?
+          E2E.cleanup
+        end
+      end
     end
   end
 end
