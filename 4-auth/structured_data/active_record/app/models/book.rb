@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# [START book]
 class Book < ActiveRecord::Base
   validates :title, presence: true
 
@@ -63,3 +64,4 @@ class Book < ActiveRecord::Base
   end
   # [END update]
 end
+# [END book]

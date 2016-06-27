@@ -15,8 +15,9 @@ require 'json'
 
 class E2E
   class << self
-    attr_accessor :configured
-    attr_accessor :attempted
+    attr_accessor :configured, :attempted
+    alias_method :configured?, :configured
+    alias_method :attempted?, :attempted
     def check()
       # this allows the test to be run against a URL specified in an environment
       # variable
@@ -29,14 +30,14 @@ class E2E
           raise "cannot run e2e tests - missing required step_name"
         end
 
-        if @attempted
+        if attempted?
           # we've tried to run the tests and failed
           raise "cannot run e2e tests - deployment failed"
         end
 
         @attempted = true
         build_id = ENV["BUILD_ID"]
-        self.deploy(step_name, build_id)
+        deploy(step_name, build_id)
       end
 
       # use the poltergeist (phantomjs) driver for the test
@@ -57,20 +58,20 @@ class E2E
       project_id = key_json['project_id'];
 
       # authenticate with gcloud using our credentials file
-      self.exec "gcloud config set project #{project_id}"
-      self.exec "gcloud config set account #{account_name}"
+      exec "gcloud config set project #{project_id}"
+      exec "gcloud config set account #{account_name}"
 
       # deploy this step_name to gcloud
       # try 3 times in case of intermittent deploy error
       app_yaml_path = File.expand_path("../../#{step_name}/app.yaml", __FILE__)
       for attempt in 0..3
-        self.exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
+        exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
         break if $?.to_i == 0
       end
 
       # if status is not 0, we tried 3 times and failed
       if $?.to_i != 0
-        self.output "Failed to deploy to gcloud"
+        output "Failed to deploy to gcloud"
         return $?.to_i
       end
 
@@ -87,17 +88,17 @@ class E2E
     def cleanup()
       # determine build number
       version = @url.match(/https:\/\/(.+)-dot-(.+).appspot.com/)
-      if not version
-        self.output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
+      unless version
+        output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
       end
 
       # run gcloud command
-      self.exec "gcloud preview app versions delete #{version[1]} -q"
+      exec "gcloud preview app versions delete #{version[1]} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
-        self.output "Failed to delete e2e version"
+        output "Failed to delete e2e version"
         return $?.to_i
       end
 
@@ -105,18 +106,18 @@ class E2E
       return 0
     end
 
-    def deployed
+    def deployed?
       not @url.nil?
     end
 
     def url
-      self.check()
+      check()
       @url
     end
 
     def exec(cmd)
-      self.output "> #{cmd}"
-      self.output `#{cmd}`
+      output "> #{cmd}"
+      output `#{cmd}`
     end
 
     def output(line)
@@ -125,7 +126,7 @@ class E2E
 
     def register_config(config)
       config.before :example, :e2e => true do
-        if not E2E.configured
+        unless E2E.configured?
           # Set up database.yml for e2e tests with values from environment variables
           db_file = File.expand_path("../../#{ENV["STEP_NAME"]}/config/database.yml", __FILE__)
           db_config = File.read(db_file)
@@ -154,7 +155,7 @@ class E2E
 
     def register_cleanup(config)
       config.after :suite do
-        if E2E.deployed and ENV["E2E_URL"].nil?
+        if E2E.deployed? and ENV["E2E_URL"].nil?
           E2E.cleanup
         end
       end

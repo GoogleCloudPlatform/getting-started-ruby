@@ -46,4 +46,7 @@ RSpec.configure do |config|
     Fog::Mock.reset
     FogStorage.directories.create key: "testbucket", acl: "public-read"
   end
+
+  E2E.register_config(config)
+  E2E.register_cleanup(config)
 end

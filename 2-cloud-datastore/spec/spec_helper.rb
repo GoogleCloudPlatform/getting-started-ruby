@@ -40,4 +40,6 @@ RSpec.configure do |config|
   config.before :each do |example|
     Book.delete_all
   end
+
+  E2E.register_cleanup(config)
 end
