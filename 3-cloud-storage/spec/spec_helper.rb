@@ -16,8 +16,10 @@
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../../../spec/e2e", __FILE__)
 require "rspec/rails"
 require "capybara/rails"
+require 'capybara/poltergeist'
 require "rack/test"
 
 database_config = Rails.application.config.database_configuration[Rails.env]
@@ -44,4 +46,7 @@ RSpec.configure do |config|
     Fog::Mock.reset
     FogStorage.directories.create key: "testbucket", acl: "public-read"
   end
+
+  E2E.register_config(config)
+  E2E.register_cleanup(config)
 end

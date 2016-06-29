@@ -20,8 +20,6 @@ require "capybara/rails"
 require 'capybara/poltergeist'
 require "rack/test"
 
-setupE2EConfig = true
-
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
@@ -32,7 +30,7 @@ RSpec.configure do |config|
   end
 
   config.before(:example, :e2e) do
-    if setupE2EConfig
+    unless E2E.configured?
       # Set up database.yml for e2e tests with values from environment variables
       db_file = File.expand_path("../../config/database.yml", __FILE__)
       db_config = File.read(db_file)
@@ -51,7 +49,9 @@ RSpec.configure do |config|
       }
 
       File.open(db_file, "w") {|file| file.puts db_config }
-      setupE2EConfig = false
+      E2E.configured = true
     end
   end
+
+  E2E.register_cleanup(config)
 end
