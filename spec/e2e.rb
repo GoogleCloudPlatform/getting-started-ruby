@@ -94,7 +94,7 @@ class E2E
       end
 
       # run gcloud command
-      exec "gcloud preview app versions delete #{version[1]} -q"
+      exec "gcloud app versions delete #{version[1]} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
