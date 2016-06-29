@@ -41,7 +41,7 @@ Then, run the Rails web server:
 
 ### To deploy to App Engine Managed VMs
 
-    $ gcloud preview app deploy
+    $ gcloud app deploy
 
 ## Contributing changes
 

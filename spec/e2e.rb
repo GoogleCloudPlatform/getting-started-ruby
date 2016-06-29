@@ -65,7 +65,7 @@ class E2E
       # try 3 times in case of intermittent deploy error
       app_yaml_path = File.expand_path("../../#{step_name}/app.yaml", __FILE__)
       for attempt in 0..3
-        exec "gcloud preview app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
+        exec "gcloud app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
         break if $?.to_i == 0
       end
 
@@ -94,7 +94,7 @@ class E2E
       end
 
       # run gcloud command
-      exec "gcloud preview app versions delete #{version[1]} -q"
+      exec "gcloud app versions delete #{version[1]} -q"
 
       # return the result of the gcloud delete command
       if $?.to_i != 0

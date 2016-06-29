@@ -37,7 +37,7 @@ Install the [Google Cloud SDK](https://cloud.google.com/sdk):
 
 And then deploy the application:
 
-    $ gcloud preview app deploy
+    $ gcloud app deploy
 
 The application Dockerfile uses the [`google/ruby-runtime`][runtime] Docker image
 which supports running any Ruby web application.
