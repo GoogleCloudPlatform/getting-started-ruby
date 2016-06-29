@@ -49,7 +49,7 @@ And then run the Rails web server:
 
 ### To deploy to App Engine Managed VMs
 
-    $ gcloud preview app deploy
+    $ gcloud app deploy
 
 [ror]: http://rubyonrails.org/
 [mvms]: https://cloud.google.com/appengine/docs/managed-vms/
