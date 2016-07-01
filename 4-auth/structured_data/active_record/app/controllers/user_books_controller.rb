@@ -21,8 +21,10 @@ class UserBooksController < ApplicationController
   def index
     page = params[:more] ? params[:more].to_i : 0
 
+    # [START books_by_creator]
     @books = Book.where(creator_id: current_user.id).
                   limit(PER_PAGE).offset(PER_PAGE * page)
+    # [END books_by_creator]
 
     @more = page + 1 if @books.count == PER_PAGE
 
