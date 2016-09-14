@@ -26,7 +26,7 @@ git config --global credential.helper gcloud.sh
 # Change branch from master if not using master
 git clone https://source.developers.google.com/p/$PROJECTID /opt/app -b master
 
-pushd /opt/app
+pushd /opt/app/7-compute-engine
 
 pushd config
 
