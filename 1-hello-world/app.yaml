@@ -13,6 +13,6 @@
 
 # [START runtime]
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec rackup -p 8080 -E production config.ru
 # [END runtime]
