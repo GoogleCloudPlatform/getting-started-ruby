@@ -11,8 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO test against Ruby 1.9.3
-
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
@@ -23,10 +21,7 @@ require 'capybara/poltergeist'
 require "rack/test"
 require "book_extensions"
 
-database_config = Rails.application.config.database_configuration[Rails.env]
-
 Book.send :extend, BookExtensions
-Book.dataset.connection.http_host = database_config["host"]
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
