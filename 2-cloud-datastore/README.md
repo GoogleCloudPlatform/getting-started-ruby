@@ -16,8 +16,7 @@ Checkout branches to view particular steps of this sample application.
 
 ### Dependencies
 
-To run the Bookshelf app, first ensure that you have Ruby 1.9.3 or newer.
-Ruby 2.0 and above is recommended.
+To run the Bookshelf app, first ensure that you have a [stable version][rstable] of Ruby.
 
 For information on installing Ruby, view [Installing Ruby][] on the [Ruby website][].
 
@@ -54,6 +53,7 @@ And then run the Rails web server:
 [fevm]: https://cloud.google.com/appengine/docs/flexible/
 [Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
 [Ruby website]: https://www.ruby-lang.org
+[rstable]: https://www.ruby-lang.org/en/downloads/
 [user-install]: http://guides.rubygems.org/faqs/#user-install
 
 ## Contributing changes
