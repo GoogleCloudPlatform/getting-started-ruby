@@ -12,7 +12,7 @@ Checkout branches to view particular steps of this sample application.
  - `6-task-queueing`
  - `7-compute-engine`
 
-[Ruby on Rails][ror] web application on [Google Managed VMs][mvms].
+[Ruby on Rails][ror] web application on [Google App Engine flexible environment][fevm].
 
 ### Dependencies
 
@@ -51,7 +51,7 @@ And then run the Rails web server:
     $ gcloud app deploy
 
 [ror]: http://rubyonrails.org/
-[mvms]: https://cloud.google.com/appengine/docs/managed-vms/
+[fevm]: https://cloud.google.com/appengine/docs/flexible/
 [Installing Ruby]: https://www.ruby-lang.org/en/documentation/installation/
 [Ruby website]: https://www.ruby-lang.org
 [user-install]: http://guides.rubygems.org/faqs/#user-install
