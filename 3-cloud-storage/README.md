@@ -37,11 +37,6 @@ B. Web UI
      ACCESS leave it as Reader.
   8. Click the blue "Save" button.
 
-Open `config/application.rb`, edit the below line to replace `bucket`
-with the name of your bucket:
-
-    config.x.fog_dir = 'bucket'
-
 #### Setup your cloud storage secrets
 
 In the Web UI:
@@ -50,11 +45,11 @@ In the Web UI:
   2. Select the "Interoperability" tab
   3. Click the "Create a new key" button
 
-Setup the secrets file:
+Setup settings.yml file:
 
-    $ cp config/fog_credentials.example.yml config/fog_credentials.yml
+    $ cp config/settings.example.yml config/settings.yml
 
-Edit `fog_credentials.yml` and add your secrets from the Web UI.
+Edit `settings.yml` and set your `bucket` name and secrets from the Web UI.
 
 ### Run
 
