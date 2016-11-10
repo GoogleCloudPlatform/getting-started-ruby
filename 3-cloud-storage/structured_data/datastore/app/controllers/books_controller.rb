@@ -48,7 +48,7 @@ class BooksController < ApplicationController
     redirect_to books_path
   end
 
-  before_filter :convert_published_on_to_date
+  before_action :convert_published_on_to_date
 
   def create
     @book = Book.new book_params

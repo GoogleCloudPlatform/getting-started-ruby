@@ -13,6 +13,6 @@
 
 # [START runtime]
 runtime: ruby
-vm: true
-entrypoint: bundle exec rackup -p 8080 -E production config.ru
+env: flex
+entrypoint: bundle exec rackup -p $PORT
 # [END runtime]
