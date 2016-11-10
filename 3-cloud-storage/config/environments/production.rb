@@ -35,7 +35,7 @@ Rails.application.configure do
 
   # Serve static files from the `/public` folder by default.
   # Consider using a CDN for better performance
-  config.serve_static_files = true
+  config.public_file_server.enabled = true
 
   # Specifies the header that your server uses for sending files.
   # config.action_dispatch.x_sendfile_header = 'X-Sendfile' # for Apache

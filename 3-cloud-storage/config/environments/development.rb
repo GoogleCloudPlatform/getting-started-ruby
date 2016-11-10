@@ -29,7 +29,7 @@ Rails.application.configure do
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 
-  config.serve_static_files = true
+  config.public_file_server.enabled = true
   config.assets.debug = true
   config.assets.digest = true
   config.assets.raise_runtime_errors = true
