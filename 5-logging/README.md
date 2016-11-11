@@ -21,8 +21,9 @@ To run the application, first install dependencies:
 
 To setup the database for local development, copy the sample `database.yml` file:
 
-    $ cp config/secrets.example.yml config/secrets.yml
+    $ cp config/database.example.yml config/database.yml
 
+To setup OAuth:
   * In the Developers Console, go to "APIs & auth" -> "Credentials"
   * "Add credentials" then "OAuth 2.0 client ID"
   * Select "Web application"
@@ -36,8 +37,7 @@ To setup the database for local development, copy the sample `database.yml` file
   * "Google+ API"
   * Enable
 
-Edit `secrets.yml` and add your `client_id` and `client_secret` from your project's
-web application credentials ([console](https://console.developers.google.com/project/_/apiui/credential)).
+Copy `settings.example.yml` to `settings.yml` and add your `client_id` and `client_secret` from your project's web application credentials ([console](https://console.developers.google.com/project/_/apiui/credential)).
 
 Then, run the Rails web server:
 
