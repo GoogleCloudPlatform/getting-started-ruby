@@ -14,7 +14,7 @@
 source "https://rubygems.org"
 
 gem "rails"
-gem "gcloud"
+gem "google-cloud"
 gem "jquery-rails"
 gem "fog"
 # [START omniauth]

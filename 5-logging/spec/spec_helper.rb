@@ -11,8 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# TODO test against Ruby 1.9.3
-
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
@@ -22,12 +20,9 @@ require "capybara/rails"
 require 'capybara/poltergeist'
 require "rack/test"
 
-database_config = Rails.application.config.database_configuration[Rails.env]
-
 if Book.respond_to? :dataset
   require "datastore_book_extensions"
   Book.send :include, DatastoreBookExtensions
-  Book.dataset.connection.http_host = database_config["host"]
 end
 
 Rails.configuration.x.fog_dir = "testbucket"
@@ -43,7 +38,7 @@ RSpec.configure do |config|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
-  config.before :each, :e2e => false do
+  config.before :each do
     Book.delete_all
     Fog::Mock.reset
     FogStorage.directories.create key: "testbucket", acl: "public-read"
