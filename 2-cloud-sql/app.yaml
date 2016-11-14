@@ -14,7 +14,7 @@
 # [START runtime]
 runtime: ruby
 env: flex
-entrypoint: bundle exec rackup -p 8080 -E production config.ru
+entrypoint: bundle exec rackup -p $PORT
 # [END runtime]
 
 beta_settings:
