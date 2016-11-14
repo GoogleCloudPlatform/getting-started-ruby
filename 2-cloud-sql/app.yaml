@@ -13,6 +13,11 @@
 
 # [START runtime]
 runtime: ruby
-vm: true
+env: flex
 entrypoint: bundle exec rackup -p 8080 -E production config.ru
 # [END runtime]
+
+beta_settings:
+  # The connection name of your instance on its Overview page in the Google
+  # Cloud Platform Console, or use `[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`
+  cloud_sql_instances: [YOUR_INSTANCE_CONNECTION_NAME]

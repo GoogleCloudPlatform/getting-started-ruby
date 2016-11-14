@@ -4,8 +4,8 @@ mysql_settings: &mysql_settings
   pool: 5
   username: your-mysql-user-here
   password: your-mysql-password-here
-  host: your-mysql-IPv4-address-here
   database: your-mysql-database-here
+  socket: your-cloud-sql-socket-path
 
 development:
   <<: *mysql_settings
