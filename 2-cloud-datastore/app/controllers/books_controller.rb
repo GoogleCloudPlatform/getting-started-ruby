@@ -56,7 +56,7 @@ class BooksController < ApplicationController
   end
   # [END destroy]
 
-  before_action :convert_published_on_to_date
+  before_filter :convert_published_on_to_date
 
   # [START create]
   def create
