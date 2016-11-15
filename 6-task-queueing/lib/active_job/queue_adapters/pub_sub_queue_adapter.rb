@@ -1,5 +1,5 @@
 # [START pub_sub_enqueue]
-require "gcloud"
+require "google/cloud"
 
 module ActiveJob
   module QueueAdapters
@@ -7,7 +7,7 @@ module ActiveJob
 
       def self.pubsub
         project_id = Rails.application.config.x.settings["project_id"]
-        gcloud     = Gcloud.new project_id
+        gcloud     = Google::Cloud.new project_id
 
         gcloud.pubsub
       end

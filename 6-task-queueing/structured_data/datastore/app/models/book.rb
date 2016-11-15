@@ -22,11 +22,12 @@ class Book
 
   validates :title, presence: true
 
-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
+  # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
-    @dataset ||= Gcloud.datastore(
-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+    @dataset ||= Google::Cloud::Datastore.new(
+      project: Rails.application.config.
+                     database_configuration[Rails.env]["dataset_id"]
     )
   end
 
@@ -36,7 +37,7 @@ class Book
   # that can be used to query for additional results.
   # [START books_by_creator]
   def self.query options = {}
-    query = Gcloud::Datastore::Query.new
+    query = Google::Cloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]
     query.cursor options[:cursor] if options[:cursor]
@@ -67,7 +68,7 @@ class Book
 
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
-    query    = Gcloud::Datastore::Key.new "Book", id.to_i
+    query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
     entities = dataset.lookup query
 
     from_entity entities.first if entities.any?
@@ -77,8 +78,8 @@ class Book
   singleton_class.send(:alias_method, :find_by_id, :find)
 
   def to_entity
-    entity = Gcloud::Datastore::Entity.new
-    entity.key = Gcloud::Datastore::Key.new "Book", id
+    entity = Google::Cloud::Datastore::Entity.new
+    entity.key = Google::Cloud::Datastore::Key.new "Book", id
     entity["title"]        = title
     entity["author"]       = author               if author.present?
     entity["published_on"] = published_on.to_time if published_on.present?
@@ -98,7 +99,7 @@ class Book
   def destroy
     delete_image if image_url.present?
 
-    Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
+    Book.dataset.delete Google::Cloud::Datastore::Key.new "Book", id
   end
 
   def persisted?

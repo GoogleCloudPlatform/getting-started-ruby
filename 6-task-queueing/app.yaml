@@ -12,7 +12,7 @@
 # limitations under the License.
 
 runtime: ruby
-vm: true
+env: flex
 # [START entrypoint]
 entrypoint: bundle exec foreman start --formation "$FORMATION"
 # [END entrypoint]

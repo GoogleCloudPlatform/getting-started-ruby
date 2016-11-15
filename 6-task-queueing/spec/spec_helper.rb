@@ -20,12 +20,9 @@ require "capybara/rails"
 require "capybara/poltergeist"
 require "rack/test"
 
-database_config = Rails.application.config.database_configuration[Rails.env]
-
 if Book.respond_to? :dataset
   require "datastore_book_extensions"
   Book.send :include, DatastoreBookExtensions
-  Book.dataset.connection.http_host = database_config["host"]
 end
 
 Rails.configuration.x.fog_dir = "testbucket"
