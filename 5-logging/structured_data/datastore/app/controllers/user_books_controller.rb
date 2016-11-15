@@ -15,7 +15,7 @@ class UserBooksController < ApplicationController
 
   PER_PAGE = 10
 
-  before_action :login_required
+  before_filter :login_required
 
   def index
     # [START books_by_creator]
