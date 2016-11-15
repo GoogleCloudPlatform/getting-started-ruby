@@ -58,9 +58,8 @@ RSpec.describe Book do
     expect(job[:job]).to eq LookupBookDetailsJob
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
-    # Mock Books API volumes.list RPC method
-    books_api = double
-    allow(books_api).to receive_message_chain(:volumes, :list).and_return "BookVolumesListMethod"
+    # Mock Books API RPC method
+    book_service = double
 
     # Mock response from call to Books API
     book_response = double(
@@ -74,17 +73,13 @@ RSpec.describe Book do
       )
     )
 
-    # Mock Google::APIClient
-    google_api_client = double
-    allow(google_api_client).to receive(:discovered_api).and_return books_api
-    allow(google_api_client).to receive(:authorization=)
-    expect(google_api_client).to receive(:execute).with(
-      api_method: books_api.volumes.list,
-      parameters: { q: "A Tale of Two Cities", order_by: "relevance" }
-    ).and_return(
-      double data: double(items: [book_response])
-    )
-    allow(Google::APIClient).to receive(:new).and_return google_api_client
+    allow(book_service).to receive(:authorization=)
+    expect(book_service).to receive(:list_volumes).with(
+      "A Tale of Two Cities", order_by: "relevance"
+    ).and_yield(double(items: [book_response]), nil)
+
+    allow(Google::Apis::BooksV1::BooksService).to receive(:new).
+                                               and_return book_service
 
     run_enqueued_jobs!
 

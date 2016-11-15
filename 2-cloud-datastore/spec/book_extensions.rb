@@ -17,7 +17,7 @@ module BookExtensions
   def all
     books = []
 
-    query = Gcloud::Datastore::Query.new.kind "Book"
+    query = Google::Cloud::Datastore::Query.new.kind "Book"
 
     loop do
       results = dataset.run query
@@ -43,7 +43,7 @@ module BookExtensions
   end
 
   def delete_all
-    query = Gcloud::Datastore::Query.new.kind "Book"
+    query = Google::Cloud::Datastore::Query.new.kind "Book"
     loop do
       books = dataset.run query
       if books.empty?

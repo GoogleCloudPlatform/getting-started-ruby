@@ -32,8 +32,7 @@ production:
 # Test configuration
 test:
   # Datastore
-  dataset_id: gcd-test-dataset-directory
-  host: http://localhost:8080/
+  dataset_id: your-test-project-id
   # SQL
   adapter: sqlite3
   pool: 5

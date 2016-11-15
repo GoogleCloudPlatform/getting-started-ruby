@@ -12,17 +12,18 @@
 # limitations under the License.
 
 # [START book_class]
-require "gcloud/datastore"
+require "google/cloud/datastore"
 
 class Book
 
   attr_accessor :id, :title, :author, :published_on, :description
 
-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
+  # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
-    @dataset ||= Gcloud.datastore(
-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+    @dataset ||= Google::Cloud::Datastore.new(
+      project: Rails.application.config.
+                     database_configuration[Rails.env]["dataset_id"]
     )
   end
 # [END book_class]
@@ -33,7 +34,7 @@ class Book
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
   def self.query options = {}
-    query = Gcloud::Datastore::Query.new
+    query = Google::Cloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]
     query.cursor options[:cursor] if options[:cursor]
@@ -63,7 +64,7 @@ class Book
   # [START find]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
-    query    = Gcloud::Datastore::Key.new "Book", id.to_i
+    query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
     entities = dataset.lookup query
 
     from_entity entities.first if entities.any?
@@ -92,8 +93,8 @@ class Book
   # [START to_entity]
   # ...
   def to_entity
-    entity = Gcloud::Datastore::Entity.new
-    entity.key = Gcloud::Datastore::Key.new "Book", id
+    entity                 = Google::Cloud::Datastore::Entity.new
+    entity.key             = Google::Cloud::Datastore::Key.new "Book", id
     entity["title"]        = title
     entity["author"]       = author       if author
     entity["published_on"] = published_on if published_on
@@ -121,7 +122,7 @@ class Book
 
   # [START destroy]
   def destroy
-    Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
+    Book.dataset.delete Google::Cloud::Datastore::Key.new "Book", id
   end
   # [END destroy]
 
