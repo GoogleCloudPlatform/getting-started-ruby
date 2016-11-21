@@ -57,6 +57,19 @@ if [ "$STEP_NAME" = '2-cloud-datastore' -o "$STEP_NAME" = 'optional-container-en
 fi
 
 if [ "$STEP_NAME" = '7-compute-engine' ]; then
+  if [ -n "$GOOGLE_CLIENT_ID" ]; then
+    sed -i -e "s/@@CLIENT@@/$GOOGLE_CLIENT_ID/g" $TEST_DIR/config/settings.yml
+  fi
+
+  if [ -n "$GOOGLE_CLIENT_SECRET" ]; then
+    sed -i -e "s/@@SECRET@@/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
+  fi
+
+  if [ -n "$GOOGLE_PROJECT_ID" ]; then
+    sed -i -e "s/@@PROJECT@@/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/settings.yml
+    sed -i -e "s/@@PROJECT@@/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/database.yml
+  fi
+
   # replace all @@'s with placeholders, since this breaks yaml parsing
   sed -i -e 's/@//g' $TEST_DIR/config/database.yml $TEST_DIR/config/settings.yml
 fi

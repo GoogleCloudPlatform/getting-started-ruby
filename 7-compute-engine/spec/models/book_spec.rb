@@ -58,44 +58,29 @@ RSpec.describe Book do
     expect(job[:job]).to eq LookupBookDetailsJob
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
-    # Mock Books API volumes.list RPC method
-    books_api = double
-    allow(books_api).to receive_message_chain(:volumes, :list).and_return "BookVolumesListMethod"
-
-    # Mock response from call to Books API
-    book_response = double(
-      self_link: "https://link/to/book",
-      volume_info: double(
-        title: "A Tale of Two Cities",
-        authors: ["Charles Dickens"],
-        published_date: "1859",
-        description: "A Tale of Two Cities is a novel by Charles Dickens.",
-        image_links: double(thumbnail: "https://path/to/cover/image.png")
-      )
-    )
-
-    # Mock Google::APIClient
-    google_api_client = double
-    allow(google_api_client).to receive(:discovered_api).and_return books_api
-    expect(google_api_client).to receive(:execute).with(
-      api_method: books_api.volumes.list,
-      parameters: { q: "A Tale of Two Cities", order_by: "relevance" }
-    ).and_return(
-      double data: double(items: [book_response])
-    )
-
-    allow_any_instance_of(LookupBookDetailsJob).to receive(:google_api_client).and_return google_api_client
-
     run_enqueued_jobs!
 
     expect(enqueued_jobs).to be_empty
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Date.parse("1859-01-01")
-    expect(book.description).to eq "A Tale of Two Cities is a novel by Charles Dickens."
-    expect(book.image_url).to eq "https://path/to/cover/image.png"
+    expect(book.description).to eq "\"It was the best of times, it was the "\
+    "worst of times.\" Charles Dickens' classic novel tells the story of "\
+    "two Englishmen--degenerate lawyer Sydney Carton and aristocrat Charles "\
+    "Darnay--who fall in love with the same woman in the midst of the French "\
+    "Revolution's blood and terror. Originally published as 31 weekly "\
+    "instalments,A Tale of Two Cities has been adapted several times for "\
+    "film, serves as a rite of passage for many students, and is one of the "\
+    "most famous novels ever published. This is a free digital copy of a "\
+    "book that has been carefully scanned by Google as part of a project to "\
+    "make the world's books discoverable online. To make this print edition "\
+    "available as an ebook, we have extracted the text using Optical "\
+    "Character Recognition (OCR) technology and submitted it to a review "\
+    "process to ensure its accuracy and legibility across different screen "\
+    "sizes and devices. Google is proud to partner with libraries to make "\
+    "this book available to readers everywhere."
+    expect(book.image_url).to eq "http://books.google.com/books/content?id=5EIPAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
   end
 
   it "book details are only looked up when fields are blank"

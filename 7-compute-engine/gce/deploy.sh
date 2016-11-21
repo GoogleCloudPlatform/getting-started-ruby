@@ -61,7 +61,7 @@ gcloud compute instance-groups managed \
   --base-instance-name $GROUP \
   --size $MIN_INSTANCES \
   --template $TEMPLATE \
-  --zone $ZONE 
+  --zone $ZONE
 # [END create_group]
 
 # [START create_named_port]
@@ -140,7 +140,7 @@ gcloud compute instance-groups managed set-autoscaling \
   $GROUP \
   --max-num-replicas $MAX_INSTANCES \
   --target-load-balancing-utilization $TARGET_UTILIZATION \
-  --zone $ZONE 
+  --zone $ZONE
 # [END set_autoscaling]
 
 # [START create_firewall]

@@ -17,10 +17,10 @@ After=network.target
 
 [Service]
 Environment="GEM_HOME=/opt/gem"
-PIDFile=/opt/app/shared/pids/unicorn.pid
+PIDFile=/opt/app/7-compute-engine/shared/pids/unicorn.pid
 User=railsapp
 Type=forking
-WorkingDirectory=/opt/app
+WorkingDirectory=/opt/app/7-compute-engine
 ExecStart=/usr/local/bin/bundle exec unicorn -c config/unicorn.rb -E production -D
 Restart=on-failure
 

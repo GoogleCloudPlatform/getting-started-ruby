@@ -22,7 +22,7 @@ cat >/etc/google-fluentd/config.d/railsapp.conf << EOF
 <source>
   type tail
   format none
-  path /opt/app/shared/log/*.log
+  path /opt/app/7-compute-engine/log/*.log
   pos_file /var/tmp/fluentd.railsapp.pos
   read_from_head true
   tag railsapp
@@ -44,8 +44,7 @@ mkdir /opt/gem
 chown -R railsapp:railsapp /opt/gem
 
 sudo -u railsapp -H bundle install --path /opt/gem
-sudo -u railsapp -H bundle exec rake db:create
-sudo -u railsapp -H bundle exec rake db:migrate
+sudo -u railsapp -H bundle exec rake assets:precompile
 
 systemctl enable redis-server.service
 systemctl start redis-server.service

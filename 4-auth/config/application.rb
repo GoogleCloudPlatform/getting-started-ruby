@@ -17,6 +17,7 @@ require "rails"
 
 # Pick the frameworks you want:
 require "active_model/railtie"
+require "active_record/railtie"
 require "action_controller/railtie"
 require "action_view/railtie"
 require "sprockets/railtie"
@@ -28,5 +29,8 @@ Bundler.require(*Rails.groups)
 module Bookshelf
   class Application < Rails::Application
     config.x.settings = Rails.application.config_for :settings
+
+    # Do not swallow errors in after_commit/after_rollback callbacks.
+    config.active_record.raise_in_transactional_callbacks = true
   end
 end
