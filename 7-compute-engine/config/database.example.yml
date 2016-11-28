@@ -1,20 +1,11 @@
-mysql_settings: &mysql_settings
-  adapter: mysql2
-  encoding: utf8
-  pool: 5
-  username: @@USER@@
-  password: @@PASS@@
-  host: @@IP@@
-  database: @@DB@@
+default: &default
+  dataset_id: @@PROJECT@@
 
 development:
-  <<: *mysql_settings
+  <<: *default
 
 production:
-  <<: *mysql_settings
+  <<: *default
 
 test:
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
-  database: db/test.sqlite3
+  <<: *default

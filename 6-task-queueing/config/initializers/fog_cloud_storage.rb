@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-if Rails.env.test? || ! File.file?(Rails.root.join "config", "cloud_storage.yml")
+if Rails.env.test?
 
   Fog.mock!
   FogStorage = Fog::Storage.new(

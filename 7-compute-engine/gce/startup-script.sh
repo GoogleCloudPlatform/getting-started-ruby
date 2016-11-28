@@ -35,14 +35,9 @@ chmod go-rwx database.yml
 cp settings.example.yml settings.yml
 chmod go-rwx settings.yml
 
-# Add your database config here
-sed -i -e 's/@@USER@@/your-cloud-sql-username/' database.yml
-sed -i -e 's/@@PASS@@/your-cloud-sql-password/' database.yml
-sed -i -e 's/@@IP@@/your-cloud-sql-ip/' database.yml
-sed -i -e 's/@@DB@@/your-cloud-sql-db-name/' database.yml
-
 # Add your GCP project ID here
 sed -i -e 's/@@PROJECT@@/your-project-id/' settings.yml
+sed -i -e 's/@@PROJECT@@/your-project-id/' database.yml
 
 # Add your cloud storage config here
 sed -i -e 's/@@BUCKET@@/your-cloud-storage-bucket/' settings.yml

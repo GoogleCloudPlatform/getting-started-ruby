@@ -17,8 +17,12 @@ require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
 require "capybara/rails"
 require "rack/test"
+require "book_extensions"
+require "google/cloud/datastore"
 
 OmniAuth.config.test_mode = true
+
+Book.send :extend, BookExtensions
 
 RSpec.configure do |config|
   config.use_transactional_fixtures = true

@@ -21,7 +21,7 @@ Environment="TERM_CHILD=1"
 Environment="QUEUE=*"
 User=railsapp
 Type=simple
-WorkingDirectory=/opt/app
+WorkingDirectory=/opt/app/7-compute-engine
 ExecStart=/usr/local/bin/bundle exec rake environment resque:work
 Restart=on-failure
 

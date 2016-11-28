@@ -15,9 +15,23 @@ require "spec_helper"
 
 feature "Managing Books" do
 
+  # Simple wait method. Test for condition 5 times, delaying 1 second each time
+  def wait_until times: 5, delay: 1, &condition
+    times.times do
+      return if condition.call
+      sleep delay
+    end
+    raise "Condition not met.  Waited #{times} times with #{delay} sec delay"
+  end
+
   before do
     # Ignore all background lookup tasks
     allow_any_instance_of(Book).to receive(:lookup_book_details)
+
+    @datastore = Google::Cloud::Datastore.new(
+      project: Rails.application.config.
+                     database_configuration[Rails.env]["dataset_id"]
+    )
   end
 
   scenario "No books have been added" do
@@ -27,7 +41,9 @@ feature "Managing Books" do
   end
 
   scenario "Listing all books" do
-    Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
+    book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
 
     visit root_path
 
@@ -35,44 +51,14 @@ feature "Managing Books" do
     expect(page).to have_content "Charles Dickens"
   end
 
-  scenario "Paginating through list of books" do
-    Book.create! title: "Book 1"
-    Book.create! title: "Book 2"
-    Book.create! title: "Book 3"
-    Book.create! title: "Book 4"
-    Book.create! title: "Book 5"
-
-    stub_const "BooksController::PER_PAGE", 2
-
-    visit root_path
-    expect(page).to have_content "Book 1"
-    expect(page).to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
-
-    click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).to have_content "Book 3"
-    expect(page).to have_content "Book 4"
-    expect(page).not_to have_content "Book 5"
-
-    click_link "More"
-    expect(page).not_to have_content "Book 1"
-    expect(page).not_to have_content "Book 2"
-    expect(page).not_to have_content "Book 3"
-    expect(page).not_to have_content "Book 4"
-    expect(page).to have_content "Book 5"
-
-    expect(page).not_to have_link "More"
-  end
-
   scenario "Displaying a book" do
-    Book.create! title: "A Tale of Two Cities",
+    book = Book.create! title: "A Tale of Two Cities",
                  author: "Charles Dickens",
                  published_on: "2015-01-01",
                  description: "This is a book!"
+
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
 
     visit root_path
     click_link "A Tale of Two Cities"
@@ -84,6 +70,8 @@ feature "Managing Books" do
 
   scenario "Displaying a book with an unknown author" do
     book = Book.create! title: "A Tale of Two Cities"
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
 
     visit book_path(book)
 
@@ -109,7 +97,7 @@ feature "Managing Books" do
     book = Book.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Date.parse("1859-04-01")
+    expect(book.published_on).to eq Time.parse("1859-04-01")
     expect(book.description).to eq "A novel by Charles Dickens"
   end
 
@@ -136,6 +124,8 @@ feature "Managing Books" do
 
   scenario "Editing a book" do
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
 
     visit root_path
     click_link "A Tale of Two Cities"
@@ -145,13 +135,15 @@ feature "Managing Books" do
 
     expect(page).to have_content "Updated Book"
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "CHANGED!"
     expect(book.author).to eq "Charles Dickens"
   end
 
   scenario "Editing a book with missing fields" do
     book = Book.create! title: "A Tale of Two Cities"
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
 
     visit root_path
     click_link "A Tale of Two Cities"
@@ -160,7 +152,7 @@ feature "Managing Books" do
     click_button "Save"
 
     expect(page).to have_content "Title can't be blank"
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
 
     within "form.edit_book" do
@@ -168,12 +160,14 @@ feature "Managing Books" do
       click_button "Save"
     end
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "CHANGED!"
   end
 
   scenario "Deleting a book" do
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
+    key    = Google::Cloud::Datastore::Key.new "Book", book.id
+    wait_until { @datastore.find key }
     expect(Book.exists? book.id).to be true
 
     visit root_path
@@ -188,6 +182,8 @@ feature "Managing Books" do
     scenario "Displaying cover images in book listing" do
       book = Book.create! title: "A Tale of Two Cities",
                           cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
+      key    = Google::Cloud::Datastore::Key.new "Book", book.id
+      wait_until { @datastore.find key }
 
       visit root_path
 
@@ -198,6 +194,8 @@ feature "Managing Books" do
     scenario "Displaying cover image on book page" do
       book = Book.create! title: "A Tale of Two Cities",
                           cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
+      key    = Google::Cloud::Datastore::Key.new "Book", book.id
+      wait_until { @datastore.find key }
 
       visit book_path(book)
 
@@ -229,6 +227,8 @@ feature "Managing Books" do
     scenario "Editing a book's cover image" do
       book = Book.create! title: "A Tale of Two Cities",
                           cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
+      key    = Google::Cloud::Datastore::Key.new "Book", book.id
+      wait_until { @datastore.find key }
 
       visit root_path
       click_link "A Tale of Two Cities"
@@ -240,13 +240,15 @@ feature "Managing Books" do
       expect(StorageBucket.files.get "cover_images/#{book.id}/test-2.txt").to be_present
       expect(StorageBucket.files.get "cover_images/#{book.id}/test.txt").to be_nil
 
-      book.reload
+      book = Book.find book.id
       expect(book.image_url).to end_with "/cover_images/#{book.id}/test-2.txt"
     end
 
     scenario "Deleting a book with an image" do
       book = Book.create! title: "A Tale of Two Cities",
                           cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
+      key    = Google::Cloud::Datastore::Key.new "Book", book.id
+      wait_until { @datastore.find key }
 
       image_key = "cover_images/#{book.id}/test.txt"
       expect(StorageBucket.files.get image_key).to be_present
@@ -271,8 +273,12 @@ feature "Managing Books" do
     end
 
     scenario "Listing user's books" do
-      Book.create! title: "Book created by anonymous user"
-      Book.create! creator_id: "123456", title: "Book created by logged in user"
+      book1 = Book.create! title: "Book created by anonymous user"
+      book2 = Book.create! creator_id: "123456", title: "Book created by logged in user"
+      key    = Google::Cloud::Datastore::Key.new "Book", book1.id
+      wait_until { @datastore.find key }
+      key    = Google::Cloud::Datastore::Key.new "Book", book2.id
+      wait_until { @datastore.find key }
 
       visit root_path
       expect(page).not_to have_link "Mine"
