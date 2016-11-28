@@ -1,5 +1,7 @@
 # Getting Started Ruby
 
+[![Travis Build Status](https://travis-ci.org/GoogleCloudPlatform/getting-started-ruby.svg)](https://travis-ci.org/GoogleCloudPlatform/getting-started-ruby)
+
 Checkout branches to view particular steps of this sample application.
 
  - [`1-hello-world`](1-hello-world)
