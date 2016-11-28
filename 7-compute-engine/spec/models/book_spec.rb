@@ -65,21 +65,7 @@ RSpec.describe Book do
     book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.description).to eq "\"It was the best of times, it was the "\
-    "worst of times.\" Charles Dickens' classic novel tells the story of "\
-    "two Englishmen--degenerate lawyer Sydney Carton and aristocrat Charles "\
-    "Darnay--who fall in love with the same woman in the midst of the French "\
-    "Revolution's blood and terror. Originally published as 31 weekly "\
-    "instalments,A Tale of Two Cities has been adapted several times for "\
-    "film, serves as a rite of passage for many students, and is one of the "\
-    "most famous novels ever published. This is a free digital copy of a "\
-    "book that has been carefully scanned by Google as part of a project to "\
-    "make the world's books discoverable online. To make this print edition "\
-    "available as an ebook, we have extracted the text using Optical "\
-    "Character Recognition (OCR) technology and submitted it to a review "\
-    "process to ensure its accuracy and legibility across different screen "\
-    "sizes and devices. Google is proud to partner with libraries to make "\
-    "this book available to readers everywhere."
+    expect(book.description).to include "Charles Dickens' classic novel"
     expect(book.image_url).to eq "http://books.google.com/books/content?id=5EIPAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
   end
 
