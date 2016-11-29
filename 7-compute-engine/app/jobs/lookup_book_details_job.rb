@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START lookup_books]
 require "google/apis/books_v1"
 
 BooksAPI = Google::Apis::BooksV1
@@ -44,8 +43,7 @@ class LookupBookDetailsJob < ActiveJob::Base
 
       # List of relevant books
       volumes = results.items
-# [END lookup_books]
-      # [START choose_volume]
+
       # To provide the best results, find the first returned book that
       # includes title and author information as well as a book cover image.
       best_match = volumes.find {|volume|
@@ -54,9 +52,7 @@ class LookupBookDetailsJob < ActiveJob::Base
       }
 
       volume = best_match || volumes.first
-      # [END choose_volume]
 
-      # [START update_book]
       if volume
         info   = volume.volume_info
         images = info.image_links
@@ -72,10 +68,8 @@ class LookupBookDetailsJob < ActiveJob::Base
                                                                present?
         book.save
       end
-      # [END update_book]
 
       Rails.logger.info "[BookService] (#{book.id}) Complete"
     end
   end
 end
-# [END book_lookup]
