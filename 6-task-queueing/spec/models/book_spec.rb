@@ -76,10 +76,10 @@ RSpec.describe Book do
     allow(book_service).to receive(:authorization=)
     expect(book_service).to receive(:list_volumes).with(
       "A Tale of Two Cities", order_by: "relevance"
-    ).and_yield(double(items: [book_response]), nil)
+    ).and_yield(double(total_items: 1, items: [book_response]), nil)
 
     allow(Google::Apis::BooksV1::BooksService).to receive(:new).
-                                               and_return book_service
+                                                  and_return book_service
 
     run_enqueued_jobs!
 
