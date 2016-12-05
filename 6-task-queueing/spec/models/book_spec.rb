@@ -58,39 +58,15 @@ RSpec.describe Book do
     expect(job[:job]).to eq LookupBookDetailsJob
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
-    # Mock Books API RPC method
-    book_service = double
-
-    # Mock response from call to Books API
-    book_response = double(
-      self_link: "https://link/to/book",
-      volume_info: double(
-        title: "A Tale of Two Cities",
-        authors: ["Charles Dickens"],
-        published_date: "1859",
-        description: "A Tale of Two Cities is a novel by Charles Dickens.",
-        image_links: double(thumbnail: "https://path/to/cover/image.png")
-      )
-    )
-
-    allow(book_service).to receive(:authorization=)
-    expect(book_service).to receive(:list_volumes).with(
-      "A Tale of Two Cities", order_by: "relevance"
-    ).and_yield(double(items: [book_response]), nil)
-
-    allow(Google::Apis::BooksV1::BooksService).to receive(:new).
-                                               and_return book_service
-
     run_enqueued_jobs!
 
     expect(enqueued_jobs).to be_empty
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on.to_date).to eq Date.parse("1859-01-01")
-    expect(book.description).to eq "A Tale of Two Cities is a novel by Charles Dickens."
-    expect(book.image_url).to eq "https://path/to/cover/image.png"
+    expect(book.description).to include "Charles Dickens' classic novel"
+    expect(book.image_url).to eq "http://books.google.com/books/content?id=5EIPAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
   end
 
   it "book details are only looked up when fields are blank"
