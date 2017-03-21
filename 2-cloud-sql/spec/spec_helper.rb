@@ -38,7 +38,7 @@ RSpec.configure do |config|
         "[MYSQL_USER]" => "MYSQL_USER",
         "[MYSQL_PASS]" =>  "MYSQL_PASSWORD",
         "[MYSQL_DATABASE]" => "MYSQL_DBNAME",
-        "[YOUR_INSTANCE_CONNECTION_NAME]" => "MYSQL_HOST"
+        "[YOUR_INSTANCE_CONNECTION_NAME]" => "MYSQL_SOCKET"
       }
 
       db_values.each { |key, envkey|
