@@ -35,10 +35,10 @@ RSpec.configure do |config|
       db_file = File.expand_path("../../config/database.yml", __FILE__)
       db_config = File.read(db_file)
       db_values = {
-        "your-mysql-user-here" => "MYSQL_USER",
-        "your-mysql-password-here" =>  "MYSQL_PASSWORD",
-        "your-mysql-IPv4-address-here" => "MYSQL_HOST",
-        "your-mysql-database-here" => "MYSQL_DBNAME"
+        "[MYSQL_USER]" => "MYSQL_USER",
+        "[MYSQL_PASS]" =>  "MYSQL_PASSWORD",
+        "[MYSQL_DATABASE]" => "MYSQL_DBNAME",
+        "[YOUR_INSTANCE_CONNECTION_NAME]" => "MYSQL_HOST"
       }
 
       db_values.each { |key, envkey|
