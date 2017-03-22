@@ -4,10 +4,10 @@ default: &default
 #   adapter: mysql2
 #   encoding: utf8
 #   pool: 5
-#   username: your-mysql-user-here
-#   password: your-mysql-password-here
-#   host: your-mysql-IPv4-address-here
-#   database: your-mysql-database-here
+#   username: [MYSQL_USER]
+#   password: [MYSQL_PASS]
+#   database: [MYSQL_DATABASE]
+#   socket: /cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]
 
 # Google Cloud Datastore Sample Database Configuration
 # ----------------------------------------------------
