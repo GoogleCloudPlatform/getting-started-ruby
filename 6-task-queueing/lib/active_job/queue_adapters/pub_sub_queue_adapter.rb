@@ -37,7 +37,7 @@ module ActiveJob
           Rails.logger.info "Book lookup request (#{message.data})"
 
           book_id = message.data.to_i
-          book    = Book.find_by_id book_id
+          book    = Book.find book_id
 
           LookupBookDetailsJob.perform_now book if book
         end
