@@ -186,8 +186,6 @@ GEM
     foreman (0.82.0)
       thor (~> 0.19.1)
     formatador (0.2.5)
-    gcloud (0.21.0)
-      google-cloud (~> 0.21.0)
     globalid (0.3.7)
       activesupport (>= 4.1.0)
     google-api-client (0.9.20)
@@ -450,8 +448,8 @@ DEPENDENCIES
   capybara
   fog
   foreman
-  gcloud
   google-api-client (~> 0.9)
+  google-cloud
   jquery-rails
   mysql2 (~> 0.3.0)
   omniauth
@@ -464,4 +462,4 @@ DEPENDENCIES
   tzinfo-data
 
 BUNDLED WITH
-   1.13.4
+   1.14.2

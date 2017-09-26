@@ -19,7 +19,7 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START gcloud]
-gem "gcloud"
+gem "google-cloud"
 # [END gcloud]
 # [START google_api_client]
 gem "google-api-client", "~> 0.9"
