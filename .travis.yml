@@ -35,7 +35,7 @@ env:
   - STEP_NAME=5-logging
   - STEP_NAME=6-task-queueing
   - STEP_NAME=7-compute-engine
-  - STEP_NAME=optional-container-engine
+  - STEP_NAME=optional-kubernetes-engine
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
