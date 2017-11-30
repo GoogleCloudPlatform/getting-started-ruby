@@ -46,7 +46,7 @@ if [ -f $TEST_DIR/config/database.example.yml ]; then
   fi
 fi
 
-if [ "$STEP_NAME" = '2-cloud-datastore' -o "$STEP_NAME" = 'optional-container-engine' ]; then
+if [ "$STEP_NAME" = '2-cloud-datastore' -o "$STEP_NAME" = 'optional-kubernetes-engine' ]; then
   # download gcd testing tool
   wget -q http://storage.googleapis.com/gcd/tools/gcd-v1beta2-rev1-3.0.2.zip -O gcd-v1beta2-rev1-3.0.2.zip
   unzip -o gcd-v1beta2-rev1-3.0.2.zip
@@ -80,7 +80,7 @@ if [ -e $TEST_DIR/app/assets ]; then
 fi
 
 # run rake DB tasks after all other changes
-if [ -d $TEST_DIR/db/migrate -a "$STEP_NAME" != 'optional-container-engine' ]; then
+if [ -d $TEST_DIR/db/migrate -a "$STEP_NAME" != 'optional-kubernetes-engine' ]; then
   # create the tables required for testing
   RAILS_ENV=test bundle exec rake --rakefile=$TEST_DIR/Rakefile db:migrate
 fi
