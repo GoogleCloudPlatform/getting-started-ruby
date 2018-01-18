@@ -19,10 +19,11 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START gcloud]
-gem "gcloud", "~> 0.8.0"
+gem "google-cloud-datastore"
+gem "google-cloud-pubsub"
 # [END gcloud]
 # [START google_api_client]
-gem "google-api-client"
+gem "google-api-client", "0.8"
 # [END google_api_client]
 gem "foreman"
 

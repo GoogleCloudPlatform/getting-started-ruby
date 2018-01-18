@@ -1,0 +1,413 @@
+diff --git a/optional-kubernetes-engine/Gemfile b/optional-kubernetes-engine/Gemfile
+index 33d4baf..aa9f26d 100644
+--- a/optional-kubernetes-engine/Gemfile
++++ b/optional-kubernetes-engine/Gemfile
+@@ -19,10 +19,11 @@ gem "fog"
+ gem "omniauth"
+ gem "omniauth-google-oauth2"
+ # [START gcloud]
+-gem "gcloud", "~> 0.8.0"
++gem "google-cloud-datastore"
++gem "google-cloud-pubsub"
+ # [END gcloud]
+ # [START google_api_client]
+-gem "google-api-client"
++gem "google-api-client", "0.8"
+ # [END google_api_client]
+ gem "foreman"
+ 
+diff --git a/optional-kubernetes-engine/Gemfile.lock b/optional-kubernetes-engine/Gemfile.lock
+index f5bc3f7..63d5e17 100644
+--- a/optional-kubernetes-engine/Gemfile.lock
++++ b/optional-kubernetes-engine/Gemfile.lock
+@@ -1,7 +1,7 @@
+ GEM
+   remote: https://rubygems.org/
+   specs:
+-    CFPropertyList (2.3.5)
++    CFPropertyList (2.3.6)
+     actionmailer (4.2.10)
+       actionpack (= 4.2.10)
+       actionview (= 4.2.10)
+@@ -43,23 +43,21 @@ GEM
+       addressable (>= 2.3.1)
+       extlib (>= 0.9.15)
+       multi_json (>= 1.0.0)
+-    beefcake (1.2.0)
+     builder (3.2.3)
+-    capybara (2.16.1)
++    capybara (2.17.0)
+       addressable
+       mini_mime (>= 0.1.3)
+       nokogiri (>= 1.3.3)
+       rack (>= 1.0.0)
+       rack-test (>= 0.5.4)
+-      xpath (~> 2.0)
++      xpath (>= 2.0, < 4.0)
+     concurrent-ruby (1.0.5)
+     crass (1.0.3)
+     diff-lcs (1.3)
+-    digest-crc (0.4.1)
+     domain_name (0.5.20170404)
+       unf (>= 0.0.5, < 1.0.0)
+     erubis (2.7.0)
+-    excon (0.59.0)
++    excon (0.60.0)
+     extlib (0.9.16)
+     faraday (0.12.2)
+       multipart-post (>= 1.2, < 3)
+@@ -219,39 +217,60 @@ GEM
+     foreman (0.84.0)
+       thor (~> 0.19.1)
+     formatador (0.2.5)
+-    gcloud (0.8.2)
+-      beefcake (~> 1.0)
+-      digest-crc (~> 0.4)
+-      google-api-client (~> 0.8.3)
+-      grpc (~> 0.13.1)
+-      mime-types (~> 2.4)
+-      zonefile (~> 1.04)
+     globalid (0.4.1)
+       activesupport (>= 4.2.0)
+-    google-api-client (0.8.7)
+-      activesupport (>= 3.2, < 5.0)
++    google-api-client (0.8.0)
++      activesupport (>= 3.2)
+       addressable (~> 2.3)
+       autoparse (~> 0.3)
+       extlib (~> 0.9)
+       faraday (~> 0.9)
+-      googleauth (~> 0.3)
+       launchy (~> 2.4)
+       multi_json (~> 1.10)
+       retriable (~> 1.4)
+       signet (~> 0.6)
+-    google-protobuf (3.0.2)
+-    googleauth (0.5.3)
++    google-cloud-core (1.1.0)
++      google-cloud-env (~> 1.0)
++    google-cloud-datastore (1.3.0)
++      google-cloud-core (~> 1.1)
++      google-gax (~> 1.0)
++      google-protobuf (~> 3.3)
++    google-cloud-env (1.0.1)
++      faraday (~> 0.11)
++    google-cloud-pubsub (0.29.0)
++      concurrent-ruby (~> 1.0)
++      google-cloud-core (~> 1.1)
++      google-gax (~> 1.0)
++      grpc-google-iam-v1 (~> 0.6.9)
++    google-gax (1.0.1)
++      google-protobuf (~> 3.2)
++      googleapis-common-protos (>= 1.3.5, < 2.0)
++      googleauth (~> 0.6.2)
++      grpc (>= 1.7.2, < 2.0)
++      rly (~> 0.2.3)
++    google-protobuf (3.5.1)
++    googleapis-common-protos (1.3.7)
++      google-protobuf (~> 3.0)
++      googleapis-common-protos-types (~> 1.0)
++      grpc (~> 1.0)
++    googleapis-common-protos-types (1.0.1)
++      google-protobuf (~> 3.0)
++    googleauth (0.6.2)
+       faraday (~> 0.12)
+-      jwt (~> 1.4)
++      jwt (>= 1.4, < 3.0)
+       logging (~> 2.0)
+       memoist (~> 0.12)
+       multi_json (~> 1.11)
+       os (~> 0.9)
+       signet (~> 0.7)
+-    grpc (0.13.1)
+-      google-protobuf (~> 3.0.0.alpha.5.0.3)
+-      googleauth (~> 0.5.1)
+-    hashie (3.5.6)
++    grpc (1.8.3)
++      google-protobuf (~> 3.1)
++      googleapis-common-protos-types (~> 1.0.0)
++      googleauth (>= 0.5.1, < 0.7)
++    grpc-google-iam-v1 (0.6.9)
++      googleapis-common-protos (>= 1.3.1, < 2.0)
++      grpc (~> 1.0)
++    hashie (3.5.7)
+     http-cookie (1.0.3)
+       domain_name (~> 0.5)
+     i18n (0.9.1)
+@@ -276,11 +295,13 @@ GEM
+     mail (2.7.0)
+       mini_mime (>= 0.1.1)
+     memoist (0.16.0)
+-    mime-types (2.99.3)
++    mime-types (3.1)
++      mime-types-data (~> 3.2015)
++    mime-types-data (3.2016.0521)
+     mini_mime (1.0.0)
+     mini_portile2 (2.3.0)
+-    minitest (5.10.3)
+-    multi_json (1.12.2)
++    minitest (5.11.1)
++    multi_json (1.13.1)
+     multi_xml (0.6.0)
+     multipart-post (2.0.0)
+     mysql2 (0.3.21)
+@@ -293,7 +314,7 @@ GEM
+       multi_json (~> 1.3)
+       multi_xml (~> 0.5)
+       rack (>= 1.2, < 3)
+-    omniauth (1.7.1)
++    omniauth (1.8.1)
+       hashie (>= 3.4.6, < 3.6.0)
+       rack (>= 1.6.2, < 3)
+     omniauth-google-oauth2 (0.5.2)
+@@ -301,8 +322,8 @@ GEM
+       multi_json (~> 1.3)
+       omniauth (>= 1.1.1)
+       omniauth-oauth2 (>= 1.3.1)
+-    omniauth-oauth2 (1.4.0)
+-      oauth2 (~> 1.0)
++    omniauth-oauth2 (1.5.0)
++      oauth2 (~> 1.1)
+       omniauth (~> 1.2)
+     os (0.9.6)
+     public_suffix (3.0.1)
+@@ -322,8 +343,8 @@ GEM
+       sprockets-rails
+     rails-deprecated_sanitizer (1.0.3)
+       activesupport (>= 4.2.0.alpha)
+-    rails-dom-testing (1.0.8)
+-      activesupport (>= 4.2.0.beta, < 5.0)
++    rails-dom-testing (1.0.9)
++      activesupport (>= 4.2.0, < 5.0)
+       nokogiri (~> 1.6)
+       rails-deprecated_sanitizer (>= 1.0.1)
+     rails-html-sanitizer (1.0.3)
+@@ -334,10 +355,10 @@ GEM
+       rake (>= 0.8.7)
+       thor (>= 0.18.1, < 2.0)
+     rake (12.3.0)
+-    rbovirt (0.1.4)
++    rbovirt (0.1.5)
+       nokogiri
+       rest-client (> 1.7.0)
+-    rbvmomi (1.11.4)
++    rbvmomi (1.11.6)
+       builder (~> 3.0)
+       json (>= 1.8)
+       nokogiri (~> 1.5)
+@@ -347,7 +368,8 @@ GEM
+       mime-types (>= 1.16, < 4.0)
+       netrc (~> 0.8)
+     retriable (1.4.1)
+-    rspec-core (3.7.0)
++    rly (0.2.3)
++    rspec-core (3.7.1)
+       rspec-support (~> 3.7.0)
+     rspec-expectations (3.7.0)
+       diff-lcs (>= 1.2.0, < 2.0)
+@@ -388,9 +410,8 @@ GEM
+       unf_ext
+     unf_ext (0.0.7.4)
+     xml-simple (1.1.5)
+-    xpath (2.1.0)
+-      nokogiri (~> 1.3)
+-    zonefile (1.06)
++    xpath (3.0.0)
++      nokogiri (~> 1.8)
+ 
+ PLATFORMS
+   ruby
+@@ -399,8 +420,9 @@ DEPENDENCIES
+   capybara
+   fog
+   foreman
+-  gcloud (~> 0.8.0)
+-  google-api-client
++  google-api-client (= 0.8)
++  google-cloud-datastore
++  google-cloud-pubsub
+   jquery-rails
+   mysql2 (~> 0.3.0)
+   omniauth
+diff --git a/optional-kubernetes-engine/app/models/book.rb b/optional-kubernetes-engine/app/models/book.rb
+index 047919d..b1fe80e 100644
+--- a/optional-kubernetes-engine/app/models/book.rb
++++ b/optional-kubernetes-engine/app/models/book.rb
+@@ -11,7 +11,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-require "gcloud/datastore"
++require "google/cloud/datastore"
+ 
+ class Book
+   include ActiveModel::Model
+@@ -22,11 +22,11 @@ class Book
+ 
+   validates :title, presence: true
+ 
+-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
++  # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
+   # The dataset is used to create, read, update, and delete entity objects.
+   def self.dataset
+-    @dataset ||= Gcloud.datastore(
+-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
++    @dataset ||= Google::Cloud::Datastore.new(
++      project_id: Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+     )
+   end
+ 
+@@ -36,7 +36,7 @@ class Book
+   # that can be used to query for additional results.
+   # [START books_by_creator]
+   def self.query options = {}
+-    query = Gcloud::Datastore::Query.new
++    query = Google::Cloud::Datastore::Query.new
+     query.kind "Book"
+     query.limit options[:limit]   if options[:limit]
+     query.cursor options[:cursor] if options[:cursor]
+@@ -67,7 +67,7 @@ class Book
+ 
+   # Lookup Book by ID.  Returns Book or nil.
+   def self.find id
+-    query    = Gcloud::Datastore::Key.new "Book", id.to_i
++    query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
+     entities = dataset.lookup query
+ 
+     from_entity entities.first if entities.any?
+@@ -77,8 +77,8 @@ class Book
+   singleton_class.send(:alias_method, :find_by_id, :find)
+ 
+   def to_entity
+-    entity = Gcloud::Datastore::Entity.new
+-    entity.key = Gcloud::Datastore::Key.new "Book", id
++    entity = Google::Cloud::Datastore::Entity.new
++    entity.key = Google::Cloud::Datastore::Key.new "Book", id
+     entity["title"]        = title
+     entity["author"]       = author               if author.present?
+     entity["published_on"] = published_on.to_time if published_on.present?
+@@ -98,7 +98,7 @@ class Book
+   def destroy
+     delete_image if image_url.present?
+ 
+-    Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
++    Book.dataset.delete Google::Cloud::Datastore::Key.new "Book", id
+   end
+ 
+   def persisted?
+diff --git a/optional-kubernetes-engine/lib/active_job/queue_adapters/pub_sub_queue_adapter.rb b/optional-kubernetes-engine/lib/active_job/queue_adapters/pub_sub_queue_adapter.rb
+index b4d1b7e..2c27ab0 100644
+--- a/optional-kubernetes-engine/lib/active_job/queue_adapters/pub_sub_queue_adapter.rb
++++ b/optional-kubernetes-engine/lib/active_job/queue_adapters/pub_sub_queue_adapter.rb
+@@ -1,5 +1,5 @@
+ # [START pub_sub_enqueue]
+-require "gcloud"
++require "google/cloud/pubsub"
+ 
+ module ActiveJob
+   module QueueAdapters
+@@ -7,9 +7,7 @@ module ActiveJob
+ 
+       def self.pubsub
+         project_id = Rails.application.config.x.settings["project_id"]
+-        gcloud     = Gcloud.new project_id
+-
+-        gcloud.pubsub
++        Google::Cloud::Pubsub.new project_id: project_id
+       end
+ 
+       def self.enqueue job
+@@ -31,9 +29,11 @@ module ActiveJob
+         topic        = pubsub.topic       "lookup_book_details_queue"
+         subscription = topic.subscription "lookup_book_details"
+ 
+-        topic.subscribe "lookup_book_details" unless subscription.exists?
++        subscription = topic.subscribe "lookup_book_details" if subscription.nil?
++
++        subscriber = subscription.listen do |message|
++          message.acknowledge!
+ 
+-        subscription.listen autoack: true do |message|
+           Rails.logger.info "Book lookup request (#{message.data})"
+ 
+           book_id = message.data.to_i
+@@ -41,6 +41,13 @@ module ActiveJob
+ 
+           LookupBookDetailsJob.perform_now book if book
+         end
++
++        # Start background threads that will call block passed to listen.
++        subscriber.start
++
++        loop do
++          sleep 10
++        end
+       end
+       # [END pub_sub_worker]
+ 
+diff --git a/optional-kubernetes-engine/structured_data/datastore/app/models/book.rb b/optional-kubernetes-engine/structured_data/datastore/app/models/book.rb
+index 047919d..b1fe80e 100644
+--- a/optional-kubernetes-engine/structured_data/datastore/app/models/book.rb
++++ b/optional-kubernetes-engine/structured_data/datastore/app/models/book.rb
+@@ -11,7 +11,7 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-require "gcloud/datastore"
++require "google/cloud/datastore"
+ 
+ class Book
+   include ActiveModel::Model
+@@ -22,11 +22,11 @@ class Book
+ 
+   validates :title, presence: true
+ 
+-  # Return a Gcloud::Datastore::Dataset for the configured dataset.
++  # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
+   # The dataset is used to create, read, update, and delete entity objects.
+   def self.dataset
+-    @dataset ||= Gcloud.datastore(
+-      Rails.application.config.database_configuration[Rails.env]["dataset_id"]
++    @dataset ||= Google::Cloud::Datastore.new(
++      project_id: Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+     )
+   end
+ 
+@@ -36,7 +36,7 @@ class Book
+   # that can be used to query for additional results.
+   # [START books_by_creator]
+   def self.query options = {}
+-    query = Gcloud::Datastore::Query.new
++    query = Google::Cloud::Datastore::Query.new
+     query.kind "Book"
+     query.limit options[:limit]   if options[:limit]
+     query.cursor options[:cursor] if options[:cursor]
+@@ -67,7 +67,7 @@ class Book
+ 
+   # Lookup Book by ID.  Returns Book or nil.
+   def self.find id
+-    query    = Gcloud::Datastore::Key.new "Book", id.to_i
++    query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
+     entities = dataset.lookup query
+ 
+     from_entity entities.first if entities.any?
+@@ -77,8 +77,8 @@ class Book
+   singleton_class.send(:alias_method, :find_by_id, :find)
+ 
+   def to_entity
+-    entity = Gcloud::Datastore::Entity.new
+-    entity.key = Gcloud::Datastore::Key.new "Book", id
++    entity = Google::Cloud::Datastore::Entity.new
++    entity.key = Google::Cloud::Datastore::Key.new "Book", id
+     entity["title"]        = title
+     entity["author"]       = author               if author.present?
+     entity["published_on"] = published_on.to_time if published_on.present?
+@@ -98,7 +98,7 @@ class Book
+   def destroy
+     delete_image if image_url.present?
+ 
+-    Book.dataset.delete Gcloud::Datastore::Key.new "Book", id
++    Book.dataset.delete Google::Cloud::Datastore::Key.new "Book", id
+   end
+ 
+   def persisted?
