@@ -1,5 +1,5 @@
 # [START pub_sub_enqueue]
-require "gcloud"
+require "google/cloud/pubsub"
 
 module ActiveJob
   module QueueAdapters
@@ -7,9 +7,7 @@ module ActiveJob
 
       def self.pubsub
         project_id = Rails.application.config.x.settings["project_id"]
-        gcloud     = Gcloud.new project_id
-
-        gcloud.pubsub
+        Google::Cloud::Pubsub.new project_id: project_id
       end
 
       def self.enqueue job
@@ -31,15 +29,24 @@ module ActiveJob
         topic        = pubsub.topic       "lookup_book_details_queue"
         subscription = topic.subscription "lookup_book_details"
 
-        topic.subscribe "lookup_book_details" unless subscription.exists?
+        subscription = topic.subscribe "lookup_book_details" if subscription.nil?
 
-        subscription.listen autoack: true do |message|
+        subscriber = subscription.listen do |message|
+          message.acknowledge!
+
           Rails.logger.info "Book lookup request (#{message.data})"
 
           book_id = message.data.to_i
           book    = Book.find_by_id book_id
 
           LookupBookDetailsJob.perform_now book if book
+        end
+
+        # Start background threads that will call block passed to listen.
+        subscriber.start
+
+        loop do
+          sleep 10
         end
       end
       # [END pub_sub_worker]
