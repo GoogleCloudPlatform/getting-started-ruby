@@ -36,7 +36,7 @@ spec:
       containers:
       - name: bookshelf-app
         # Replace [YOUR_PROJECT_ID] with your project ID.
-        image: gcr.io/spec-test-ruby-samples/bookshelf:latest
+        image: gcr.io/[YOUR_PROJECT_ID]/bookshelf:latest
         # This setting makes nodes pull the docker image every time before
         # starting the pod. This is useful when debugging, but should be turned
         # off in production.
