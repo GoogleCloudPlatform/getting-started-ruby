@@ -14,6 +14,7 @@ module ActiveJob
         Rails.logger.info "[PubSubQueueAdapter] enqueue job #{job.inspect}"
 
         book  = job.arguments.first
+
         topic = pubsub.topic "lookup_book_details_queue"
 
         topic.publish book.id.to_s
@@ -26,10 +27,17 @@ module ActiveJob
       def self.run_worker!
         Rails.logger.info "Running worker to lookup book details"
 
-        topic        = pubsub.topic       "lookup_book_details_queue"
-        subscription = topic.subscription "lookup_book_details"
+        topic = pubsub.topic "lookup_book_details_queue"
+        if topic.nil?
+          topic = pubsub.create_topic "lookup_book_details_queue"
+        end
 
-        subscription = topic.subscribe "lookup_book_details" if subscription.nil?
+        subscription = topic.subscription "lookup_book_details"
+        if subscription.nil?
+          subscription = topic.create_subscription "lookup_book_details"
+        else
+          subscription = topic.subscription "lookup_book_details"
+        end
 
         subscriber = subscription.listen do |message|
           message.acknowledge!
