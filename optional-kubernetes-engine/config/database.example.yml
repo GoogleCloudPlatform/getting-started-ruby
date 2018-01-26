@@ -10,7 +10,7 @@ production:
 # Test configuration
 test:
   # Datastore
-  dataset_id: [YOUR_PROJECT_ID]
+  dataset_id: gcd-test-dataset-directory
   # SQL
   adapter: sqlite3
   pool: 5

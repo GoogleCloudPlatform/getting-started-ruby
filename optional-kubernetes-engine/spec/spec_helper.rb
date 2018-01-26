@@ -21,6 +21,8 @@ require "datastore_book_extensions"
 
 database_config = Rails.application.config.database_configuration[Rails.env]
 
+ENV["DATASTORE_EMULATOR_HOST"] = "localhost:8978"
+
 Book.send :include, DatastoreBookExtensions
 
 Rails.configuration.x.fog_dir = "testbucket"
