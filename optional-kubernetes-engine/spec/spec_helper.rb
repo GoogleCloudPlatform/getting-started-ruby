@@ -22,7 +22,6 @@ require "datastore_book_extensions"
 database_config = Rails.application.config.database_configuration[Rails.env]
 
 Book.send :include, DatastoreBookExtensions
-Book.dataset.connection.http_host = database_config["host"]
 
 Rails.configuration.x.fog_dir = "testbucket"
 
