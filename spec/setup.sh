@@ -52,8 +52,10 @@ if [ "$STEP_NAME" = '2-cloud-datastore' -o "$STEP_NAME" = 'optional-kubernetes-e
   unzip -o cloud-datastore-emulator.zip
 
   # start cloud-datastore-emulator test server
-  cloud-datastore-emulator/cloud_datastore_emulator create -d gcd-test-dataset-directory gcd-test-dataset-directory
+  cloud-datastore-emulator/cloud_datastore_emulator create gcd-test-dataset-directory
   cloud-datastore-emulator/cloud_datastore_emulator start --testing ./gcd-test-dataset-directory/ &
+
+  export DATASTORE_EMULATOR_HOST=localhost:8080
 fi
 
 if [ "$STEP_NAME" = '7-compute-engine' ]; then
