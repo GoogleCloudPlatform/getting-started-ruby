@@ -59,8 +59,7 @@ RSpec.describe Book do
     expect(job[:args]).to eq [{ "_aj_globalid" => book.to_global_id.to_s }]
 
     # Mock Books API volumes.list RPC method
-    books_service = double
-    allow(books_service).to receive(:list_volumes).and_return "BookVolumesListMethod"
+    book_service = double
 
     # Mock response from call to Books API
     book_response = double(
@@ -71,17 +70,15 @@ RSpec.describe Book do
         published_date: "1859",
         description: "A Tale of Two Cities is a novel by Charles Dickens.",
         image_links: double(thumbnail: "https://path/to/cover/image.png")
-      )
+      ),
     )
 
     # Mock Google::Apis::BooksV1::BookService
-    google_api_client = double
-    expect(google_api_client).to receive(:list_volumes).with(
+    expect(book_service).to receive(:list_volumes).with(
       "A Tale of Two Cities", { order_by: "relevance" }
-    ).and_return(
-      double(items: [book_response])
-    )
-    allow(Google::Apis::BooksV1::BooksService).to receive(:new).and_return google_api_client
+    ) { |&block| block.call(double(items: [book_response], total_items: 1), nil) }
+
+    allow(Google::Apis::BooksV1::BooksService).to receive(:new).and_return book_service
 
     run_enqueued_jobs!
 
