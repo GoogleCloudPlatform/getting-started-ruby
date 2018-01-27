@@ -12,6 +12,7 @@
 # limitations under the License.
 
 ENV["RAILS_ENV"] ||= "test"
+ENV["DATASTORE_EMULATOR_HOST"] = "localhost:8978"
 
 require File.expand_path("../../config/environment", __FILE__)
 require "rspec/rails"
@@ -20,8 +21,6 @@ require "rack/test"
 require "datastore_book_extensions"
 
 database_config = Rails.application.config.database_configuration[Rails.env]
-
-ENV["DATASTORE_EMULATOR_HOST"] = "localhost:8978"
 
 Book.send :include, DatastoreBookExtensions
 
