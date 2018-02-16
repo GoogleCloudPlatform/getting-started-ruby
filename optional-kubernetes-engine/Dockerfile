@@ -4,13 +4,13 @@
 #   https://github.com/GoogleCloudPlatform/ruby-docker
 FROM gcr.io/google_appengine/ruby
 
-# Install 2.2.3 if not already preinstalled by the base image
+# Install 2.4.3 if not already preinstalled by the base image
 RUN cd /rbenv/plugins/ruby-build && \
     git pull && \
-    rbenv install -s 2.2.3 && \
-    rbenv global 2.2.3 && \
-    gem install -q --no-rdoc --no-ri bundler --version 1.11.2
-ENV RBENV_VERSION 2.2.3
+    rbenv install -s 2.4.3 && \
+    rbenv global 2.4.3 && \
+    gem install -q --no-rdoc --no-ri bundler --version 1.16.1
+ENV RBENV_VERSION 2.4.3
 
 # Copy the application files.
 COPY . /app/
