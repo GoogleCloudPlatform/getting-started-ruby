@@ -35,8 +35,6 @@ module ActiveJob
         subscription = topic.subscription "lookup_book_details"
         if subscription.nil?
           subscription = topic.create_subscription "lookup_book_details"
-        else
-          subscription = topic.subscription "lookup_book_details"
         end
 
         subscriber = subscription.listen do |message|
