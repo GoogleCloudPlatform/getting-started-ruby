@@ -17,7 +17,9 @@ env: flex
 entrypoint: bundle exec rackup -p $PORT
 # [END runtime]
 
+# [START cloud_sql_beta_settings]
 beta_settings:
   # The connection name of your instance on its Overview page in the Google
   # Cloud Platform Console, or use `[YOUR_PROJECT_ID]:[YOUR_REGION]:[YOUR_INSTANCE_NAME]`
   cloud_sql_instances: [YOUR_INSTANCE_CONNECTION_NAME]
+# [END cloud_sql_beta_settings]
