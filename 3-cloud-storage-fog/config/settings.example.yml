@@ -1,0 +1,11 @@
+default: &default
+  cloud_storage:
+    bucket: your-bucket-name
+    access_key_id: your-access-key-id
+    secret_access_key: your-secret-access-key
+
+development:
+  <<: *default
+
+production:
+  <<: *default
