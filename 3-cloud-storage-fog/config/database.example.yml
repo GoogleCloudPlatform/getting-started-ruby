@@ -1,0 +1,40 @@
+default: &default
+# Google Cloud SQL Sample Database Configuration
+# ----------------------------------------------
+#   adapter: mysql2
+#   encoding: utf8
+#   pool: 5
+#   username: [MYSQL_USER]
+#   password: [MYSQL_PASS]
+#   database: [MYSQL_DATABASE]
+#   socket: /cloudsql/[YOUR_INSTANCE_CONNECTION_NAME]
+
+# Google Cloud Datastore Sample Database Configuration
+# ----------------------------------------------------
+#   dataset_id: your-project-id
+
+# PostgreSQL Sample Database Configuration
+# ----------------------------------------
+#   adapter: postgresql
+#   encoding: unicode
+#   pool: 5
+#   username: your-postgresql-user-here
+#   password: your-postgresql-password-here
+#   host: your-postgresql-IPv4-address-here
+#   database: your-postgresql-database-here
+
+development:
+  <<: *default
+
+production:
+  <<: *default
+
+# Test configuration
+test:
+  # Datastore
+  dataset_id: your-test-project-id
+  # SQL
+  adapter: sqlite3
+  pool: 5
+  timeout: 5000
+  database: db/test.sqlite3
