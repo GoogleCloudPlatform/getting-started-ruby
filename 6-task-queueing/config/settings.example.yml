@@ -1,5 +1,9 @@
+# [START settings]
 default: &default
   project_id: your-project-id
+  pubsub_topic: your-pubsub-topic
+  pubsub_subscription: your-pubsub-subscription
+# [END settings]
   oauth2:
     client_id: your-client-id
     client_secret: your-client-secret
