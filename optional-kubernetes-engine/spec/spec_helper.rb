@@ -20,8 +20,6 @@ require "capybara/rails"
 require "rack/test"
 require "datastore_book_extensions"
 
-Database_config = Rails.application.config.database_configuration[Rails.env]
-
 Book.send :include, DatastoreBookExtensions
 
 Rails.configuration.x.fog_dir = "testbucket"
