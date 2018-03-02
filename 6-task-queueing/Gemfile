@@ -19,15 +19,15 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START gcloud]
-gem "gcloud"
+gem "google-cloud"
 # [END gcloud]
 # [START google_api_client]
-gem "google-api-client", "~> 0.9"
+gem "google-api-client", "~> 0.11"
 # [END google_api_client]
 gem "foreman"
 
 group :production do
-  gem "mysql2", "~> 0.3.0"
+  gem "mysql2", "~> 0.3"
 end
 
 group :development, :test do

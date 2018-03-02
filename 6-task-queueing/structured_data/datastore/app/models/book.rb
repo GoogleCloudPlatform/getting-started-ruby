@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud/datastore"
+require "google/cloud/datastore"
 
 class Book
   include ActiveModel::Model
@@ -26,8 +26,7 @@ class Book
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
     @dataset ||= Google::Cloud::Datastore.new(
-      project: Rails.application.config.
-                     database_configuration[Rails.env]["dataset_id"]
+      project_id: Rails.application.config.database_configuration[Rails.env]["dataset_id"]
     )
   end
 
