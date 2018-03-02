@@ -43,10 +43,10 @@ class LookupBookDetailsJob < ActiveJob::Base
 # [END lookup_books]
       # [START choose_volume]
       # To provide the best results, find the first returned book that
-      # includes title and author information as well as a book cover image.
+      # includes title, author, description, and book cover image.
       best_match = volumes.find {|volume|
         info = volume.volume_info
-        info.title && info.authors && info.image_links.try(:thumbnail)
+        info.title && info.authors && info.description && info.image_links.try(:thumbnail)
       }
 
       volume = best_match || volumes.first
