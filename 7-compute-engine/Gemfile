@@ -19,7 +19,7 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "unicorn"
-gem "google-cloud"
+gem "google-cloud", "0.44"
 gem "google-api-client"
 gem "resque"
 
