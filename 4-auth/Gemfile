@@ -14,12 +14,11 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
-gem "google-cloud"
+gem "google-cloud", "0.44"
 gem "jquery-rails"
 gem "fog"
 # [START omniauth]
-gem "omniauth", "~> 1.8"
-gem "omniauth-oauth2", "~> 1.1"
+gem "omniauth"
 gem "omniauth-google-oauth2"
 # [END omniauth]
 
