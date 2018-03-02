@@ -24,6 +24,7 @@ gem "tzinfo-data"
 
 group :test do
   gem "rspec-rails"
+  gem "rspec-retry"
   gem "rack-test"
   gem "capybara"
   gem "poltergeist"
