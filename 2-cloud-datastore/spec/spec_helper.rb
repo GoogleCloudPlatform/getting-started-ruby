@@ -16,6 +16,7 @@ ENV["RAILS_ENV"] ||= "test"
 require File.expand_path("../../config/environment", __FILE__)
 require File.expand_path("../../../spec/e2e", __FILE__)
 require "rspec/rails"
+require "rspec/retry"
 require "capybara/rails"
 require 'capybara/poltergeist'
 require "rack/test"
@@ -24,6 +25,16 @@ require "book_extensions"
 Book.send :extend, BookExtensions
 
 RSpec.configure do |config|
+  # Retry setup
+  # show retry status in spec process
+  config.verbose_retry = true
+  # show exception that triggers a retry if verbose_retry is set to true
+  config.display_try_failure_messages = true
+
+  # set retry count and retry sleep interval to 10 seconds
+  config.default_retry_count = 5
+  config.default_sleep_interval = 10
+
   config.use_transactional_fixtures = true
 
   config.infer_spec_type_from_file_location!
