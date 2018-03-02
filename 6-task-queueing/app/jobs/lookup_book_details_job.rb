@@ -14,8 +14,6 @@
 # [START lookup_books]
 require "google/apis/books_v1"
 
-BooksAPI = Google::Apis::BooksV1
-
 class LookupBookDetailsJob < ActiveJob::Base
   queue_as :default
 
@@ -24,12 +22,10 @@ class LookupBookDetailsJob < ActiveJob::Base
                       "#{book.id} #{book.title.inspect}"
 
     # Create Book API Client
-    book_service = BooksAPI::BooksService.new
-    # Books API does not require authentication
-    book_service.authorization = nil
+    book_service = Google::Apis::BooksV1::BooksService.new
 
     # Lookup a list of relevant books based on the provided book title.
-    book_service.list_volumes book.title, order_by: "relevance" do |results, error|
+    book_service.list_volumes(book.title, order_by: "relevance") do |results, error|
       # Error ocurred soft-failure
       if error
         Rails.logger.error "[BookService] #{error.inspect}"
@@ -47,10 +43,10 @@ class LookupBookDetailsJob < ActiveJob::Base
 # [END lookup_books]
       # [START choose_volume]
       # To provide the best results, find the first returned book that
-      # includes title and author information as well as a book cover image.
+      # includes title, author, description, and book cover image.
       best_match = volumes.find {|volume|
         info = volume.volume_info
-        info.title && info.authors && info.image_links.try(:thumbnail)
+        info.title && info.authors && info.description && info.image_links.try(:thumbnail)
       }
 
       volume = best_match || volumes.first
@@ -76,6 +72,7 @@ class LookupBookDetailsJob < ActiveJob::Base
 
       Rails.logger.info "[BookService] (#{book.id}) Complete"
     end
+    Rails.logger.info "(#{book.id}) Complete"
   end
 end
 # [END book_lookup]
