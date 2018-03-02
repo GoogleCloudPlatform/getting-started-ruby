@@ -19,8 +19,7 @@ gem "fog"
 gem "omniauth"
 gem "omniauth-google-oauth2"
 # [START gcloud]
-gem "google-cloud-datastore"
-gem "google-cloud-pubsub"
+gem "google-cloud", "0.44"
 # [END gcloud]
 # [START google_api_client]
 gem "google-api-client", "~> 0.11"
