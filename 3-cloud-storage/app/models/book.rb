@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START book]
+# [START connect]
 require "google/cloud/storage"
 
 class Book < ActiveRecord::Base
@@ -24,7 +24,7 @@ class Book < ActiveRecord::Base
       storage.bucket config["storage_bucket"]
     end
   end
-  # [END book]
+  # [END connect]
 
   validates :title, presence: true
 
