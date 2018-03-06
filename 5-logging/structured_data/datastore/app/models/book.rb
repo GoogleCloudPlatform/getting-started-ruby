@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud/datastore"
+require "google/cloud/datastore"
 require "google/cloud/storage"
 
 class Book
@@ -84,18 +84,27 @@ class Book
     from_entity entities.first if entities.any?
   end
 
-  # alias "find_by_id" for compatibility with Active Record
-  singleton_class.send(:alias_method, :find_by_id, :find)
+  def save
+    if valid?
+      entity = to_entity
+      Book.dataset.save entity
+      self.id = entity.key.id
+      update_image if cover_image.present?
+      true
+    else
+      false
+    end
+  end
 
   def to_entity
     entity = Google::Cloud::Datastore::Entity.new
     entity.key = Google::Cloud::Datastore::Key.new "Book", id
     entity["title"]        = title
-    entity["author"]       = author               if author.present?
-    entity["published_on"] = published_on.to_time if published_on.present?
-    entity["description"]  = description          if description.present?
-    entity["image_url"]    = image_url            if image_url.present?
-    entity["creator_id"]   = creator_id           if creator_id.present?
+    entity["author"]       = author       if author
+    entity["published_on"] = published_on if published_on
+    entity["description"]  = description  if description
+    entity["image_url"]    = image_url    if image_url
+    entity["creator_id"]   = creator_id   if creator_id
     entity
   end
 

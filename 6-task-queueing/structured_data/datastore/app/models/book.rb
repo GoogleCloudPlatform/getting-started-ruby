@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "gcloud/datastore"
+require "google/cloud/datastore"
 require "google/cloud/storage"
 
 class Book
