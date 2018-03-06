@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require "google/cloud/datastore"
+require "gcloud/datastore"
 require "google/cloud/storage"
 
 class Book
@@ -28,8 +28,7 @@ class Book
   include ActiveModel::Validations
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url,
-                :cover_image
-
+                :cover_image, :creator_id
 
   validates :title, presence: true
 
@@ -46,11 +45,17 @@ class Book
   #
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
+  # [START books_by_creator]
   def self.query options = {}
     query = Google::Cloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]
     query.cursor options[:cursor] if options[:cursor]
+
+    if options[:creator_id]
+      query.where "creator_id", "=", options[:creator_id]
+    end
+    # [END books_by_creator]
 
     results = dataset.run query
     books   = results.map {|entity| Book.from_entity entity }
@@ -79,26 +84,18 @@ class Book
     from_entity entities.first if entities.any?
   end
 
-  def save
-    if valid?
-      entity = to_entity
-      Book.dataset.save entity
-      self.id = entity.key.id
-      update_image if cover_image.present?
-      true
-    else
-      false
-    end
-  end
+  # alias "find_by_id" for compatibility with Active Record
+  singleton_class.send(:alias_method, :find_by_id, :find)
 
   def to_entity
     entity = Google::Cloud::Datastore::Entity.new
     entity.key = Google::Cloud::Datastore::Key.new "Book", id
     entity["title"]        = title
-    entity["author"]       = author       if author
-    entity["published_on"] = published_on if published_on
-    entity["description"]  = description  if description
-    entity["image_url"]    = image_url    if image_url
+    entity["author"]       = author               if author.present?
+    entity["published_on"] = published_on.to_time if published_on.present?
+    entity["description"]  = description          if description.present?
+    entity["image_url"]    = image_url            if image_url.present?
+    entity["creator_id"]   = creator_id           if creator_id.present?
     entity
   end
 

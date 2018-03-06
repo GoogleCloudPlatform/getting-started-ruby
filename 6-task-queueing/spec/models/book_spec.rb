@@ -66,7 +66,7 @@ RSpec.describe Book do
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
     expect(book.description).to include "Charles Dickens' classic novel"
-    expect(book.image_url).to eq "http://books.google.com/books/content?id=5EIPAAAAQAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
+    expect(book.image_url).to eq "http://books.google.com/books/content?id=YqfPAAAAMAAJ&printsec=frontcover&img=1&zoom=1&edge=curl&source=gbs_api"
   end
 
   it "book details are only looked up when fields are blank"

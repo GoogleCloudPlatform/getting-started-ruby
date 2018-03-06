@@ -12,8 +12,18 @@
 # limitations under the License.
 
 require "gcloud/datastore"
+require "google/cloud/storage"
 
 class Book
+  def self.storage_bucket
+    @storage_bucket ||= begin
+      config = Rails.application.config.x.settings
+      storage = Google::Cloud::Storage.new project_id: config["project"],
+                                           credentials: config["keyfile"]
+      storage.bucket config["storage_bucket"]
+    end
+  end
+
   include ActiveModel::Model
   include ActiveModel::Validations
 
@@ -107,30 +117,27 @@ class Book
   end
 
   def upload_image
-    image = StorageBucket.files.new(
-      key: "cover_images/#{id}/#{cover_image.original_filename}",
-      body: cover_image.read,
-      public: true
-    )
+    file = Book.storage_bucket.create_file \
+      cover_image.tempfile,
+      "cover_images/#{id}/#{cover_image.original_filename}",
+      content_type: cover_image.content_type,
+      acl: "public"
 
-    image.save
-
-    self.image_url = image.public_url
+    self.image_url = file.public_url
 
     Book.dataset.save to_entity
   end
 
   def delete_image
-    bucket_name = StorageBucket.key
-    image_uri   = URI.parse image_url
+    image_uri = URI.parse image_url
 
-    if image_uri.host == "#{bucket_name}.storage.googleapis.com"
+    if image_uri.host == "#{Book.storage_bucket.name}.storage.googleapis.com"
       # Remove leading forward slash from image path
       # The result will be the image key, eg. "cover_images/:id/:filename"
-      image_key = image_uri.path.sub("/", "")
-      image     = StorageBucket.files.new key: image_key
+      image_path = image_uri.path.sub("/", "")
 
-      image.destroy
+      file = Book.storage_bucket.file image_path
+      file.delete
     end
   end
 
