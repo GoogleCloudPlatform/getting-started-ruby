@@ -6,8 +6,10 @@ module ActiveJob
     class PubSubQueueAdapter
 
       def self.pubsub
-        project_id = Rails.application.config.x.settings["project_id"]
-        Google::Cloud::Pubsub.new project_id: project_id
+        @pubsub ||= begin
+          project_id = Rails.application.config.x.settings["project_id"]
+          Google::Cloud::Pubsub.new project_id: project_id
+        end
       end
 
       def self.pubsub_topic
