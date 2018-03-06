@@ -12,13 +12,23 @@
 # limitations under the License.
 
 require "google/cloud/datastore"
+require "google/cloud/storage"
 
 class Book
+  def self.storage_bucket
+    @storage_bucket ||= begin
+      config = Rails.application.config.x.settings
+      storage = Google::Cloud::Storage.new project_id: config["project"],
+                                           credentials: config["keyfile"]
+      storage.bucket config["storage_bucket"]
+    end
+  end
+
   include ActiveModel::Model
   include ActiveModel::Validations
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url,
-                :cover_image, :creator_id
+                :cover_image
 
 
   validates :title, presence: true
@@ -36,17 +46,11 @@ class Book
   #
   # returns an array of Book query results and a cursor
   # that can be used to query for additional results.
-  # [START books_by_creator]
   def self.query options = {}
     query = Google::Cloud::Datastore::Query.new
     query.kind "Book"
     query.limit options[:limit]   if options[:limit]
     query.cursor options[:cursor] if options[:cursor]
-
-    if options[:creator_id]
-      query.where "creator_id", "=", options[:creator_id]
-    end
-    # [END books_by_creator]
 
     results = dataset.run query
     books   = results.map {|entity| Book.from_entity entity }
@@ -95,7 +99,6 @@ class Book
     entity["published_on"] = published_on if published_on
     entity["description"]  = description  if description
     entity["image_url"]    = image_url    if image_url
-    entity["creator_id"]   = creator_id   if creator_id
     entity
   end
 
@@ -117,30 +120,27 @@ class Book
   end
 
   def upload_image
-    image = StorageBucket.files.new(
-      key: "cover_images/#{id}/#{cover_image.original_filename}",
-      body: cover_image.read,
-      public: true
-    )
+    file = Book.storage_bucket.create_file \
+      cover_image.tempfile,
+      "cover_images/#{id}/#{cover_image.original_filename}",
+      content_type: cover_image.content_type,
+      acl: "public"
 
-    image.save
-
-    self.image_url = image.public_url
+    self.image_url = file.public_url
 
     Book.dataset.save to_entity
   end
 
   def delete_image
-    bucket_name = StorageBucket.key
-    image_uri   = URI.parse image_url
+    image_uri = URI.parse image_url
 
-    if image_uri.host == "#{bucket_name}.storage.googleapis.com"
+    if image_uri.host == "#{Book.storage_bucket.name}.storage.googleapis.com"
       # Remove leading forward slash from image path
       # The result will be the image key, eg. "cover_images/:id/:filename"
-      image_key = image_uri.path.sub("/", "")
-      image     = StorageBucket.files.new key: image_key
+      image_path = image_uri.path.sub("/", "")
 
-      image.destroy
+      file = Book.storage_bucket.file image_path
+      file.delete
     end
   end
 

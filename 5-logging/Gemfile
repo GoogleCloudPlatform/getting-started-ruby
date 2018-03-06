@@ -14,9 +14,10 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
-gem "google-cloud"
+gem "google-cloud-datastore", "~> 1.4"
+gem "google-cloud-storage", "~> 1.10"
 gem "jquery-rails"
-gem "fog"
+
 # [START omniauth]
 gem "omniauth"
 gem "omniauth-google-oauth2"
