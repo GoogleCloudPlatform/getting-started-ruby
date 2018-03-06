@@ -14,7 +14,8 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
-gem "google-cloud-datastore"
+gem "google-cloud-datastore", "~> 1.4"
+gem "google-cloud-storage", "~> 1.9"
 gem "jquery-rails"
 
 group :production do
@@ -34,7 +35,3 @@ group :test do
   gem "capybara"
   gem "poltergeist"
 end
-
-#[START gems]
-gem "google-cloud-storage", "~> 1.9"
-#[END gems]
