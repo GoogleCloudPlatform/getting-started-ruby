@@ -15,15 +15,16 @@ source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
 gem "jquery-rails"
-gem "fog"
+
+gem "google-cloud-datastore", "~> 1.4"
+gem "google-cloud-storage", "~> 1.10"
+gem "google-cloud-pubsub", "~> 0.30"
+gem "google-api-client", "~> 0.19"
+
 gem "omniauth"
 gem "omniauth-google-oauth2"
 gem "unicorn"
-gem "google-cloud"
-gem "google-api-client"
 gem "resque"
-
-# New API (not yet compatible with gcloud) gem "google-api-client", "0.9.pre3"
 
 group :test do
   gem "rspec-rails"
