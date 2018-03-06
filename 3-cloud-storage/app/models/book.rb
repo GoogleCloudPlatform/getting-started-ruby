@@ -19,7 +19,7 @@ class Book < ActiveRecord::Base
   def self.storage_bucket
     @storage_bucket ||= begin
       config = Rails.application.config.x.settings
-      storage = Google::Cloud::Storage.new project_id: config["project"],
+      storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
       storage.bucket config["storage_bucket"]
     end

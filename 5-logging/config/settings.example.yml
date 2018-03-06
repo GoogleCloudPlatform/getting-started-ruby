@@ -1,5 +1,5 @@
 default: &default
-  project: your-project-id
+  project_id: your-project-id
   storage_bucket: your-bucket-name
   oauth2:
     client_id: your-client-id
