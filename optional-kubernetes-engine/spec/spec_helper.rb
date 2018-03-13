@@ -22,7 +22,7 @@ require "datastore_book_extensions"
 
 Book.send :include, DatastoreBookExtensions
 
-Rails.configuration.x.fog_dir = "testbucket"
+require "storage_book_extensions"
 
 OmniAuth.config.test_mode = true
 
@@ -37,7 +37,6 @@ RSpec.configure do |config|
 
   config.before :each do
     Book.delete_all
-    Fog::Mock.reset
-    FogStorage.directories.create key: "testbucket", acl: "public-read"
+    Book.storage_bucket.reset!
   end
 end

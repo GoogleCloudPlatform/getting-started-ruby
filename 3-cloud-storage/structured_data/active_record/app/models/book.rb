@@ -11,8 +11,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require "google/cloud/storage"
+
 # [START book]
 class Book < ActiveRecord::Base
+
+  def self.storage_bucket
+    @storage_bucket ||= begin
+      config = Rails.application.config.x.settings
+      storage = Google::Cloud::Storage.new project_id: config["project_id"],
+                                           credentials: config["keyfile"]
+      storage.bucket config["gcs_bucket"]
+    end
+  end
+
   validates :title, presence: true
 
   attr_accessor :cover_image
@@ -23,15 +35,13 @@ class Book < ActiveRecord::Base
   after_create :upload_image, if: :cover_image
 
   def upload_image
-    image = StorageBucket.files.new(
-      key: "cover_images/#{id}/#{cover_image.original_filename}",
-      body: cover_image.read,
-      public: true
-    )
+    file = Book.storage_bucket.create_file \
+      cover_image.tempfile,
+      "cover_images/#{id}/#{cover_image.original_filename}",
+      content_type: cover_image.content_type,
+      acl: "public"
 
-    image.save
-
-    update_columns image_url: image.public_url
+    update_columns image_url: file.public_url
   end
   # [END upload]
 
@@ -41,16 +51,15 @@ class Book < ActiveRecord::Base
   before_destroy :delete_image, if: :image_url
 
   def delete_image
-    bucket_name = StorageBucket.key
-    image_uri   = URI.parse image_url
+    image_uri = URI.parse image_url
 
-    if image_uri.host == "#{bucket_name}.storage.googleapis.com"
+    if image_uri.host == "#{Book.storage_bucket.name}.storage.googleapis.com"
       # Remove leading forward slash from image path
       # The result will be the image key, eg. "cover_images/:id/:filename"
-      image_key = image_uri.path.sub("/", "")
-      image     = StorageBucket.files.new key: image_key
+      image_path = image_uri.path.sub("/", "")
 
-      image.destroy
+      file = Book.storage_bucket.file image_path
+      file.delete
     end
   end
   # [END delete]

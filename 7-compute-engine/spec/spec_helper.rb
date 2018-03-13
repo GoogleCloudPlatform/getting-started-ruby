@@ -24,6 +24,8 @@ OmniAuth.config.test_mode = true
 
 Book.send :extend, BookExtensions
 
+require "storage_book_extensions"
+
 RSpec.configure do |config|
   config.use_transactional_fixtures = true
 
@@ -35,7 +37,6 @@ RSpec.configure do |config|
 
   config.before :each do |example|
     Book.delete_all
-    Fog::Mock.reset
-    FogStorage.directories.create key: "testbucket", acl: "public-read"
+    Book.storage_bucket.reset!
   end
 end

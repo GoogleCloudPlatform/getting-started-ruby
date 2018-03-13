@@ -15,15 +15,19 @@ source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
 gem "jquery-rails"
-gem "fog"
+
+gem "google-cloud-datastore", "~> 1.4"
+gem "google-cloud-storage", "~> 1.10"
+# [START pubsub]
+gem "google-cloud-pubsub", "~> 0.30"
+# [END pubsub]
+# [START google_api_client]
+gem "google-api-client", "~> 0.19"
+# [END google_api_client]
+
 gem "omniauth"
 gem "omniauth-google-oauth2"
-# [START gcloud]
-gem "gcloud"
-# [END gcloud]
-# [START google_api_client]
-gem "google-api-client", "~> 0.9"
-# [END google_api_client]
+
 gem "foreman"
 
 group :production do

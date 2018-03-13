@@ -1,9 +1,6 @@
 default: &default
   project_id: @@PROJECT@@
-  cloud_storage:
-    bucket: @@BUCKET@@
-    access_key_id: @@ID@@
-    secret_access_key: @@KEY@@
+  gcs_bucket: @@BUCKET@@
   oauth2:
     client_id: @@CLIENT@@
     client_secret: @@SECRET@@

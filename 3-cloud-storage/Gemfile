@@ -14,11 +14,10 @@
 source "https://rubygems.org"
 
 gem "rails", "~> 4.2.8"
-gem "google-cloud-datastore"
 gem "jquery-rails"
-#[START fog]
-gem "fog"
-#[END fog]
+
+gem "google-cloud-datastore", "~> 1.4"
+gem "google-cloud-storage", "~> 1.10"
 
 group :production do
   gem "mysql2", "~> 0.3.0"

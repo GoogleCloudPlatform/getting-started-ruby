@@ -202,8 +202,8 @@ feature "Managing Books" do
       expect(book.title).to eq "A Tale of Two Cities"
       expect(book.image_url).to end_with "/cover_images/#{book.id}/test.txt"
 
-      expect(StorageBucket.files.all.count).to eq 1
-      file = StorageBucket.files.first
+      expect(Book.storage_bucket.files.count).to eq 1
+      file = Book.storage_bucket.files.first
       expect(file.key).to eq "cover_images/#{book.id}/test.txt"
       expect(file.body).to include "Test file."
     end
@@ -219,8 +219,8 @@ feature "Managing Books" do
       click_button "Save"
 
       expect(page).to have_content "Updated Book"
-      expect(StorageBucket.files.get "cover_images/#{book.id}/test-2.txt").to be_present
-      expect(StorageBucket.files.get "cover_images/#{book.id}/test.txt").to be_nil
+      expect(Book.storage_bucket.file "cover_images/#{book.id}/test-2.txt").to be_present
+      expect(Book.storage_bucket.file "cover_images/#{book.id}/test.txt").to be_nil
 
       book.reload
       expect(book.image_url).to end_with "/cover_images/#{book.id}/test-2.txt"
@@ -231,14 +231,14 @@ feature "Managing Books" do
                           cover_image: Rack::Test::UploadedFile.new("spec/resources/test.txt")
 
       image_key = "cover_images/#{book.id}/test.txt"
-      expect(StorageBucket.files.get image_key).to be_present
+      expect(Book.storage_bucket.file image_key).to be_present
 
       visit root_path
       click_link "A Tale of Two Cities"
       click_link "Delete Book"
 
       expect(Book.exists? book.id).to be false
-      expect(StorageBucket.files.get image_key).to be_nil
+      expect(Book.storage_bucket.file image_key).to be_nil
     end
   end
 
