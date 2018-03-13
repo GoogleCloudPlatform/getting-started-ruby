@@ -1,6 +1,6 @@
 default: &default
   project_id: your-project-id
-  storage_bucket: your-bucket-name
+  gcs_bucket: your-bucket-name
   oauth2:
     client_id: your-client-id
     client_secret: your-client-secret

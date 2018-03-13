@@ -1,6 +1,6 @@
 default: &default
   project_id: your-project-id
-  storage_bucket: your-bucket-name
+  gcs_bucket: your-bucket-name
 
 development:
   <<: *default
