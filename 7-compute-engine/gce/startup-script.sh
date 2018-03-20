@@ -19,12 +19,13 @@ set -e
 
 # Talk to the metadata server to get the project id
 PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
+REPO_NAME="[YOUR_REPO_NAME]"
 
 # Get the source code
 export HOME=/root
 git config --global credential.helper gcloud.sh
 # Change branch from master if not using master
-git clone https://source.developers.google.com/p/$PROJECTID /opt/app -b master
+git clone https://source.developers.google.com/p/$PROJECTID/r/$REPO_NAME /opt/app -b master
 
 pushd /opt/app/7-compute-engine
 
@@ -36,17 +37,15 @@ cp settings.example.yml settings.yml
 chmod go-rwx settings.yml
 
 # Add your GCP project ID here
-sed -i -e 's/@@PROJECT@@/your-project-id/' settings.yml
-sed -i -e 's/@@PROJECT@@/your-project-id/' database.yml
+sed -i -e 's/PROJECT_ID/[YOUR_PROJECT_ID]/' settings.yml
+sed -i -e 's/PROJECT_ID/[YOUR_PROJECT_ID]/' database.yml
 
 # Add your cloud storage config here
-sed -i -e 's/@@BUCKET@@/your-cloud-storage-bucket/' settings.yml
-sed -i -e 's/@@ID@@/your-access-key-id/' settings.yml
-sed -i -e 's:@@KEY@@:your-secret-access-key:' settings.yml
+sed -i -e 's/BUCKET_NAME/[YOUR_BUCKET_NAME]/' settings.yml
 
 # Add your OAuth config here
-sed -i -e 's/@@CLIENT@@/your-oauth-client-id/' settings.yml
-sed -i -e 's/@@SECRET@@/your-oauth-client-secret/' settings.yml
+sed -i -e 's/CLIENT_ID/[YOUR_CLIENT_ID]/' settings.yml
+sed -i -e 's/CLIENT_SECRET/[YOUR_CLIENT_SECRET]/' settings.yml
 
 popd # config
 

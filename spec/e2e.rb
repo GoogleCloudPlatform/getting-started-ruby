@@ -136,7 +136,7 @@ class E2E
           end
           project_id = ENV["GOOGLE_PROJECT_ID"]
 
-          find = "#   dataset_id: your-project-id"
+          find = "#   dataset_id: [YOUR_PROJECT_ID]"
           replace = "  dataset_id: #{project_id}"
           db_config.sub!(find, replace)
 

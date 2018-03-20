@@ -1,9 +1,11 @@
+# The following values are updated by gce/startup-script.sh
+# and shouldn't be changed.
 default: &default
-  project_id: @@PROJECT@@
-  gcs_bucket: @@BUCKET@@
+  project_id: PROJECT_ID
+  gcs_bucket: BUCKET_NAME
   oauth2:
-    client_id: @@CLIENT@@
-    client_secret: @@SECRET@@
+    client_id: CLIENT_ID
+    client_secret: CLIENT_SECRET
 
 development:
   <<: *default

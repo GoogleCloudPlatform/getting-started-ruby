@@ -1,5 +1,7 @@
+# The following values are updated by gce/startup-script.sh
+# and shouldn't be changed.
 default: &default
-  dataset_id: @@PROJECT@@
+  dataset_id: PROJECT_ID
 
 development:
   <<: *default

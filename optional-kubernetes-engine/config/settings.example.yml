@@ -4,8 +4,8 @@ default: &default
   pubsub_topic: [YOUR_PUBSUB_TOPIC]
   pubsub_subscription: [YOUR_PUBSUB_SUBSCRIPTION]
   oauth2:
-    client_id: your-client-id
-    client_secret: your-client-secret
+    client_id: [YOUR_CLIENT_ID]
+    client_secret: [YOUR_CLIENT_SECRET]
 
 development:
   <<: *default
