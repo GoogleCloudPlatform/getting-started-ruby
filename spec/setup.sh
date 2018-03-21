@@ -26,15 +26,15 @@ TEST_DIR=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )/../$STEP_NAME
 if [ -f $TEST_DIR/config/settings.example.yml ]; then
   cp $TEST_DIR/config/settings.example.yml $TEST_DIR/config/settings.yml
   if [ -n "$GOOGLE_CLIENT_ID" ]; then
-    sed -i -e "s/[YOUR_CLIENT_ID]/$GOOGLE_CLIENT_ID/g" $TEST_DIR/config/settings.yml
+    sed -i -e "s/\[YOUR_CLIENT_ID\]/$GOOGLE_CLIENT_ID/g" $TEST_DIR/config/settings.yml
   fi
 
   if [ -n "$GOOGLE_CLIENT_SECRET" ]; then
-    sed -i -e "s/[YOUR_CLIENT_SECRET]/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
+    sed -i -e "s/\[YOUR_CLIENT_SECRET\]/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
   fi
 
   if [ -n "$GOOGLE_PROJECT_ID" ]; then
-    sed -i -e "s/[YOUR_PROJECT_ID]/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/settings.yml
+    sed -i -e "s/\[YOUR_PROJECT_ID\]/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/settings.yml
   fi
 fi
 
@@ -42,7 +42,7 @@ fi
 if [ -f $TEST_DIR/config/database.example.yml ]; then
   cp $TEST_DIR/config/database.example.yml $TEST_DIR/config/database.yml
   if [ -n "$GOOGLE_PROJECT_ID" ]; then
-    sed -i -e "s/[YOUR_PROJECT_ID]/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/database.yml
+    sed -i -e "s/\[YOUR_PROJECT_ID\]/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/database.yml
   fi
 fi
 
