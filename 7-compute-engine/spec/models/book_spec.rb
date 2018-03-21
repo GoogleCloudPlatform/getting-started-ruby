@@ -84,7 +84,7 @@ RSpec.describe Book do
 
     expect(enqueued_jobs).to be_empty
 
-    book.reload
+    book = Book.find book.id
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
     expect(book.published_on.to_date).to eq Date.parse("1859-01-01")
