@@ -52,9 +52,8 @@ module ActiveJob
         # Start background threads that will call block passed to listen.
         subscriber.start
 
-        loop do
-          sleep 10
-        end
+        # Fade into a deep sleep as worker will run indefinitely
+        sleep
       end
       # [END pub_sub_worker]
 
