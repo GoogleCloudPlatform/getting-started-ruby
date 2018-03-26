@@ -40,7 +40,8 @@ class LookupBookDetailsJob < ActiveJob::Base
 
       # List of relevant books
       volumes = results.items
-# [END lookup_books]
+      # [END lookup_books]
+
       # [START choose_volume]
       # To provide the best results, find the first returned book that
       # includes title and author information as well as a book cover image.
