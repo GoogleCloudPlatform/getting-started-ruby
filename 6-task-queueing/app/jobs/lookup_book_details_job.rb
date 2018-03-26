@@ -76,4 +76,4 @@ class LookupBookDetailsJob < ActiveJob::Base
     Rails.logger.info "(#{book.id}) Complete"
   end
 end
-# [END book_lookup]
+
