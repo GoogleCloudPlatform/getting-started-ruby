@@ -1,5 +1,5 @@
 default: &default
-  dataset_id: PROJECT_ID
+  dataset_id: @@PROJECT_ID@@
 
 development:
   <<: *default

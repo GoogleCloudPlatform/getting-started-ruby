@@ -36,17 +36,18 @@ chmod go-rwx database.yml
 cp settings.example.yml settings.yml
 chmod go-rwx settings.yml
 
+# [START config]
 # Add your GCP project ID here
-sed -i -e 's/PROJECT_ID/[YOUR_PROJECT_ID]/' settings.yml
-sed -i -e 's/PROJECT_ID/[YOUR_PROJECT_ID]/' database.yml
+sed -i -e 's/@@PROJECT_ID@@/[YOUR_PROJECT_ID]/' settings.yml
+sed -i -e 's/@@PROJECT_ID@@/[YOUR_PROJECT_ID]/' database.yml
 
 # Add your cloud storage config here
-sed -i -e 's/BUCKET_NAME/[YOUR_BUCKET_NAME]/' settings.yml
+sed -i -e 's/@@BUCKET_NAME@@/[YOUR_BUCKET_NAME]/' settings.yml
 
 # Add your OAuth config here
-sed -i -e 's/CLIENT_ID/[YOUR_CLIENT_ID]/' settings.yml
-sed -i -e 's/CLIENT_SECRET/[YOUR_CLIENT_SECRET]/' settings.yml
-
+sed -i -e 's/@@CLIENT_ID@@/[YOUR_CLIENT_ID]/' settings.yml
+sed -i -e 's/@@CLIENT_SECRET@@/[YOUR_CLIENT_SECRET]/' settings.yml
+# [END config]
 popd # config
 
 ./gce/configure.sh
