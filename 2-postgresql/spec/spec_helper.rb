@@ -35,10 +35,10 @@ RSpec.configure do |config|
       db_file = File.expand_path("../../config/database.yml", __FILE__)
       db_config = File.read(db_file)
       db_values = {
-        "your-postgresql-user-here" => "POSTGRES_USER",
-        "your-postgresql-password-here" =>  "POSTGRES_PASSWORD",
-        "your-postgresql-IPv4-address-here" => "POSTGRES_HOST",
-        "your-postgresql-database-here" => "POSTGRES_DBNAME"
+        "[YOUR_POSTGRES_USER]" => "POSTGRES_USER",
+        "[YOUR_POSTGRES_PASSWORD]" =>  "POSTGRES_PASSWORD",
+        "[YOUR_POSTGRES_IPV4_ADDRESS]" => "POSTGRES_HOST",
+        "[YOUR_POSTGRES_DATABASE]" => "POSTGRES_DBNAME"
       }
 
       db_values.each { |key, envkey|

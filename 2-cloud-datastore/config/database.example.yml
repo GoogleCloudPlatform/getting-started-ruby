@@ -1,9 +1,9 @@
 development:
-  dataset_id: your-project-id
+  dataset_id: [YOUR_PROJECT_ID]
 
 production:
-  dataset_id: your-project-id
+  dataset_id: [YOUR_PROJECT_ID]
 
 test:
-  dataset_id: your-project-id
+  dataset_id: [YOUR_PROJECT_ID]
 

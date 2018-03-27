@@ -29,8 +29,8 @@ feature "Managing Books" do
     allow_any_instance_of(Book).to receive(:lookup_book_details)
 
     @datastore = Google::Cloud::Datastore.new(
-      project: Rails.application.config.
-                     database_configuration[Rails.env]["dataset_id"]
+      project_id: Rails.application.config.
+                        database_configuration[Rails.env]["dataset_id"]
     )
   end
 

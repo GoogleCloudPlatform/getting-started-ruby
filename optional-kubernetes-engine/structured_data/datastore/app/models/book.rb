@@ -36,7 +36,8 @@ class Book
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
     @dataset ||= Google::Cloud::Datastore.new(
-      project_id: Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+      project_id: Rails.application.config.
+                        database_configuration[Rails.env]["dataset_id"]
     )
   end
 

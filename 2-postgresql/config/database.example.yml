@@ -2,10 +2,10 @@ postgresql_settings: &postgresql_settings
   adapter: postgresql
   encoding: unicode
   pool: 5
-  username: your-postgresql-user-here
-  password: your-postgresql-password-here
-  host: your-postgresql-IPv4-address-here
-  database: your-postgresql-database-here
+  username: [YOUR_POSTGRES_USER]
+  password: [YOUR_POSTGRES_PASSWORD]
+  host: [YOUR_POSTGRES_IPV4_ADDRESS]
+  database: [YOUR_POSTGRES_DATABASE]
 
 development:
   <<: *postgresql_settings
