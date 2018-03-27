@@ -69,6 +69,9 @@ if [ "$STEP_NAME" = '7-compute-engine' ]; then
     sed -i -e "s/@@PROJECT_ID@@/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/settings.yml
     sed -i -e "s/@@PROJECT_ID@@/$GOOGLE_PROJECT_ID/g" $TEST_DIR/config/database.yml
   fi
+
+  # Replace all @@'s with placeholders, since this breaks yaml parsing
+  sed -i -e 's/@//g' $TEST_DIR/config/database.yml $TEST_DIR/config/settings.yml
 fi
 
 # compile assets if an "assets" directory exists
