@@ -62,7 +62,7 @@ if [ "$STEP_NAME" = '7-compute-engine' ]; then
   fi
 
   if [ -n "$GOOGLE_CLIENT_SECRET" ]; then
-    sed -i -e "s/@@YOUR_CLIENT@@/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
+    sed -i -e "s/@@CLIENT_SECRET@@/$GOOGLE_CLIENT_SECRET/g" $TEST_DIR/config/settings.yml
   fi
 
   if [ -n "$GOOGLE_PROJECT_ID" ]; then
