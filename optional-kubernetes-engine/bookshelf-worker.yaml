@@ -11,8 +11,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This file configures the bookshelf application frontend. The frontend serves
-# public web traffic.
+# This file configures the bookshelf worker. The worker processes
+# jobs in the background.
 
 apiVersion: extensions/v1beta1
 kind: Deployment
@@ -21,8 +21,8 @@ metadata:
   labels:
     app: bookshelf
     tier: worker
-# The bookshelf frontend replica set ensures that at least 3
-# instances of the bookshelf app are running on the cluster.
+# The bookshelf worker replica set ensures that at least 2
+# instances of the bookshelf worker are running on the cluster.
 # For more info about Pods see:
 #   https://cloud.google.com/kubernetes-engine/docs/pods/
 spec:
@@ -43,7 +43,7 @@ spec:
         imagePullPolicy: Always
         # The FORMATION environment variable is used by foreman in the
         # Dockerfile's CMD to control which processes are started. In this
-        # case, only the bookshelf process is needed.
+        # case, only the worker process is needed.
         env:
         - name: FORMATION
           value: worker=1
