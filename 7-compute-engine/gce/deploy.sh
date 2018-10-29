@@ -19,10 +19,12 @@ ZONE=us-central1-f
 
 GROUP=frontend-group
 TEMPLATE=$GROUP-tmpl
-MACHINE_TYPE=f1-micro
-STARTUP_SCRIPT=my-startup.sh
-IMAGE=ubuntu-15-04
+MACHINE_TYPE=g1-small
+STARTUP_SCRIPT=startup-script.sh
+IMAGE_FAMILY=ubuntu-1804-lts
+IMAGE_PROJECT=ubuntu-os-cloud
 SCOPES="userinfo-email,\
+cloud-platform,\
 logging-write,\
 storage-full,\
 datastore,\
@@ -49,7 +51,8 @@ gcloud compute instance-templates create $TEMPLATE \
   --machine-type $MACHINE_TYPE \
   --scopes $SCOPES \
   --metadata-from-file startup-script=$STARTUP_SCRIPT \
-  --image $IMAGE \
+  --image-family $IMAGE_FAMILY \
+  --image-project $IMAGE_PROJECT \
   --tags $TAGS
 # [END create_template]
 
@@ -67,7 +70,7 @@ gcloud compute instance-groups managed \
 # [START create_named_port]
 gcloud compute instance-groups managed set-named-ports \
     $GROUP \
-    --named-ports http:8080 \
+    --named-ports http:80 \
     --zone $ZONE
 # [END create_named_port]
 
@@ -101,13 +104,16 @@ gcloud compute http-health-checks create ah-health-check \
 
 # [START create_backend_service]
 gcloud compute backend-services create $SERVICE \
-  --http-health-checks ah-health-check
+  --http-health-checks ah-health-check \
+  --port-name http \
+  --global
 # [END create_backend-service]
 
 # [START add_backend_service]
 gcloud compute backend-services add-backend $SERVICE \
-  --group $GROUP \
-  --zone $ZONE
+  --instance-group $GROUP \
+  --instance-group-zone $ZONE \
+  --global
 # [END add_backend_service]
 
 # Create a URL map and web Proxy. The URL map will send all requests to the
@@ -129,7 +135,7 @@ gcloud compute target-http-proxies create $SERVICE-proxy \
 gcloud compute forwarding-rules create $SERVICE-http-rule \
   --global \
   --target-http-proxy $SERVICE-proxy \
-  --port-range 80
+  --ports 80
 # [END create_forwarding_rule]
 
 #

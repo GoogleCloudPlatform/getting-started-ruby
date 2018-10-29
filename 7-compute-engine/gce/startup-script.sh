@@ -17,9 +17,12 @@
 # [START all]
 set -e
 
+export PATH="$PATH:/snap/google-cloud-sdk/current/bin"
+
 # Talk to the metadata server to get the project id
 PROJECTID=$(curl -s "http://metadata.google.internal/computeMetadata/v1/project/project-id" -H "Metadata-Flavor: Google")
 REPO_NAME="[YOUR_REPO_NAME]"
+BUCKET_NAME="[YOUR_BUCKET_NAME]"
 
 # Get the source code
 export HOME=/root
@@ -30,7 +33,7 @@ git clone https://source.developers.google.com/p/$PROJECTID/r/$REPO_NAME /opt/ap
 pushd /opt/app/7-compute-engine
 
 # Decrypt secrets.yml
-gcloud kms decrypt --location=global --keyring=[YOUR_KEYRING] --key=[YOUR_KEY_NAME] --plaintext-file=secrets.yml --ciphertext-file=secrets.yml.enc
+gcloud kms decrypt --location=global --keyring=[YOUR_KEYRING] --key=[YOUR_KEY_NAME] --plaintext-file=/opt/app/7-compute-engine/config/secrets.yml --ciphertext-file=/opt/app/7-compute-engine/config/secrets.yml.enc
 
 pushd config
 
@@ -41,15 +44,15 @@ chmod go-rwx settings.yml
 
 # [START config]
 # Add your GCP project ID here
-sed -i -e 's/@@PROJECT_ID@@/[YOUR_PROJECT_ID]/' settings.yml
-sed -i -e 's/@@PROJECT_ID@@/[YOUR_PROJECT_ID]/' database.yml
+sed -i -e "s/@@PROJECT_ID@@/${PROJECTID}/" settings.yml
+sed -i -e "s/@@PROJECT_ID@@/${PROJECTID}/" database.yml
 
 # Add your cloud storage config here
-sed -i -e 's/@@BUCKET_NAME@@/[YOUR_BUCKET_NAME]/' settings.yml
+sed -i -e "s/@@BUCKET_NAME@@/${BUCKET_NAME}/" settings.yml
 
 # Add your OAuth config here
-sed -i -e 's/@@CLIENT_ID@@/[YOUR_CLIENT_ID]/' settings.yml
-sed -i -e 's/@@CLIENT_SECRET@@/[YOUR_CLIENT_SECRET]/' settings.yml
+sed -i -e "s/@@CLIENT_ID@@/[YOUR_CLIENT_ID]/" settings.yml
+sed -i -e "s/@@CLIENT_SECRET@@/[YOUR_CLIENT_SECRET]/" settings.yml
 # [END config]
 popd # config
 
