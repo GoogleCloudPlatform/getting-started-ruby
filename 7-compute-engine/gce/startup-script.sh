@@ -29,6 +29,9 @@ git clone https://source.developers.google.com/p/$PROJECTID/r/$REPO_NAME /opt/ap
 
 pushd /opt/app/7-compute-engine
 
+# Decrypt secrets.yml
+gcloud kms decrypt --location=global --keyring=[YOUR_KEYRING] --key=[YOUR_KEY_NAME] --plaintext-file=secrets.yml --ciphertext-file=secrets.yml.enc
+
 pushd config
 
 cp database.example.yml database.yml
