@@ -31,11 +31,12 @@ git config --global credential.helper gcloud.sh
 git clone https://source.developers.google.com/p/$PROJECTID/r/$REPO_NAME /opt/app -b master
 
 pushd /opt/app/7-compute-engine
-
-# Decrypt secrets.yml
-gcloud kms decrypt --location=global --keyring=[YOUR_KEYRING] --key=[YOUR_KEY_NAME] --plaintext-file=/opt/app/7-compute-engine/config/secrets.yml --ciphertext-file=/opt/app/7-compute-engine/config/secrets.yml.enc
-
 pushd config
+
+# Decrypt secrets.yml, if applicable
+if [ -f secrets.yml.enc ]; then
+  gcloud kms decrypt --location=global --keyring=[YOUR_KEYRING] --key=[YOUR_KEY_NAME] --plaintext-file=secrets.yml --ciphertext-file=secrets.yml.enc
+fi
 
 cp database.example.yml database.yml
 chmod go-rwx database.yml
