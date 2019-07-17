@@ -15,8 +15,8 @@
 sudo: false
 language: ruby
 rvm:
-- 2.6.3
-- 2.5.5
+- 2.6
+- 2.5
 
 cache:
   directories:
@@ -25,8 +25,6 @@ cache:
 
 env:
   global:
-  # Do not prompt for user input when using any SDK methods.
-  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
   - PATH=$PATH:$HOME/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
 
@@ -43,13 +41,7 @@ before_install:
 #       $ git commit client_secrets.json.enc .travis.yml
 - openssl aes-256-cbc -K $encrypted_c66238cfcad7_key -iv $encrypted_c66238cfcad7_iv
   -in client_secrets.json.enc -out client_secrets.json -d
-- if [ ! -d $HOME/google-cloud-sdk/bin ]; then
-    rm -rf $HOME/google-cloud-sdk;
-    curl https://sdk.cloud.google.com | bash > /dev/null;
-  fi
-- source $HOME/google-cloud-sdk/path.bash.inc
-- gcloud components update
-- gcloud -q auth activate-service-account --key-file client_secrets.json;
+- gcloud auth activate-service-account --key-file client_secrets.json;
 
 install:
 - bash spec/setup.sh
