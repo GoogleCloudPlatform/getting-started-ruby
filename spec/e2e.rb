@@ -128,13 +128,13 @@ class E2E
       config.before :example, :e2e => true do
         unless E2E.configured?
           # Set up database.yml for e2e tests with values from environment variables
-          db_file = File.expand_path("../../#{ENV["STEP_NAME"]}/config/database.yml", __FILE__)
+          db_file = File.expand_path("../../bookshelf/config/database.yml", __FILE__)
           db_config = File.read(db_file)
 
-          if ENV["GOOGLE_PROJECT_ID"].nil?
-            raise "Please set environment variable GOOGLE_PROJECT_ID"
+          if ENV["GCLOUD_PROJECT"].nil?
+            raise "Please set environment variable GCLOUD_PROJECT"
           end
-          project_id = ENV["GOOGLE_PROJECT_ID"]
+          project_id = ENV["GCLOUD_PROJECT"]
 
           find = "#   dataset_id: [YOUR_PROJECT_ID]"
           replace = "  dataset_id: #{project_id}"

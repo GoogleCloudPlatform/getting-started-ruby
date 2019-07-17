@@ -15,7 +15,7 @@
 sudo: false
 language: ruby
 rvm:
-- 2.4.3
+- 2.6.3
 
 cache:
   - directories:
@@ -25,17 +25,6 @@ env:
   global:
   - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
-  matrix:
-  - STEP_NAME=1-hello-world
-  - STEP_NAME=2-cloud-datastore
-  - STEP_NAME=2-cloud-sql
-  - STEP_NAME=2-postgresql
-  - STEP_NAME=3-cloud-storage
-  - STEP_NAME=4-auth
-  - STEP_NAME=5-logging
-  - STEP_NAME=6-task-queueing
-  - STEP_NAME=7-compute-engine
-  - STEP_NAME=optional-kubernetes-engine
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
@@ -62,14 +51,10 @@ before_install:
 - if [ -a client_secrets.json ]; then
   gcloud -q auth activate-service-account --key-file client_secrets.json;
   fi
-- cd $STEP_NAME
 
 install:
 - bundle install --jobs=3 --retry=3
 
 script:
-- bash $TRAVIS_BUILD_DIR/spec/setup.sh $STEP_NAME
+- bash $TRAVIS_BUILD_DIR/spec/setup.sh
 - bundle exec rspec spec --tag ~e2e --backtrace --format documentation
-
-after_script:
-- ruby $TRAVIS_BUILD_DIR/spec/e2e_cleanup.rb $STEP_NAME

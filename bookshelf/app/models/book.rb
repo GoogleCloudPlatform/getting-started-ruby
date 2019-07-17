@@ -33,12 +33,10 @@ class Book
   def self.storage_bucket
     @storage_bucket ||= begin
       config = Rails.application.config.x.settings
-      # storage = Google::Cloud::Storage.new project_id: config["project_id"],
-      #                                      credentials: config["keyfile"]
-      storage = Google::Cloud::Storage.new project_id: "bookshelf-reloaded",
-                                           credentials: "/Users/betterbrent/gcloud/creds/bookshelf-reloaded.json"
-      # storage.bucket config["project_id"]
-      bucket = storage.bucket "bookshelf-reloaded-bucket"#config["project_id"]
+      storage = Google::Cloud::Storage.new project_id: config["project_id"],
+                                           credentials: config["keyfile"]
+      raise "project_id does not exist" if ENV["GCLOUD_PROJECT"].nil?
+      bucket = storage.bucket ENV["GCLOUD_PROJECT"] + ".appspot.com"
       raise "bucket does not exist" if bucket.nil?
       bucket
     end
