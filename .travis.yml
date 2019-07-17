@@ -16,14 +16,18 @@ sudo: false
 language: ruby
 rvm:
 - 2.6.3
+- 2.5.5
 
 cache:
-  - directories:
-    - $HOME/gcloud/
+  directories:
+  # We cache the SDK so we don't have to download it again on subsequent builds.
+  - $HOME/google-cloud-sdk
 
 env:
   global:
-  - PATH=$PATH:$HOME/gcloud/google-cloud-sdk/bin
+  # Do not prompt for user input when using any SDK methods.
+  - CLOUDSDK_CORE_DISABLE_PROMPTS=1
+  - PATH=$PATH:$HOME/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
 
 before_install:
@@ -39,23 +43,22 @@ before_install:
 #       $ git commit client_secrets.json.enc .travis.yml
 - openssl aes-256-cbc -K $encrypted_c66238cfcad7_key -iv $encrypted_c66238cfcad7_iv
   -in client_secrets.json.enc -out client_secrets.json -d
-- if [ ! -d $HOME/gcloud/google-cloud-sdk ]; then
-  mkdir -p $HOME/gcloud &&
-  wget https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz --directory-prefix=$HOME/gcloud &&
-  cd $HOME/gcloud &&
-  tar xzf google-cloud-sdk.tar.gz &&
-  printf '\ny\n\ny\ny\n' | ./google-cloud-sdk/install.sh &&
-  cd $TRAVIS_BUILD_DIR;
+- if [ ! -d $HOME/google-cloud-sdk/bin ]; then
+    # The install script errors if this directory already exists,
+    # but Travis already creates it when we mark it as cached.
+    rm -rf $HOME/google-cloud-sdk;
+    # The install script is overly verbose, which sometimes causes
+    # problems on Travis, so ignore stdout.
+    curl https://sdk.cloud.google.com | bash > /dev/null;
   fi
-- gcloud -q components update
-- if [ -a client_secrets.json ]; then
-  gcloud -q auth activate-service-account --key-file client_secrets.json;
-  fi
+- source $HOME/google-cloud-sdk/path.bash.inc
+- gcloud components update
+- gcloud -q auth activate-service-account --key-file client_secrets.json;
 
 install:
+- bash spec/setup.sh
+- pushd bookshelf
 - bundle install --jobs=3 --retry=3
 
 script:
-- bash spec/setup.sh
-- pushd bookshelf
 - bundle exec rspec spec --tag ~e2e --backtrace --format documentation
