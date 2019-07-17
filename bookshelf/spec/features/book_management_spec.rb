@@ -67,7 +67,7 @@ feature "Managing Books" do
     book = Book.first
     expect(book.title).to eq "A Tale of Two Cities"
     expect(book.author).to eq "Charles Dickens"
-    expect(book.published_on).to eq Time.parse("1859-04-01")
+    expect(book.published_on).to eq "1859-04-01"
     expect(book.description).to eq "A novel by Charles Dickens"
   end
 

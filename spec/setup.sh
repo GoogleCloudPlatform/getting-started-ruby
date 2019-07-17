@@ -13,12 +13,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-TEST_DIR=$( cd "$(dirname "${BASH_SOURCE}")" ; pwd -P )/../bookshelf
-
 # copy example database config to database.yml
-if [ -f $TEST_DIR/config/database.example.yml ]; then
-  cp $TEST_DIR/config/database.example.yml $TEST_DIR/config/database.yml
+cp bookshelf/config/database.example.yml bookshelf/config/database.yml
+if [ -n "$GCLOUD_PROJECT" ]; then
+  sed -i -e "s/\[YOUR_PROJECT_ID\]/$GCLOUD_PROJECT/g" bookshelf/config/database.yml
 fi
+
 # download cloud-datastore-emulator testing tool
 wget -q https://storage.googleapis.com/gcd/tools/cloud-datastore-emulator-1.1.1.zip -O cloud-datastore-emulator.zip
 unzip -o cloud-datastore-emulator.zip
@@ -27,7 +27,7 @@ unzip -o cloud-datastore-emulator.zip
 cloud-datastore-emulator/cloud_datastore_emulator create gcd-test-dataset-directory
 cloud-datastore-emulator/cloud_datastore_emulator start --testing ./gcd-test-dataset-directory/ &
 
-# compile assets if an "assets" directory exists
-if [ -e $TEST_DIR/app/assets ]; then
-  RAILS_ENV=test bundle exec rake --rakefile=$TEST_DIR/Rakefile assets:precompile
-fi
+# compile assets directory
+pushd bookshelf
+RAILS_ENV=test bundle exec rake --rakefile=Rakefile assets:precompile
+popd

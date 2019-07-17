@@ -56,5 +56,6 @@ install:
 - bundle install --jobs=3 --retry=3
 
 script:
-- bash $TRAVIS_BUILD_DIR/spec/setup.sh
+- bash spec/setup.sh
+- pushd bookshelf
 - bundle exec rspec spec --tag ~e2e --backtrace --format documentation
