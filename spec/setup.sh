@@ -15,8 +15,8 @@
 
 # copy example database config to database.yml
 cp bookshelf/config/database.example.yml bookshelf/config/database.yml
-if [ -n "$GCLOUD_PROJECT" ]; then
-  sed -i -e "s/\[YOUR_PROJECT_ID\]/$GCLOUD_PROJECT/g" bookshelf/config/database.yml
+if [ -n "$GOOGLE_CLOUD_PROJECT" ]; then
+  sed -i -e "s/\[YOUR_PROJECT_ID\]/$GOOGLE_CLOUD_PROJECT/g" bookshelf/config/database.yml
 fi
 
 # download cloud-datastore-emulator testing tool

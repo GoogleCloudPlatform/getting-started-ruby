@@ -12,7 +12,9 @@
 # limitations under the License.
 
 # [START book_class]
+# [START firestore_client]
 require "google/cloud/datastore"
+# [END firestore_client]
 require "google/cloud/storage"
 
 class Book
@@ -22,10 +24,12 @@ class Book
   # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
   # The dataset is used to create, read, update, and delete entity objects.
   def self.dataset
+    project_id = Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+    # [START firestore_client]
     @dataset ||= Google::Cloud::Datastore.new(
-      project_id: Rails.application.config.
-                        database_configuration[Rails.env]["dataset_id"]
+      project_id: project_id
     )
+    # [END firestore_client]
   end
 # [END book_class]
 
@@ -35,8 +39,8 @@ class Book
       config = Rails.application.config.x.settings
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
-      raise "project_id does not exist" if ENV["GCLOUD_PROJECT"].nil?
-      bucket = storage.bucket ENV["GCLOUD_PROJECT"] + ".appspot.com"
+      raise "project_id does not exist" if ENV["GOOGLE_CLOUD_PROJECT"].nil?
+      bucket = storage.bucket ENV["GOOGLE_CLOUD_PROJECT"] + ".appspot.com"
       raise "bucket does not exist" if bucket.nil?
       bucket
     end
@@ -76,7 +80,7 @@ class Book
   end
   # [END from_entity]
 
-  # [START find]
+  # [START firestore_client_get_book]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
     query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
@@ -84,7 +88,7 @@ class Book
 
     from_entity entities.first if entities.any?
   end
-  # [END find]
+  # [END firestore_client_get_book]
 
   # Add Active Model support.
   # Provides constructor that takes a Hash of attribute values.

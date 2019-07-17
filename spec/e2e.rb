@@ -131,10 +131,10 @@ class E2E
           db_file = File.expand_path("../../bookshelf/config/database.yml", __FILE__)
           db_config = File.read(db_file)
 
-          if ENV["GCLOUD_PROJECT"].nil?
-            raise "Please set environment variable GCLOUD_PROJECT"
+          if ENV["GOOGLE_CLOUD_PROJECT"].nil?
+            raise "Please set environment variable GOOGLE_CLOUD_PROJECT"
           end
-          project_id = ENV["GCLOUD_PROJECT"]
+          project_id = ENV["GOOGLE_CLOUD_PROJECT"]
 
           find = "#   dataset_id: [YOUR_PROJECT_ID]"
           replace = "  dataset_id: #{project_id}"
