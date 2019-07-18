@@ -16,7 +16,7 @@ class BooksController < ApplicationController
   PER_PAGE = 10
 
   def index
-    @books, @cursor = Book.query limit: PER_PAGE, cursor: params[:cursor]
+    @books, @last_title = Book.query limit: PER_PAGE, last_title: params[:last_title]
   end
 
   def new

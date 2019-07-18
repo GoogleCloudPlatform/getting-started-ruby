@@ -13,7 +13,7 @@
 
 # [START book_class]
 # [START firestore_client]
-require "google/cloud/datastore"
+require "google/cloud/firestore"
 # [END firestore_client]
 require "google/cloud/storage"
 
@@ -21,14 +21,13 @@ class Book
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url, :cover_image
 
-  # Return a Google::Cloud::Datastore::Dataset for the configured dataset.
-  # The dataset is used to create, read, update, and delete entity objects.
-  def self.dataset
-    project_id = Rails.application.config.database_configuration[Rails.env]["dataset_id"]
+  # Return a Google::Cloud::Firestore::Dataset for the configured collection.
+  # The collection is used to create, read, update, and delete entity objects.
+  def self.collection
+    project_id = Rails.application.config.database_configuration[Rails.env]["collection_id"]
     # [START firestore_client]
-    @dataset ||= Google::Cloud::Datastore.new(
-      project_id: project_id
-    )
+    firestore = Google::Cloud::Firestore.new project_id: project_id
+    @collection = firestore.col "books"
     # [END firestore_client]
   end
 # [END book_class]
@@ -48,45 +47,46 @@ class Book
   # [END connect]
 
   # [START query]
-  # Query Book entities from Cloud Datastore.
+  # Query Book entities from Cloud Firestore.
   #
-  # returns an array of Book query results and a cursor
+  # returns an array of Book query results and the last book title
   # that can be used to query for additional results.
   def self.query options = {}
-    query = Google::Cloud::Datastore::Query.new
-    query.kind "Book"
-    query.limit options[:limit]   if options[:limit]
-    query.cursor options[:cursor] if options[:cursor]
+    query = collection.order(:title)
+    query = query.limit(options[:limit]) if options[:limit]
+    query = query.start_after(options[:last_title]) if options[:last_title]
 
-    results = dataset.run query
-    books   = results.map {|entity| Book.from_entity entity }
-
-    if options[:limit] && results.size == options[:limit]
-      next_cursor = results.cursor
+    books = []
+    last_title = nil
+    query.get do |book|
+      books << Book.from_snapspot(book)
+      last_title = book.data[:title]
     end
 
-    return books, next_cursor
+    return books, last_title
   end
   # [END query]
 
-  # [START from_entity]
-  def self.from_entity entity
+  def self.requires_pagination last_title
+    collection.order(:title).limit(1).start_after(last_title).get.count > 0
+  end
+
+  # [START from_snapspot]
+  def self.from_snapspot book_snapshot
     book = Book.new
-    book.id = entity.key.id
-    entity.properties.to_hash.each do |name, value|
+    book.id = book_snapshot.document_id
+    book_snapshot.data.each do |name, value|
       book.send "#{name}=", value if book.respond_to? "#{name}="
     end
     book
   end
-  # [END from_entity]
+  # [END from_snapspot]
 
   # [START firestore_client_get_book]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
-    query    = Google::Cloud::Datastore::Key.new "Book", id.to_i
-    entities = dataset.lookup query
-
-    from_entity entities.first if entities.any?
+    book_snapshot = collection.doc(id).get
+    Book.from_snapspot(book_snapshot) if book_snapshot.data
   end
   # [END firestore_client_get_book]
 
@@ -95,13 +95,19 @@ class Book
   include ActiveModel::Model
 
   # [START save]
-  # Save the book to Datastore.
+  # Save the book to Firestore.
   # @return true if valid and saved successfully, otherwise false.
   def save
     if valid?
-      entity = to_entity
-      Book.dataset.save entity
-      self.id = entity.key.id
+      book_ref = Book.collection.doc(title)
+      book_ref.set(
+        title:        title,
+        author:       author,
+        published_on: published_on,
+        description:  description,
+        image_url:    image_url,
+      )
+      self.id = book_ref.document_id
       true
     else
       false
@@ -114,20 +120,6 @@ class Book
     save
   end
 
-  # [START to_entity]
-  # ...
-  def to_entity
-    entity                 = Google::Cloud::Datastore::Entity.new
-    entity.key             = Google::Cloud::Datastore::Key.new "Book", id
-    entity["title"]        = title
-    entity["author"]       = author       if author
-    entity["published_on"] = published_on if published_on
-    entity["description"]  = description  if description
-    entity["image_url"]    = image_url
-    entity
-  end
-  # [END to_entity]
-
   # [START validations]
   # Add Active Model validation support to Book class.
   include ActiveModel::Validations
@@ -136,7 +128,7 @@ class Book
   # [END validations]
 
   # [START update]
-  # Set attribute values from provided Hash and save to Datastore.
+  # Set attribute values from provided Hash and save to Firestore.
   def update attributes
     attributes.each do |name, value|
       send "#{name}=", value if respond_to? "#{name}="
@@ -165,7 +157,8 @@ class Book
   # [START destroy]
   def destroy
     delete_image if image_url
-    Book.dataset.delete Google::Cloud::Datastore::Key.new "Book", id
+    book_ref = Book.collection.doc id
+    book_ref.delete if book_ref
   end
 
   def delete_image

@@ -32,10 +32,10 @@
   </div>
 <% end %>
 
-<% if @cursor %>
+<% if Book.requires_pagination(@last_title) %>
   <nav>
     <ul class="pager">
-      <li><%= link_to "More", books_path(cursor: @cursor) %></li>
+      <li><%= link_to "More", books_path(last_title: @last_title) %></li>
     </ul>
   </nav>
 <% end %>

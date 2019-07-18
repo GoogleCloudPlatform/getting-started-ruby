@@ -15,23 +15,7 @@
 module BookExtensions
 
   def all
-    books = []
-
-    query = Google::Cloud::Datastore::Query.new.kind "Book"
-
-    loop do
-      results = dataset.run query
-
-      if results.empty?
-        break
-      else
-        results.each {|entity| books << from_entity(entity) }
-        query.cursor results.cursor
-        results = dataset.run query
-      end
-    end
-
-    books
+    collection.get
   end
 
   def first
@@ -39,18 +23,12 @@ module BookExtensions
   end
 
   def count
-    all.length
+    all.count
   end
 
   def delete_all
-    query = Google::Cloud::Datastore::Query.new.kind "Book"
-    loop do
-      books = dataset.run query
-      if books.empty?
-        break
-      else
-        dataset.delete *books
-      end
+    collection.get do |book_snapshot|
+      book_snapshot.ref.delete
     end
   end
 
