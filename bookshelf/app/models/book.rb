@@ -32,19 +32,21 @@ class Book
   end
 # [END book_class]
 
-  # [START connect]
   def self.storage_bucket
-    @storage_bucket ||= begin
+    project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+    raise "project_id does not exist" if project_id.nil?
+
+    @storage_bucket = begin
       config = Rails.application.config.x.settings
+      # [START cloud_storage_client]
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
-      raise "project_id does not exist" if ENV["GOOGLE_CLOUD_PROJECT"].nil?
-      bucket = storage.bucket ENV["GOOGLE_CLOUD_PROJECT"] + ".appspot.com"
+      bucket = storage.bucket project_id + ".appspot.com"
+      # [END cloud_storage_client]
       raise "bucket does not exist" if bucket.nil?
       bucket
     end
   end
-  # [END connect]
 
   # [START query]
   # Query Book entities from Cloud Firestore.
