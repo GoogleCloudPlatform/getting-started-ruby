@@ -39,9 +39,10 @@ class Book
     @storage_bucket = begin
       config = Rails.application.config.x.settings
       # [START cloud_storage_client]
+      bucket_id = project_id + ".appspot.com"
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
-      bucket = storage.bucket project_id + ".appspot.com"
+      bucket = storage.bucket bucket_id
       # [END cloud_storage_client]
       raise "bucket does not exist" if bucket.nil?
       bucket
