@@ -99,7 +99,7 @@ class Book
   # @return true if valid and saved successfully, otherwise false.
   def save
     if valid?
-      book_ref = Book.collection.doc(title)
+      book_ref = Book.collection.doc(id)
       book_ref.set(
         title:        title,
         author:       author,

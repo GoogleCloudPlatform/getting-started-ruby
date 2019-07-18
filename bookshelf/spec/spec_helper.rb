@@ -32,8 +32,8 @@ RSpec.configure do |config|
   config.display_try_failure_messages = true
 
   # set retry count and retry sleep interval to 10 seconds
-  config.default_retry_count = 5
-  config.default_sleep_interval = 10
+  config.default_retry_count = 3
+  config.default_sleep_interval = 3
 
   config.use_transactional_fixtures = true
 

@@ -19,7 +19,7 @@ module BookExtensions
   end
 
   def first
-    all.first
+    from_snapspot(all.first)
   end
 
   def count
