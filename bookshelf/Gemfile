@@ -17,6 +17,8 @@ source "https://rubygems.org"
 gem "rails", "~> 5.2.3"
 gem "google-cloud-firestore", "~> 1.0"
 gem "google-cloud-storage", "~> 1.10"
+gem "google-cloud-error_reporting"
+
 # [END dependencies]
 gem "jquery-rails"
 

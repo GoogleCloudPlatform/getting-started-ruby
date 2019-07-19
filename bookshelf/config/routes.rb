@@ -20,5 +20,8 @@ Rails.application.routes.draw do
   # Restful routes for BooksController
   resources :books
 
+  get "/logs", to: "stackdriver#logs"
+  get "/errors", to: "stackdriver#errors"
+
 end
 # [END routes]
