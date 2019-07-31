@@ -15,10 +15,10 @@ ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
 require File.expand_path("../../../spec/e2e", __FILE__)
-require "rspec/rails"
-require "rspec/retry"
+
+require "capybara/rspec"
 require "capybara/rails"
-require 'capybara/poltergeist'
+require "capybara/poltergeist"
 require "rack/test"
 require "book_extensions"
 
@@ -35,15 +35,11 @@ RSpec.configure do |config|
   config.default_retry_count = 3
   config.default_sleep_interval = 3
 
-  config.use_transactional_fixtures = true
-
-  config.infer_spec_type_from_file_location!
-
   config.expect_with :rspec do |expectations|
     expectations.include_chain_clauses_in_custom_matcher_descriptions = true
   end
 
-  config.before :each do |example|
+  config.before :all do |example|
     Book.delete_all
   end
 

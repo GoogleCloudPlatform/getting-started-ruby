@@ -16,7 +16,7 @@ require "spec_helper"
 feature "Managing Books" do
 
   scenario "No books have been added" do
-    visit root_path
+    visit "/"
 
     expect(page).to have_content "No books found"
   end
@@ -24,7 +24,7 @@ feature "Managing Books" do
   scenario "Listing all books" do
     Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
 
-    visit root_path
+    visit "/"
 
     expect(page).to have_content "A Tale of Two Cities"
     expect(page).to have_content "Charles Dickens"
@@ -39,7 +39,7 @@ feature "Managing Books" do
 
     stub_const "BooksController::PER_PAGE", 2
 
-    visit root_path
+    visit "/"
     expect(all(".book").length).to eq 2
 
     click_link "More"
@@ -52,7 +52,7 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book" do
-    visit root_path
+    visit "/"
     click_link "Add Book"
     within "form.new_book" do
       fill_in "Title", with: "A Tale of Two Cities"
@@ -72,7 +72,7 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book with missing fields" do
-    visit root_path
+    visit "/"
     click_link "Add Book"
     within "form.new_book" do
       click_button "Save"
@@ -91,7 +91,7 @@ feature "Managing Books" do
   scenario "Editing a book" do
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
 
-    visit root_path
+    visit "/"
     click_link "A Tale of Two Cities"
     click_link "Edit Book"
     fill_in "Title", with: "CHANGED!"
@@ -107,7 +107,7 @@ feature "Managing Books" do
   scenario "Editing a book with missing fields" do
     book = Book.create! title: "A Tale of Two Cities"
 
-    visit root_path
+    visit "/"
     click_link "A Tale of Two Cities"
     click_link "Edit Book"
     fill_in "Title", with: ""
@@ -130,7 +130,7 @@ feature "Managing Books" do
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
     expect(Book.exists? book.id).to be true
 
-    visit root_path
+    visit "/"
     click_link "A Tale of Two Cities"
     click_link "Delete Book"
 

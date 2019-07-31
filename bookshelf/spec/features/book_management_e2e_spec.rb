@@ -13,16 +13,18 @@
 
 require "spec_helper"
 
+E2E.sample_dir = "bookshelf"
+
 feature "Managing Books" do
 
   scenario "Adding a book (e2e)", :e2e do
-    visit E2E.url + root_path
+    visit E2E.url
 
     click_link "Add Book"
     within "form.new_book" do
       fill_in "Title", with: "A Tale of Two Cities"
       fill_in "Author", with: "Charles Dickens"
-      fill_in "Date Published", with: "1859-04-01"
+      # fill_in "Date Published", with: "1859-04-01"
       fill_in "Description", with: "A novel by Charles Dickens"
       click_button "Save"
     end
@@ -31,7 +33,7 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book with missing fields (e2e)", :e2e do
-    visit E2E.url + root_path
+    visit E2E.url
     click_link "Add Book"
     within "form.new_book" do
       click_button "Save"
@@ -41,14 +43,14 @@ feature "Managing Books" do
   end
 
   scenario "Listing all books (e2e)", :e2e do
-    visit E2E.url + root_path
+    visit E2E.url
 
     expect(page).to have_content "A Tale of Two Cities"
     expect(page).to have_content "Charles Dickens"
   end
 
   scenario "Deleting a book (e2e)", :e2e do
-    visit E2E.url + root_path
+    visit E2E.url
     first(:link, "A Tale of Two Cities").click
     click_link "Delete Book"
 

@@ -14,22 +14,16 @@
 require 'json'
 
 class E2E
+  @@sample_dir = ""
+
   class << self
-    attr_accessor :configured, :attempted
-    alias_method :configured?, :configured
+    attr_accessor :sample_dir, :attempted
     alias_method :attempted?, :attempted
     def check()
       # this allows the test to be run against a URL specified in an environment
       # variable
       @url ||= ENV["E2E_URL"]
       if @url.nil?
-        step_name = ENV["STEP_NAME"]
-
-        if step_name.nil?
-          # we are missing arguments to deploy to e2e
-          raise "cannot run e2e tests - missing required step_name"
-        end
-
         if attempted?
           # we've tried to run the tests and failed
           raise "cannot run e2e tests - deployment failed"
@@ -37,35 +31,26 @@ class E2E
 
         @attempted = true
         build_id = ENV["BUILD_ID"]
-        deploy(step_name, build_id)
+        deploy(build_id)
       end
 
       # use the poltergeist (phantomjs) driver for the test
       Capybara.current_driver = :poltergeist
+      Capybara.server = :webrick
     end
 
-    def deploy(step_name, build_id = nil)
-      build_id ||= rand(1000..9999)
+    def deploy(build_id = nil)
+      build_id ||= "test"
 
-      version = "#{step_name}-#{build_id}"
+      version = "#{@sample_dir}-#{build_id}"
 
       # read in our credentials file
-      key_path = File.expand_path("../../client_secrets.json", __FILE__)
-      key_file = File.read(key_path)
-      key_json = JSON.parse(key_file)
+      project_id = ENV["GOOGLE_CLOUD_PROJECT"];
 
-      account_name = key_json['client_email'];
-      project_id = key_json['project_id'];
-
-      # authenticate with gcloud using our credentials file
-      exec "gcloud config set project #{project_id}"
-      exec "gcloud config set account #{account_name}"
-
-      # deploy this step_name to gcloud
+      # deploy this sample to gcloud
       # try 3 times in case of intermittent deploy error
-      app_yaml_path = File.expand_path("../../#{step_name}/app.yaml", __FILE__)
       for attempt in 0..3
-        exec "gcloud app deploy #{app_yaml_path} --version=#{version} -q --no-promote"
+        exec "gcloud app deploy --version=#{version} -q --no-promote"
         break if $?.to_i == 0
       end
 
@@ -106,8 +91,12 @@ class E2E
       return 0
     end
 
-    def deployed?
-      not @url.nil?
+    def register_cleanup(config)
+      config.after :suite do
+        if @url and ENV["E2E_URL"].nil?
+          E2E.cleanup
+        end
+      end
     end
 
     def url
@@ -122,43 +111,6 @@ class E2E
 
     def output(line)
       puts line
-    end
-
-    def register_config(config)
-      config.before :example, :e2e => true do
-        unless E2E.configured?
-          # Set up database.yml for e2e tests with values from environment variables
-          db_file = File.expand_path("../../bookshelf/config/database.yml", __FILE__)
-          db_config = File.read(db_file)
-
-          if ENV["GOOGLE_CLOUD_PROJECT"].nil?
-            raise "Please set environment variable GOOGLE_CLOUD_PROJECT"
-          end
-          project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-
-          find = "#   dataset_id: [YOUR_PROJECT_ID]"
-          replace = "  dataset_id: #{project_id}"
-          db_config.sub!(find, replace)
-
-          File.open(db_file, "w") {|file| file.puts db_config }
-          E2E.configured = true
-        end
-
-        # set the backend to datastore
-        E2E.exec("bundle exec rake backend:datastore")
-      end
-
-      config.after :example, :e2e => true do
-        E2E.exec("bundle exec rake backend:active_record")
-      end
-    end
-
-    def register_cleanup(config)
-      config.after :suite do
-        if E2E.deployed? and ENV["E2E_URL"].nil?
-          E2E.cleanup
-        end
-      end
     end
   end
 end
