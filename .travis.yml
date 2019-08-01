@@ -53,6 +53,6 @@ install:
 
 script:
 - pushd bookshelf
-- bundle exec rspec spec --tag ~e2e --backtrace --format documentation
+- bundle exec rspec spec --backtrace --format documentation
 - popd
 
