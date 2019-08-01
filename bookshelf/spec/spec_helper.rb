@@ -14,12 +14,9 @@
 ENV["RAILS_ENV"] ||= "test"
 
 require File.expand_path("../../config/environment", __FILE__)
-require File.expand_path("../../../spec/e2e", __FILE__)
 
 require "capybara/rspec"
 require "capybara/rails"
-require "capybara/poltergeist"
-require "rack/test"
 require "book_extensions"
 
 Book.send :extend, BookExtensions
@@ -42,6 +39,4 @@ RSpec.configure do |config|
   config.before :all do |example|
     Book.delete_all
   end
-
-  E2E.register_cleanup(config)
 end

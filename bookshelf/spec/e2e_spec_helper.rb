@@ -11,36 +11,33 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'json'
+require "spec_helper"
+require "capybara/poltergeist"
+
+# use the poltergeist (phantomjs) driver for the test
+Capybara.current_driver = :poltergeist
+Capybara.server = :webrick
+
+RSpec.configure do |config|
+  config.after :suite do
+    if E2E.url and ENV["E2E_URL"].nil?
+     E2E.cleanup
+    end
+  end
+end
 
 class E2E
   @@sample_dir = ""
 
   class << self
-    attr_accessor :sample_dir, :attempted
-    alias_method :attempted?, :attempted
-    def check()
-      # this allows the test to be run against a URL specified in an environment
-      # variable
-      @url ||= ENV["E2E_URL"]
-      if @url.nil?
-        if attempted?
-          # we've tried to run the tests and failed
-          raise "cannot run e2e tests - deployment failed"
-        end
-
-        @attempted = true
-        build_id = ENV["BUILD_ID"]
-        deploy(build_id)
-      end
-
-      # use the poltergeist (phantomjs) driver for the test
-      Capybara.current_driver = :poltergeist
-      Capybara.server = :webrick
-    end
+    attr_accessor :sample_dir, :url
 
     def deploy(build_id = nil)
-      build_id ||= "test"
+      if @url = ENV["E2E_URL"]
+      	return
+      end
+
+      build_id = ENV["BUILD_ID"] || "test"
 
       version = "#{@sample_dir}-#{build_id}"
 
@@ -56,7 +53,7 @@ class E2E
 
       # if status is not 0, we tried 3 times and failed
       if $?.to_i != 0
-        output "Failed to deploy to gcloud"
+        puts "Failed to deploy to gcloud"
         return $?.to_i
       end
 
@@ -74,7 +71,7 @@ class E2E
       # determine build number
       version = @url.match(/https:\/\/(.+)-dot-(.+).appspot.com/)
       unless version
-        output "you must pass a build ID or define ENV[\"BUILD_ID\"]"
+        puts "you must pass a build ID or define ENV[\"BUILD_ID\"]"
         return 1
       end
 
@@ -83,7 +80,7 @@ class E2E
 
       # return the result of the gcloud delete command
       if $?.to_i != 0
-        output "Failed to delete e2e version"
+        puts "Failed to delete e2e version"
         return $?.to_i
       end
 
@@ -91,26 +88,9 @@ class E2E
       return 0
     end
 
-    def register_cleanup(config)
-      config.after :suite do
-        if @url and ENV["E2E_URL"].nil?
-          E2E.cleanup
-        end
-      end
-    end
-
-    def url
-      check()
-      @url
-    end
-
     def exec(cmd)
-      output "> #{cmd}"
-      output `#{cmd}`
-    end
-
-    def output(line)
-      puts line
+      puts "> #{cmd}"
+      puts `#{cmd}`
     end
   end
 end

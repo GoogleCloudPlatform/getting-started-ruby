@@ -26,6 +26,7 @@ env:
   global:
   - PATH=$PATH:$HOME/google-cloud-sdk/bin
   - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/credentials.json
+  - BUILD_ID=$TRAVIS_BUILD_ID
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)

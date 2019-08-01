@@ -31,6 +31,7 @@ feature "Managing Books" do
   end
 
   scenario "Paginating through list of books" do
+    Book.delete_all
     Book.create! title: "Book 1"
     Book.create! title: "Book 2"
     Book.create! title: "Book 3"
@@ -52,6 +53,8 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book" do
+    Book.delete_all
+
     visit "/"
     click_link "Add Book"
     within "form.new_book" do
@@ -72,6 +75,7 @@ feature "Managing Books" do
   end
 
   scenario "Adding a book with missing fields" do
+    Book.delete_all
     visit "/"
     click_link "Add Book"
     within "form.new_book" do
@@ -89,6 +93,7 @@ feature "Managing Books" do
   end
 
   scenario "Editing a book" do
+    Book.delete_all
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
 
     visit "/"
@@ -105,6 +110,7 @@ feature "Managing Books" do
   end
 
   scenario "Editing a book with missing fields" do
+    Book.delete_all
     book = Book.create! title: "A Tale of Two Cities"
 
     visit "/"
@@ -127,6 +133,7 @@ feature "Managing Books" do
   end
 
   scenario "Deleting a book" do
+    Book.delete_all
     book = Book.create! title: "A Tale of Two Cities", author: "Charles Dickens"
     expect(Book.exists? book.id).to be true
 
