@@ -25,22 +25,22 @@ cache:
 env:
   global:
   - PATH=$PATH:$HOME/google-cloud-sdk/bin
-  - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/client_secrets.json
+  - GOOGLE_APPLICATION_CREDENTIALS=$TRAVIS_BUILD_DIR/credentials.json
 
 before_install:
 #ENCRYPT YOUR PRIVATE KEY (If you need authentication)
 # 1. Install and login to the Travis CLI:
 #       $ gem install travis
 #       $ travis login
-# 2. Move your json private key to client_secrets.json
+# 2. Move your json private key to credentials.json
 # 3. Run:
-#       $ travis encrypt-file client_secrets.json --add
+#       $ travis encrypt-file credentials.json --add
 # 4. Commit changes:
-#       $ git add client_secrets.json.enc
-#       $ git commit client_secrets.json.enc .travis.yml
-- openssl aes-256-cbc -K $encrypted_c66238cfcad7_key -iv $encrypted_c66238cfcad7_iv
-  -in client_secrets.json.enc -out client_secrets.json -d
-- gcloud auth activate-service-account --key-file client_secrets.json;
+#       $ git add credentials.json.enc
+#       $ git commit credentials.json.enc .travis.yml
+- openssl aes-256-cbc -K $encrypted_990eecf37889_key -iv $encrypted_990eecf37889_iv
+  -in credentials.json.enc -out credentials.json -d
+- gcloud auth activate-service-account --key-file credentials.json
 # Update  to Bundler 2.0
 - gem update --system
 - gem install bundler
