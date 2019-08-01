@@ -26,6 +26,3 @@ cp config/database.example.yml config/database.yml
 if [ -n "$GOOGLE_CLOUD_PROJECT" ]; then
   sed -i -e "s/\[YOUR_PROJECT_ID\]/$GOOGLE_CLOUD_PROJECT/g" config/database.yml
 fi
-
-# compile assets directory
-RAILS_ENV=test bundle exec rake --rakefile=Rakefile assets:precompile

@@ -47,8 +47,8 @@ before_install:
 
 install:
 - pushd bookshelf
-- bash spec/setup.sh
 - bundle install --jobs=3 --retry=3
+- bash spec/setup.sh
 - popd
 
 script:
