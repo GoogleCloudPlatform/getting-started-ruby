@@ -26,17 +26,13 @@
   <% end %>
 </div>
 
-<%# [START book_details] %>
 <div class="media">
-  <!-- [START cover] -->
   <div class="media-left">
     <img src="<%= @book.image_url %>">
   </div>
-  <!-- [END cover] -->
   <div class="media-body">
     <h4><%= @book.title %> | &nbsp; <small><%= @book.published_on %></small></h4>
     <h5>By <%= @book.author || "unknown" %></h5>
     <p><%= @book.description %></p>
   </div>
 </div>
-<%# [END book_details] %>

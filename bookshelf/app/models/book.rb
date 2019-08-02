@@ -11,10 +11,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START book_class]
-# [START firestore_client]
+# [START bookshelf_firestore_client]
 require "google/cloud/firestore"
-# [END firestore_client]
+# [END bookshelf_firestore_client]
 require "google/cloud/storage"
 
 class Book
@@ -24,32 +23,32 @@ class Book
   # Return a Google::Cloud::Firestore::Dataset for the configured collection.
   # The collection is used to create, read, update, and delete entity objects.
   def self.collection
-    project_id = Rails.application.config.database_configuration[Rails.env]["collection_id"]
-    # [START firestore_client]
+    project_id = ENV["GOOGLE_CLOUD_PROJECT"]
+    raise "Set the GOOGLE_CLOUD_PROJECT environment variable" if project_id.nil?
+
+    # [START bookshelf_firestore_client]
     firestore = Google::Cloud::Firestore.new project_id: project_id
     @collection = firestore.col "books"
-    # [END firestore_client]
+    # [END bookshelf_firestore_client]
   end
-# [END book_class]
 
   def self.storage_bucket
     project_id = ENV["GOOGLE_CLOUD_PROJECT"]
-    raise "project_id does not exist" if project_id.nil?
+    raise "Set the GOOGLE_CLOUD_PROJECT environment variable" if project_id.nil?
 
     @storage_bucket = begin
       config = Rails.application.config.x.settings
-      # [START cloud_storage_client]
+      # [START bookshelf_cloud_storage_client]
       bucket_id = project_id + ".appspot.com"
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
       bucket = storage.bucket bucket_id
-      # [END cloud_storage_client]
+      # [END bookshelf_cloud_storage_client]
       raise "bucket does not exist" if bucket.nil?
       bucket
     end
   end
 
-  # [START query]
   # Query Book entities from Cloud Firestore.
   #
   # returns an array of Book query results and the last book title
@@ -68,13 +67,11 @@ class Book
 
     return books, last_title
   end
-  # [END query]
 
   def self.requires_pagination last_title
     collection.order(:title).limit(1).start_after(last_title).get.count > 0
   end
 
-  # [START from_snapspot]
   def self.from_snapspot book_snapshot
     book = Book.new
     book.id = book_snapshot.document_id
@@ -83,21 +80,19 @@ class Book
     end
     book
   end
-  # [END from_snapspot]
 
-  # [START firestore_client_get_book]
+  # [START bookshelf_firestore_client_get_book]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
     book_snapshot = collection.doc(id).get
     Book.from_snapspot(book_snapshot) if book_snapshot.data
   end
-  # [END firestore_client_get_book]
+  # [END bookshelf_firestore_client_get_book]
 
   # Add Active Model support.
   # Provides constructor that takes a Hash of attribute values.
   include ActiveModel::Model
 
-  # [START save]
   # Save the book to Firestore.
   # @return true if valid and saved successfully, otherwise false.
   def save
@@ -116,21 +111,17 @@ class Book
       false
     end
   end
-  # [END save]
 
   def create
     upload_image if cover_image
     save
   end
 
-  # [START validations]
   # Add Active Model validation support to Book class.
   include ActiveModel::Validations
 
   validates :title, presence: true
-  # [END validations]
 
-  # [START update]
   # Set attribute values from provided Hash and save to Firestore.
   def update attributes
     attributes.each do |name, value|
@@ -144,9 +135,7 @@ class Book
     delete_image if image_url
     upload_image
   end
-  # [END update]
 
-  # [START upload]
   def upload_image
     file = Book.storage_bucket.create_file \
       cover_image.tempfile,
@@ -155,9 +144,7 @@ class Book
       acl: "public"
     @image_url = file.public_url
   end
-  # [END upload]
 
-  # [START destroy]
   def destroy
     delete_image if image_url
     book_ref = Book.collection.doc id
@@ -175,11 +162,5 @@ class Book
       file = Book.storage_bucket.file image_path
       file.delete
     end
-  end
-  # [END destroy]
-##################
-
-  def persisted?
-    id.present?
   end
 end

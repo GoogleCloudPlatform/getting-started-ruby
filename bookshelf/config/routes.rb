@@ -11,7 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START routes]
 Rails.application.routes.draw do
 
   # Route root of application to BooksController#index action
@@ -24,4 +23,3 @@ Rails.application.routes.draw do
   get "/errors", to: "stackdriver#errors"
 
 end
-# [END routes]

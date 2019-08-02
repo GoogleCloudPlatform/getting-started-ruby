@@ -1,9 +1,0 @@
-development:
-  dataset_id: [YOUR_PROJECT_ID]
-
-production:
-  dataset_id: [YOUR_PROJECT_ID]
-
-test:
-  dataset_id: [YOUR_PROJECT_ID]
-

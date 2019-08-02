@@ -1,6 +1,6 @@
 # Ruby Getting Started
 
-Follow the [Getting started with Ruby][ruby-tutorial] tutorial to
+Follow the [Getting started with Ruby][ruby-tutorial] tutorial to run this app.
 
 [ruby-tutorial]: https://cloud.google.com/ruby/getting-started
 
