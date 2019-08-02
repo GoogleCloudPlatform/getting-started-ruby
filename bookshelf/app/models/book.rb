@@ -47,7 +47,7 @@ class Book
     @storage_bucket = begin
       config = Rails.application.config.x.settings
       # [START bookshelf_cloud_storage_client]
-      bucket_id = project_id + ".appspot.com"
+      bucket_id = project_id + "_bucket"
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
       bucket = storage.bucket bucket_id
