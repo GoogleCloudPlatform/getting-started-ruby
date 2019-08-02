@@ -67,15 +67,24 @@ class Book
     query = query.start_after options[:last_title] if options[:last_title]
 
     books = []
-    query.get do |book|
-      books << Book.from_snapspot(book)
+    begin
+      query.get do |book|
+        books << Book.from_snapspot(book)
+      end
+    rescue
     end
 
     return books
   end
 
   def self.requires_pagination last_title
-    collection.order(:title).limit(1).start_after(last_title).get.count > 0
+    if last_title
+      collection
+        .order(:title)
+        .limit(1)
+        .start_after(last_title)
+        .get.count > 0
+    end
   end
 
   def self.from_snapspot book_snapshot
