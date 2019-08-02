@@ -14,7 +14,6 @@
 require "e2e_spec_helper"
 
 E2E.sample_dir = "bookshelf"
-E2E.deploy
 
 feature "Managing Books (e2e)" do
 

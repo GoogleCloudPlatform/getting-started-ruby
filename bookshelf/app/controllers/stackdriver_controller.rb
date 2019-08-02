@@ -1,4 +1,4 @@
-# Copyright 2019, Google, Inc.
+# Copyright 2019, Google, LLC.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -12,12 +12,12 @@
 # limitations under the License.
 
 class StackdriverController < ApplicationController
-    def logs
-        Rails.logger.add(Logger::INFO, "Hey, you triggered a custom log entry. Good job!")
-        redirect_to "/books", flash: { success: "Log message sent" }
-    end
+  def logs
+    Rails.logger.add(Logger::INFO, "Hey, you triggered a custom log entry. Good job!")
+    redirect_to "/books", flash: { success: "Log message sent" }
+  end
 
-    def errors
-		raise "This is an intentional exception."
-    end
+  def errors
+    raise "This is an intentional exception."
+  end
 end

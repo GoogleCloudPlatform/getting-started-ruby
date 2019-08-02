@@ -17,6 +17,14 @@ require "google/cloud/firestore"
 require "google/cloud/storage"
 
 class Book
+  # Add Active Model support.
+  # Provides constructor that takes a Hash of attribute values.
+  include ActiveModel::Model
+
+  # Add Active Model validation support to Book class.
+  include ActiveModel::Validations
+
+  validates :title, presence: true
 
   attr_accessor :id, :title, :author, :published_on, :description, :image_url, :cover_image
 
@@ -54,18 +62,16 @@ class Book
   # returns an array of Book query results and the last book title
   # that can be used to query for additional results.
   def self.query options = {}
-    query = collection.order(:title)
-    query = query.limit(options[:limit]) if options[:limit]
-    query = query.start_after(options[:last_title]) if options[:last_title]
+    query = collection.order :title
+    query = query.limit options[:limit] if options[:limit]
+    query = query.start_after options[:last_title] if options[:last_title]
 
     books = []
-    last_title = nil
     query.get do |book|
       books << Book.from_snapspot(book)
-      last_title = book.data[:title]
     end
 
-    return books, last_title
+    return books
   end
 
   def self.requires_pagination last_title
@@ -85,26 +91,21 @@ class Book
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
     book_snapshot = collection.doc(id).get
-    Book.from_snapspot(book_snapshot) if book_snapshot.data
+    Book.from_snapspot book_snapshot if book_snapshot.data
   end
   # [END bookshelf_firestore_client_get_book]
-
-  # Add Active Model support.
-  # Provides constructor that takes a Hash of attribute values.
-  include ActiveModel::Model
 
   # Save the book to Firestore.
   # @return true if valid and saved successfully, otherwise false.
   def save
     if valid?
-      book_ref = Book.collection.doc(id)
-      book_ref.set(
+      book_ref = Book.collection.doc id
+      book_ref.set \
         title:        title,
         author:       author,
         published_on: published_on,
         description:  description,
-        image_url:    image_url,
-      )
+        image_url:    image_url
       self.id = book_ref.document_id
       true
     else
@@ -116,11 +117,6 @@ class Book
     upload_image if cover_image
     save
   end
-
-  # Add Active Model validation support to Book class.
-  include ActiveModel::Validations
-
-  validates :title, presence: true
 
   # Set attribute values from provided Hash and save to Firestore.
   def update attributes
@@ -157,10 +153,16 @@ class Book
     if image_uri.host == "#{Book.storage_bucket.name}.storage.googleapis.com"
       # Remove leading forward slash from image path
       # The result will be the image key, eg. "cover_images/:id/:filename"
-      image_path = image_uri.path.sub("/", "")
+      image_path = image_uri.path.sub "/", ""
 
       file = Book.storage_bucket.file image_path
       file.delete
     end
+  end
+
+##################
+
+  def persisted?
+    id.present?
   end
 end

@@ -20,7 +20,7 @@ Capybara.server = :webrick
 
 RSpec.configure do |config|
   config.after :suite do
-    if E2E.url and ENV["E2E_URL"].nil?
+    if E2E.url? and ENV["E2E_URL"].nil?
      E2E.cleanup
     end
   end
@@ -30,10 +30,19 @@ class E2E
   @@sample_dir = ""
 
   class << self
-    attr_accessor :sample_dir, :url
+    attr_accessor :sample_dir
 
-    def deploy(build_id = nil)
-      if @url = ENV["E2E_URL"]
+    def url?
+      not @url.nil?
+    end
+
+    def url
+      deploy
+      @url
+    end
+
+    def deploy
+      if url? || @url = ENV["E2E_URL"]
       	return
       end
 

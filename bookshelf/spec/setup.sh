@@ -21,11 +21,5 @@ unzip -o cloud-datastore-emulator.zip
 cloud-datastore-emulator/cloud_datastore_emulator create gcd-test-dataset-directory
 cloud-datastore-emulator/cloud_datastore_emulator start --testing ./gcd-test-dataset-directory/ &
 
-# copy example database config to database.yml
-cp config/database.example.yml config/database.yml
-if [ -n "$GOOGLE_CLOUD_PROJECT" ]; then
-  sed -i -e "s/\[YOUR_PROJECT_ID\]/$GOOGLE_CLOUD_PROJECT/g" config/database.yml
-fi
-
 # compile assets directory
 RAILS_ENV=test bundle exec rake --rakefile=Rakefile assets:precompile
