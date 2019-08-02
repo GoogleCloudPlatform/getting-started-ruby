@@ -1,3 +1,6 @@
+# This branch is for legacy support of the Bookshelf step tutorials.
+# For the up-to-date version of this repository, see the `master` branch.
+
 # Getting Started Ruby
 
 [![Travis Build Status](https://travis-ci.org/GoogleCloudPlatform/getting-started-ruby.svg)](https://travis-ci.org/GoogleCloudPlatform/getting-started-ruby)
