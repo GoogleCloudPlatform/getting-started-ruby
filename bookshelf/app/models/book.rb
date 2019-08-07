@@ -73,8 +73,7 @@ class Book
       end
     rescue
     end
-
-    return books
+    books
   end
 
   def self.requires_pagination last_title
