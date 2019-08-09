@@ -1,5 +1,5 @@
 <%#
-  Copyright 2015, Google, Inc.
+  Copyright 2019 Google LLC.
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
@@ -31,7 +31,7 @@
   </div>
 <% end %>
 
-<% if Book.requires_pagination(@last_title) %>
+<% if Book.requires_pagination @last_title %>
   <nav>
     <ul class="pager">
       <li><%= link_to "More", books_path(last_title: @last_title) %></li>

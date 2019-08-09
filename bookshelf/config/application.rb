@@ -1,6 +1,4 @@
-require_relative 'boot'
-
-# Copyright 2015, Google, Inc.
+# Copyright 2019 Google LLC.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -13,15 +11,14 @@ require_relative 'boot'
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require_relative 'boot'
+
 require "rails"
 # Pick the frameworks you want:
 require "active_model/railtie"
-require "active_job/railtie"
 require "active_storage/engine"
 require "action_controller/railtie"
-require "action_mailer/railtie"
 require "action_view/railtie"
-require "action_cable/engine"
 require "sprockets/railtie"
 require "google/cloud/error_reporting/rails"
 
