@@ -11,11 +11,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# [START bookshelf_firestore_client]
-require "google/cloud/firestore"
-# [END bookshelf_firestore_client]
-require "google/cloud/storage"
-
 class Book
   # Add Active Model support.
   # Provides constructor that takes a Hash of attribute values.
@@ -35,6 +30,7 @@ class Book
     raise "Set the GOOGLE_CLOUD_PROJECT environment variable" if project_id.nil?
 
     # [START bookshelf_firestore_client]
+    require "google/cloud/firestore"
     firestore = Google::Cloud::Firestore.new project_id: project_id
     @collection = firestore.col "books"
     # [END bookshelf_firestore_client]
@@ -47,6 +43,7 @@ class Book
     @storage_bucket = begin
       config = Rails.application.config.x.settings
       # [START bookshelf_cloud_storage_client]
+      require "google/cloud/storage"
       bucket_id = project_id + "_bucket"
       storage = Google::Cloud::Storage.new project_id: config["project_id"],
                                            credentials: config["keyfile"]
