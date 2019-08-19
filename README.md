@@ -4,7 +4,8 @@
 
 Checkout folders to view particular steps of this sample application.
 
- - [`bookshelf`](bookshelf): Code for the [Getting Started on Ruby][getting-started] tutorial.
+ - [`bookshelf/`](bookshelf/)
+     - Code for the [Getting started with Ruby][getting-started] tutorial.
 
 [Ruby on Rails][ror] web application on [Google App Engine][gae].
 
@@ -41,6 +42,6 @@ And then deploy the application:
 
 * See [LICENSE](LICENSE)
 
-[getting-started]: http://cloud.google.com/ruby/getting-started
+[getting-started]: http://cloud.google.com/ruby/getting-started/
 [ror]: http://rubyonrails.org/
 [gae]: http://cloud.google.com/appengine/docs/standard/ruby
