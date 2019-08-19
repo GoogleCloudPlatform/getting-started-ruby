@@ -4,17 +4,9 @@
 
 Checkout folders to view particular steps of this sample application.
 
- - [`1-hello-world`](1-hello-world)
- - [`2-cloud-datastore`](2-cloud-datastore)
- - [`2-cloud-sql`](2-cloud-sql)
- - [`2-postgresql`](2-postgresql)
- - [`3-cloud-storage`](3-cloud-storage)
- - [`4-auth`](4-auth)
- - [`5-logging`](5-logging)
- - [`6-task-queueing`](6-task-queueing)
- - [`7-compute-engine`](7-compute-engine)
+ - [`bookshelf`](bookshelf): Code for the [Getting Started on Ruby][getting-started] tutorial.
 
-[Ruby on Rails][ror] web application on [Google Managed VMs][mvms].
+[Ruby on Rails][ror] web application on [Google App Engine][gae].
 
 ### Run
 
@@ -31,7 +23,7 @@ And then run the Rails web server:
     $ bundle install
     $ bundle exec rspec
 
-### To deploy to App Engine Managed VMs
+### To deploy to App Engine
 
 Install the [Google Cloud SDK](https://cloud.google.com/sdk):
 
@@ -41,14 +33,6 @@ And then deploy the application:
 
     $ gcloud app deploy
 
-The application Dockerfile uses the [`google/ruby-runtime`][runtime] Docker image
-which supports running any Ruby web application.
-
-The `ruby-runtime` image requires that your application directory contain the following:
-
- - `Gemfile` file declaring application dependencies
- - `config.ru` rackup file defining your web application
-
 ## Contributing changes
 
 * See [CONTRIBUTING.md](CONTRIBUTING.md)
@@ -57,6 +41,6 @@ The `ruby-runtime` image requires that your application directory contain the fo
 
 * See [LICENSE](LICENSE)
 
+[getting-started]: http://cloud.google.com/ruby/getting-started
 [ror]: http://rubyonrails.org/
-[mvms]: https://cloud.google.com/appengine/docs/managed-vms/
-[runtime]: https://registry.hub.docker.com/u/google/ruby-runtime/
+[gae]: http://cloud.google.com/appengine/docs/standard/ruby
