@@ -92,13 +92,13 @@ class Book
     book
   end
 
-  # [START bookshelf_firestore_client_get_book]
   # Lookup Book by ID.  Returns Book or nil.
   def self.find id
+    # [START bookshelf_firestore_client_get_book]
     book_snapshot = collection.doc(id).get
     Book.from_snapspot book_snapshot if book_snapshot.data
+    # [END bookshelf_firestore_client_get_book]
   end
-  # [END bookshelf_firestore_client_get_book]
 
   # Save the book to Firestore.
   # @return true if valid and saved successfully, otherwise false.
