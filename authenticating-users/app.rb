@@ -64,6 +64,7 @@ def validate_assertion assertion
 
 rescue StandardError => e
   puts "Failed to validate assertion: #{e}"
+  [nil, nil]
 end
 # [END getting_started_auth_validate_assertion]
 
