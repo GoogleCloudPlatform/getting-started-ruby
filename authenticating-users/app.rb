@@ -18,16 +18,17 @@ require "json"
 require "jwt"
 require "net/http"
 require "openssl"
-require "securerandom"
 require "sinatra"
 require "uri"
 
 # [START getting_started_auth_certs]
-def certs
+def certificates
   uri = URI.parse "https://www.gstatic.com/iap/verify/public_key"
   response = Net::HTTP.get_response uri
   JSON.parse response.body
 end
+
+set :certificates, certificates
 # [END getting_started_auth_certs]
 
 # [START getting_started_auth_metadata]
@@ -46,12 +47,12 @@ end
 
 # [START getting_started_auth_audience]
 def audience
-  return session[:audience] if session[:audience]
-
   project_number = get_metadata "numeric-project-id"
   project_id = get_metadata "project-id"
-  session[:audience] = "/projects/#{project_number}/apps/#{project_id}"
+  "/projects/#{project_number}/apps/#{project_id}"
 end
+
+set :audience, audience
 # [END getting_started_auth_audience]
 
 # [START getting_started_auth_validate_assertion]
@@ -59,7 +60,7 @@ def validate_assertion assertion
   a_header = Base64.decode64 assertion.split(".")[0]
   key_id = JSON.parse(a_header)["kid"]
   cert = OpenSSL::PKey::EC.new settings.certificates[key_id]
-  info = JWT.decode assertion, cert, true, algorithm: "ES256", audience: audience
+  info = JWT.decode assertion, cert, true, algorithm: "ES256", audience: settings.audience
   return info[0]["email"], info[0]["sub"]
 
 rescue StandardError => e
@@ -67,10 +68,6 @@ rescue StandardError => e
   [nil, nil]
 end
 # [END getting_started_auth_validate_assertion]
-
-enable :sessions
-set :session_secret, ENV.fetch("SESSION_SECRET") { SecureRandom.hex 64 }
-set :certificates, certs
 
 # [START getting_started_auth_front_controller]
 get "/" do
