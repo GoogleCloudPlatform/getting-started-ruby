@@ -14,7 +14,7 @@
 # [START getting_started_session_app]
 require "sinatra"
 
-require_relative "session_store"
+require_relative "firestore_session"
 
 enable :sessions
 set :session_store, Rack::Session::FirestoreSession
