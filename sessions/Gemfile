@@ -8,3 +8,9 @@ git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 gem "google-cloud-firestore", "~> 1.2"
 gem "sinatra", "~> 2.0"
 # [END getting_started_sessions_requirements]
+
+group :development do
+  gem "minitest", "~> 5.13"
+  gem "rack-test", "~> 1.1"
+  gem "rake", "~> 13.0"
+end

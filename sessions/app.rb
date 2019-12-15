@@ -16,8 +16,7 @@ require "sinatra"
 
 require_relative "firestore_session"
 
-enable :sessions
-set :session_store, Rack::Session::FirestoreSession
+use Rack::Session::FirestoreSession
 
 set :greetings, ["Hello World", "Hallo Welt", "Ciao Mondo", "Salut le Monde", "Hola Mundo"]
 
@@ -25,6 +24,6 @@ get "/" do
   session[:greeting] ||= settings.greetings.sample
   session[:views] ||= 0
   session[:views] += 1
-  "<h1>#{session[:views]} views for #{session[:greeting]}</h1>"
+  "<h1>#{session[:views]} views for \"#{session[:greeting]}\"</h1>"
 end
 # [END getting_started_session_app]
