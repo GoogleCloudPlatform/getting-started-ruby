@@ -11,6 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# rubocop:disable Metrics/ClassLength
 class Book
   # Add Active Model support.
   # Provides constructor that takes a Hash of attribute values.
@@ -45,7 +46,7 @@ class Book
       # [START bookshelf_cloud_storage_client]
       require "google/cloud/storage"
       bucket_id = project_id + "_bucket"
-      storage = Google::Cloud::Storage.new project_id: config["project_id"],
+      storage = Google::Cloud::Storage.new project_id:  config["project_id"],
                                            credentials: config["keyfile"]
       bucket = storage.bucket bucket_id
       # [END bookshelf_cloud_storage_client]
@@ -64,11 +65,8 @@ class Book
     query = query.start_after options[:last_title] if options[:last_title]
 
     books = []
-    begin
-      query.get do |book|
-        books << Book.from_snapspot(book)
-      end
-    rescue
+    query.get do |book|
+      books << Book.from_snapspot(book)
     end
     books
   end
@@ -79,7 +77,7 @@ class Book
         .order(:title)
         .limit(1)
         .start_after(last_title)
-        .get.count > 0
+        .get.count.positive?
     end
   end
 
@@ -142,14 +140,14 @@ class Book
       cover_image.tempfile,
       "cover_images/#{id}/#{cover_image.original_filename}",
       content_type: cover_image.content_type,
-      acl: "public"
+      acl:          "public"
     @image_url = file.public_url
   end
 
   def destroy
     delete_image if image_url
     book_ref = Book.collection.doc id
-    book_ref.delete if book_ref
+    book_ref&.delete
   end
 
   def delete_image
@@ -165,9 +163,10 @@ class Book
     end
   end
 
-##################
+  ##################
 
   def persisted?
     id.present?
   end
 end
+# rubocop:enable Metrics/ClassLength

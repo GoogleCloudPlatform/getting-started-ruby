@@ -1,4 +1,4 @@
-require File.expand_path "../../test/test_helper.rb", __FILE__
+require File.expand_path "../test/test_helper.rb", __dir__
 
 include Rack::Test::Methods
 
@@ -7,15 +7,15 @@ def app
 end
 
 def firestore
-  firestore = Google::Cloud::Firestore.new
+  Google::Cloud::Firestore.new
 end
 
 def col
-  col = firestore.col "sessions"
+  firestore.col "sessions"
 end
 
 def docs
-  docs = col.list_documents
+  col.list_documents
 end
 
 def delete_all_sessions
@@ -37,7 +37,7 @@ describe "app" do
 
   it "should display the number of views" do
     get "/"
-    assert_match /\d+ views for /, last_response.body
+    assert_match(/\d+ views for /, last_response.body)
   end
 
   it "should increment the number of views on successive views" do
