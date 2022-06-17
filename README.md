@@ -9,6 +9,10 @@ Checkout folders to view particular steps of this sample application.
 
 [Ruby on Rails][ror] web application on [Google App Engine][gae].
 
+### Google Cloud Samples
+
+To browse ready to use code samples check [Google Cloud Samples](https://cloud.google.com/docs/samples?l=ruby).
+
 ### Run
 
 To run the application, first install dependencies:
