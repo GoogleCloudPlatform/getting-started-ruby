@@ -26,9 +26,7 @@ And then run the Rails web server:
 
 ### To deploy to App Engine
 
-Install the [Google Cloud SDK](https://cloud.google.com/sdk):
-
-    $ curl https://sdk.cloud.google.com | bash
+Install the [gcloud CLI](https://cloud.google.com/cli): https://cloud.google.com/sdk/docs/install-sdk
 
 And then deploy the application:
 
