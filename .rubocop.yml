@@ -1,0 +1,19 @@
+inherit_gem:
+    google-style: google-style.yml
+
+AllCops:
+    Exclude:
+        - "**/spec/**/*.rb"
+        - "Rakefile"
+
+Metrics/BlockLength:
+    Exclude:
+        - "**/*test.rb"
+Style/Documentation:
+    Enabled: false
+Style/GuardClause:
+    Enabled: false
+Style/MixinUsage:
+    Exclude:
+        - "bookshelf/**/*"
+        - "**/*test.rb"
